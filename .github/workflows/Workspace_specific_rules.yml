@@ -4,7 +4,7 @@ on:
   schedule:
     # 每天的 UTC 时间凌晨 3:00 执行
     # 如果你需要的是北京时间凌晨 3:00，cron 应为 '0 19 * * *'
-    - cron: '0 3 * * *'
+    - cron: '0 3 * * *' # 对应东京时间 (JST UTC+9) 中午 12:00
   workflow_dispatch: # 允许手动触发
 
 jobs:
@@ -16,65 +16,70 @@ jobs:
       - name: Checkout current repository
         uses: actions/checkout@v4
 
+      - name: Create Rule directory
+        run: mkdir -p Rule
+
       - name: Fetch and Integrate AI Rules
         run: |
-          echo "# AI Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > Ai.list
-          echo "" >> Ai.list
+          echo "# AI Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > Rule/Ai.list
+          echo "" >> Rule/Ai.list
 
           # OpenAI.list
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/OpenAI/OpenAI.list" >> Ai.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' >> Ai.list
-          echo "" >> Ai.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/OpenAI/OpenAI.list" >> Rule/Ai.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' >> Rule/Ai.list
+          echo "" >> Rule/Ai.list
 
           # Gemini.list
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Gemini/Gemini.list" >> Ai.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list | grep -v '^#' >> Ai.list
-          echo "" >> Ai.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Gemini/Gemini.list" >> Rule/Ai.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list | grep -v '^#' >> Rule/Ai.list
+          echo "" >> Rule/Ai.list
 
           # Claude.list
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Claude/Claude.list" >> Ai.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list | grep -v '^#' >> Ai.list
-          echo "" >> Ai.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Claude/Claude.list" >> Rule/Ai.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list | grep -v '^#' >> Rule/Ai.list
+          echo "" >> Rule/Ai.list
 
-          echo "Ai.list generated successfully with comments removed."
+          echo "Ai.list generated successfully in Rule/ with comments removed."
 
       - name: Fetch and Integrate Global Rules
         run: |
-          echo "# Global Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > global.list
-          echo "" >> global.list
+          echo "# Global Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > Rule/global.list
+          echo "" >> Rule/global.list
 
           # Google.list
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Google/Google.list" >> global.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Google/Google.list | grep -v '^#' >> global.list
-          echo "" >> global.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Google/Google.list" >> Rule/global.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Google/Google.list | grep -v '^#' >> Rule/global.list
+          echo "" >> Rule/global.list
 
           # GitHub.list
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/GitHub/GitHub.list" >> global.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GitHub/GitHub.list | grep -v '^#' >> global.list
-          echo "" >> global.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/GitHub/GitHub.list" >> Rule/global.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GitHub/GitHub.list | grep -v '^#' >> Rule/global.list
+          echo "" >> Rule/global.list
 
           # Twitter.list
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Twitter/Twitter.list" >> global.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Twitter/Twitter.list | grep -v '^#' >> global.list
-          echo "" >> global.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Twitter/Twitter.list" >> Rule/global.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Twitter/Twitter.list | grep -v '^#' >> Rule/global.list
+          echo "" >> Rule/global.list
 
-          # TikTok.list (新增)
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/TikTok/TikTok.list" >> global.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/TikTok/TikTok.list | grep -v '^#' >> global.list
-          echo "" >> global.list
+          # TikTok.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/TikTok/TikTok.list" >> Rule/global.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/TikTok/TikTok.list | grep -v '^#' >> Rule/global.list
+          echo "" >> Rule/global.list
 
-          echo "global.list generated successfully with comments removed."
+          echo "global.list generated successfully in Rule/ with comments removed."
+
+      # "Fetch, Integrate, and Deduplicate Ad Rules" 步骤已整个移除
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          # 添加所有两个规则文件
-          git add Ai.list global.list adrules.list
+          # 修改 git add 的路径，只包含 Ai.list 和 global.list
+          git add Rule/Ai.list Rule/global.list # <--- 修改：移除了 adrules.list
           if git diff --staged --quiet; then
-            echo "No changes to commit for rule lists."
+            echo "No changes to commit for Ai.list or global.list in Rule/." # <--- 修改日志信息
           else
             # 更新 commit 信息
-            git commit -m "Update Ai.list, global.list, and adrules.list - $(date -u +'%Y-%m-%d')"
+            git commit -m "Update Ai.list and global.list in Rule/ folder - $(date -u +'%Y-%m-%d')" # <--- 修改 commit 信息
             git push
           fi
