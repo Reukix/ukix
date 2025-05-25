@@ -71,7 +71,6 @@ jobs:
           echo "" >> adrules.list
           echo "# Source URL 1: https://adrules.top/adrules.list" >> adrules.list
           echo "# Source URL 2: https://github.com/fmz200/wool_scripts/raw/main/Loon/rule/rejectAd.list" >> adrules.list
-          echo "# Source URL 3: https://raw.githubusercontent.com/Centralmatrix3/Matrix-io/master/Surge/Ruleset/AdBlock.list" >> adrules.list
           echo "" >> adrules.list
 
           temp_combined_adrules="temp_adrules_combined.txt"
@@ -82,8 +81,6 @@ jobs:
           curl -sL https://adrules.top/adrules.list | grep -v '^#' >> "$temp_combined_adrules"
           echo "" >> "$temp_combined_adrules"
           curl -sL https://github.com/fmz200/wool_scripts/raw/main/Loon/rule/rejectAd.list | grep -v '^#' >> "$temp_combined_adrules"
-          echo "" >> "$temp_combined_adrules"
-          curl -sL https://raw.githubusercontent.com/Centralmatrix3/Matrix-io/master/Surge/Ruleset/AdBlock.list | grep -v '^#' >> "$temp_combined_adrules"
           echo "" >> "$temp_combined_adrules"
 
           # 去重、排序（sort -u 会排序），并去除空行，然后追加到 adrules.list
