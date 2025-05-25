@@ -1,0 +1,107 @@
+name: Fetch Specific Rules Daily
+
+on:
+  schedule:
+    # 每天的 UTC 时间凌晨 3:00 执行
+    # 如果你需要的是北京时间凌晨 3:00，cron 应为 '0 19 * * *'
+    - cron: '0 3 * * *'
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  fetch-and-integrate-rules:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 确保有写入权限
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+
+      - name: Fetch and Integrate AI Rules
+        run: |
+          echo "# AI Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > Ai.list
+          echo "" >> Ai.list
+
+          # OpenAI.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/OpenAI/OpenAI.list" >> Ai.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' >> Ai.list
+          echo "" >> Ai.list
+
+          # Gemini.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Gemini/Gemini.list" >> Ai.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list | grep -v '^#' >> Ai.list
+          echo "" >> Ai.list
+
+          # Claude.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Claude/Claude.list" >> Ai.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list | grep -v '^#' >> Ai.list
+          echo "" >> Ai.list
+
+          echo "Ai.list generated successfully with comments removed."
+
+      - name: Fetch and Integrate Global Rules
+        run: |
+          echo "# Global Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > global.list
+          echo "" >> global.list
+
+          # Google.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Google/Google.list" >> global.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Google/Google.list | grep -v '^#' >> global.list
+          echo "" >> global.list
+
+          # GitHub.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/GitHub/GitHub.list" >> global.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GitHub/GitHub.list | grep -v '^#' >> global.list
+          echo "" >> global.list
+
+          # Twitter.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Twitter/Twitter.list" >> global.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Twitter/Twitter.list | grep -v '^#' >> global.list
+          echo "" >> global.list
+
+          # TikTok.list (新增)
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/TikTok/TikTok.list" >> global.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/TikTok/TikTok.list | grep -v '^#' >> global.list
+          echo "" >> global.list
+
+          echo "global.list generated successfully with comments removed."
+
+      - name: Fetch, Integrate, and Deduplicate Ad Rules
+        run: |
+          echo "# Adblock Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > adrules.list
+          echo "" >> adrules.list
+          echo "# Source URL 1: https://adrules.top/adrules.list" >> adrules.list
+          echo "# Source URL 2: https://github.com/fmz200/wool_scripts/raw/main/Loon/rule/rejectAd.list" >> adrules.list
+          echo "# Source URL 3: https://raw.githubusercontent.com/Centralmatrix3/Matrix-io/master/Surge/Ruleset/AdBlock.list" >> adrules.list
+          echo "" >> adrules.list
+
+          temp_combined_adrules="temp_adrules_combined.txt"
+          # 清空或创建临时文件
+          > "$temp_combined_adrules"
+
+          # 抓取、去除注释并追加到临时文件
+          curl -sL https://adrules.top/adrules.list | grep -v '^#' >> "$temp_combined_adrules"
+          echo "" >> "$temp_combined_adrules"
+          curl -sL https://github.com/fmz200/wool_scripts/raw/main/Loon/rule/rejectAd.list | grep -v '^#' >> "$temp_combined_adrules"
+          echo "" >> "$temp_combined_adrules"
+          curl -sL https://raw.githubusercontent.com/Centralmatrix3/Matrix-io/master/Surge/Ruleset/AdBlock.list | grep -v '^#' >> "$temp_combined_adrules"
+          echo "" >> "$temp_combined_adrules"
+
+          # 去重、排序（sort -u 会排序），并去除空行，然后追加到 adrules.list
+          sort -u "$temp_combined_adrules" | awk 'NF' >> adrules.list
+
+          rm "$temp_combined_adrules" # 删除临时文件
+          echo "adrules.list generated successfully with comments and duplicates removed."
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          # 添加所有三个规则文件
+          git add Ai.list global.list adrules.list
+          if git diff --staged --quiet; then
+            echo "No changes to commit for rule lists."
+          else
+            # 更新 commit 信息
+            git commit -m "Update Ai.list, global.list, and adrules.list - $(date -u +'%Y-%m-%d')"
+            git push
+          fi
