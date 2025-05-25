@@ -2,9 +2,6 @@ name: Fetch Specific Rules Daily
 
 on:
   schedule:
-    # 每天的 UTC 时间凌晨 3:00 执行
-    # 这对应日本当地时间 (JST UTC+9) 的中午 12:00
-    # 如果你需要的是日本当地时间凌晨 3:00，cron 应为 '0 18 * * *' (前一天的 UTC 18:00)
     - cron: '0 3 * * *'
   workflow_dispatch: # 允许手动触发
 
@@ -40,7 +37,12 @@ jobs:
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list | grep -v '^#' >> Rule/Ai.list
           echo "" >> Rule/Ai.list
 
-          echo "Ai.list generated successfully in Rule/ with comments removed."
+          # 新增：添加自定义规则到 Ai.list 的末尾
+          echo "# Custom rule added by workflow" >> Rule/Ai.list
+          echo "DOMAIN-KEYWORD,apple-relay" >> Rule/Ai.list
+          echo "" >> Rule/Ai.list # 确保文件末尾有一个空行
+
+          echo "Ai.list generated successfully in Rule/ with comments removed and custom rule added."
 
       - name: Fetch and Integrate Global Rules
         run: |
