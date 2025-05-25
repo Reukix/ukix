@@ -3,8 +3,9 @@ name: Fetch Specific Rules Daily
 on:
   schedule:
     # 每天的 UTC 时间凌晨 3:00 执行
-    # 如果你需要的是北京时间凌晨 3:00，cron 应为 '0 19 * * *'
-    - cron: '0 3 * * *' # 对应东京时间 (JST UTC+9) 中午 12:00
+    # 这对应日本当地时间 (JST UTC+9) 的中午 12:00
+    # 如果你需要的是日本当地时间凌晨 3:00，cron 应为 '0 18 * * *' (前一天的 UTC 18:00)
+    - cron: '0 3 * * *'
   workflow_dispatch: # 允许手动触发
 
 jobs:
@@ -66,20 +67,21 @@ jobs:
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/TikTok/TikTok.list | grep -v '^#' >> Rule/global.list
           echo "" >> Rule/global.list
 
-          echo "global.list generated successfully in Rule/ with comments removed."
+          # 新增：添加自定义规则到 global.list 的末尾
+          echo "# Custom rule added by workflow" >> Rule/global.list
+          echo "DOMAIN-KEYWORD,diabrowser" >> Rule/global.list
+          echo "" >> Rule/global.list # 确保文件末尾有一个空行
 
-      # "Fetch, Integrate, and Deduplicate Ad Rules" 步骤已整个移除
+          echo "global.list generated successfully in Rule/ with comments removed and custom rule added."
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          # 修改 git add 的路径，只包含 Ai.list 和 global.list
-          git add Rule/Ai.list Rule/global.list # <--- 修改：移除了 adrules.list
+          git add Rule/Ai.list Rule/global.list
           if git diff --staged --quiet; then
-            echo "No changes to commit for Ai.list or global.list in Rule/." # <--- 修改日志信息
+            echo "No changes to commit for Ai.list or global.list in Rule/."
           else
-            # 更新 commit 信息
-            git commit -m "Update Ai.list and global.list in Rule/ folder - $(date -u +'%Y-%m-%d')" # <--- 修改 commit 信息
+            git commit -m "Update Ai.list and global.list in Rule/ folder - $(date -u +'%Y-%m-%d')"
             git push
           fi
