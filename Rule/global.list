@@ -1,4 +1,4 @@
-# Global Rules - Fetched on 2025-05-25 19:06:34 UTC
+# Global Rules - Fetched on 2025-05-25 19:15:38 UTC
 
 # From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Google/Google.list
 DOMAIN,voice.telephony.goog
@@ -807,4 +807,7 @@ DOMAIN-KEYWORD,musical.ly
 DOMAIN-KEYWORD,tiktok
 USER-AGENT,TikTok*
 PROCESS-NAME,com.zhiliaoapp.musically
+
+# Custom rule added by workflow
+DOMAIN-KEYWORD,diabrowser
 
