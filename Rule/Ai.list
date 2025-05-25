@@ -1,4 +1,4 @@
-# AI Rules - Fetched on 2025-05-25 19:15:38 UTC
+# AI Rules - Fetched on 2025-05-25 19:20:25 UTC
 
 # From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/OpenAI/OpenAI.list
 DOMAIN,browser-intake-datadoghq.com
@@ -57,4 +57,7 @@ DOMAIN-KEYWORD,generativelanguage
 DOMAIN,cdn.usefathom.com
 DOMAIN-SUFFIX,anthropic.com
 DOMAIN-SUFFIX,claude.ai
+
+# Custom rule added by workflow
+DOMAIN-KEYWORD,apple-relay
 
