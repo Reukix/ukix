@@ -37,10 +37,10 @@ jobs:
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list | grep -v '^#' >> Rule/Ai.list
           echo "" >> Rule/Ai.list
 
-          # 新增：添加自定义规则到 Ai.list 的末尾
+          # Custom rule for Ai.list
           echo "# Custom rule added by workflow" >> Rule/Ai.list
           echo "DOMAIN-KEYWORD,apple-relay" >> Rule/Ai.list
-          echo "" >> Rule/Ai.list # 确保文件末尾有一个空行
+          echo "" >> Rule/Ai.list
 
           echo "Ai.list generated successfully in Rule/ with comments removed and custom rule added."
 
@@ -69,21 +69,45 @@ jobs:
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/TikTok/TikTok.list | grep -v '^#' >> Rule/global.list
           echo "" >> Rule/global.list
 
-          # 新增：添加自定义规则到 global.list 的末尾
+          # Custom rule for global.list
           echo "# Custom rule added by workflow" >> Rule/global.list
           echo "DOMAIN-KEYWORD,diabrowser" >> Rule/global.list
-          echo "" >> Rule/global.list # 确保文件末尾有一个空行
+          echo "" >> Rule/global.list
 
           echo "global.list generated successfully in Rule/ with comments removed and custom rule added."
+
+      - name: Fetch and Integrate SpoPaVo Rules # <-- 新增步骤
+        run: |
+          echo "# Spotify, PayPal, GoogleVoice Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > Rule/SpoPaVo.list
+          echo "" >> Rule/SpoPaVo.list
+
+          # Spotify.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Spotify/Spotify.list" >> Rule/SpoPaVo.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Spotify/Spotify.list | grep -v '^#' >> Rule/SpoPaVo.list
+          echo "" >> Rule/SpoPaVo.list
+
+          # PayPal.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/PayPal/PayPal.list" >> Rule/SpoPaVo.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/PayPal/PayPal.list | grep -v '^#' >> Rule/SpoPaVo.list
+          echo "" >> Rule/SpoPaVo.list
+
+          # GoogleVoice.list
+          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/GoogleVoice/GoogleVoice.list" >> Rule/SpoPaVo.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GoogleVoice/GoogleVoice.list | grep -v '^#' >> Rule/SpoPaVo.list
+          echo "" >> Rule/SpoPaVo.list
+
+          echo "SpoPaVo.list generated successfully in Rule/ with comments removed."
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add Rule/Ai.list Rule/global.list
+          # 添加所有规则文件到 git
+          git add Rule/Ai.list Rule/global.list Rule/SpoPaVo.list # <-- 修改：添加了 SpoPaVo.list
           if git diff --staged --quiet; then
-            echo "No changes to commit for Ai.list or global.list in Rule/."
+            echo "No changes to commit for rule lists in Rule/."
           else
-            git commit -m "Update Ai.list and global.list in Rule/ folder - $(date -u +'%Y-%m-%d')"
+            # 更新 commit 信息
+            git commit -m "Update Ai.list, global.list, and SpoPaVo.list in Rule/ folder - $(date -u +'%Y-%m-%d')" # <-- 修改 commit 信息
             git push
           fi
