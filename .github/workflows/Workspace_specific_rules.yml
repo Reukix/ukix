@@ -65,35 +65,11 @@ jobs:
 
           echo "global.list generated successfully with comments removed."
 
-      - name: Fetch, Integrate, and Deduplicate Ad Rules
-        run: |
-          echo "# Adblock Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > adrules.list
-          echo "" >> adrules.list
-          echo "# Source URL 1: https://adrules.top/adrules.list" >> adrules.list
-          echo "# Source URL 2: https://github.com/fmz200/wool_scripts/raw/main/Loon/rule/rejectAd.list" >> adrules.list
-          echo "" >> adrules.list
-
-          temp_combined_adrules="temp_adrules_combined.txt"
-          # 清空或创建临时文件
-          > "$temp_combined_adrules"
-
-          # 抓取、去除注释并追加到临时文件
-          curl -sL https://adrules.top/adrules.list | grep -v '^#' >> "$temp_combined_adrules"
-          echo "" >> "$temp_combined_adrules"
-          curl -sL https://github.com/fmz200/wool_scripts/raw/main/Loon/rule/rejectAd.list | grep -v '^#' >> "$temp_combined_adrules"
-          echo "" >> "$temp_combined_adrules"
-
-          # 去重、排序（sort -u 会排序），并去除空行，然后追加到 adrules.list
-          sort -u "$temp_combined_adrules" | awk 'NF' >> adrules.list
-
-          rm "$temp_combined_adrules" # 删除临时文件
-          echo "adrules.list generated successfully with comments and duplicates removed."
-
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          # 添加所有三个规则文件
+          # 添加所有两个规则文件
           git add Ai.list global.list adrules.list
           if git diff --staged --quiet; then
             echo "No changes to commit for rule lists."
