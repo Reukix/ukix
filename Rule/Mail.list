@@ -1,0 +1,14 @@
+# Mail Rules - Fetched on 2025-06-25 03:21:09 GMT+8
+
+DOMAIN,apple.imap.mail.yahoo.com
+DOMAIN,apple.smtp.mail.yahoo.com
+DOMAIN,imap-mail.outlook.com
+DOMAIN,imap.gmail.com
+DOMAIN,outlook.office365.com
+DOMAIN,pop.gmail.com
+DOMAIN,smtp-mail.outlook.com
+DOMAIN,smtp.gmail.com
+DOMAIN,smtp.office365.com
+DOMAIN-SUFFIX,imap.yandex.com
+DOMAIN-SUFFIX,m.hotmail.com
+DOMAIN-SUFFIX,smtp.yandex.com
