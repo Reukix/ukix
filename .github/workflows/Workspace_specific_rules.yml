@@ -21,7 +21,6 @@ jobs:
         run: |
           echo "# Intelligence Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Intelligence.list
           echo "" >> Rule/Intelligence.list
-
           {
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list
@@ -34,7 +33,6 @@ jobs:
         run: |
           echo "# CN Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/CN.list
           echo "" >> Rule/CN.list
-
           {
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax_All.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/MeiTuan/MeiTuan.list
@@ -96,12 +94,17 @@ jobs:
           echo "" >> Rule/XHS.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/XiaoHongShu/XiaoHongShu.list | grep -v '^#' | sort | uniq >> Rule/XHS.list
 
+      - name: Fetch and Format Apple Rules
+        run: |
+          echo "# Apple Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Apple.list
+          echo "" >> Rule/Apple.list
+          curl -sL https://raw.githubusercontent.com/Blankwonder/surge-list/master/apple.list | grep -v '^#' | sort | uniq >> Rule/Apple.list
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list Rule/Proxy.list Rule/TikTok.list Rule/PayPal.list Rule/XHS.list
+          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list Rule/Proxy.list Rule/TikTok.list Rule/PayPal.list Rule/XHS.list Rule/Apple.list
           if git diff --staged --quiet; then
             echo "No changes to commit for rule lists in Rule/."
           else
