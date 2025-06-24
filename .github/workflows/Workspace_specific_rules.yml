@@ -2,14 +2,14 @@ name: Fetch Specific Rules Daily
 
 on:
   schedule:
-    - cron: '0 19 * * *' # 每天 UTC 时间 19:00（北京时间凌晨 3:00）
-  workflow_dispatch: # 允许手动触发
+    - cron: '0 19 * * *'  # UTC+8 (北京时间凌晨3点)
+  workflow_dispatch:
 
 jobs:
   fetch-and-integrate-rules:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # 确保有写入权限
+      contents: write
     steps:
       - name: Checkout current repository
         uses: actions/checkout@v4
@@ -19,96 +19,50 @@ jobs:
 
       - name: Fetch and Integrate AI Rules
         run: |
-          echo "# AI Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > Rule/Ai.list
+          echo "# AI Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Ai.list
           echo "" >> Rule/Ai.list
 
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/OpenAI/OpenAI.list" >> Rule/Ai.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list | grep -v '^#' >> Rule/Ai.list
-          echo "" >> Rule/Ai.list
-
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Gemini/Gemini.list" >> Rule/Ai.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list | grep -v '^#' >> Rule/Ai.list
-          echo "" >> Rule/Ai.list
-
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Claude/Claude.list" >> Rule/Ai.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list | grep -v '^#' >> Rule/Ai.list
-          echo "" >> Rule/Ai.list
-
-          echo "# Custom rule added by workflow" >> Rule/Ai.list
-          echo "DOMAIN-KEYWORD,apple-relay" >> Rule/Ai.list
-          echo "" >> Rule/Ai.list
-
-          echo "Ai.list generated successfully in Rule/ with comments removed and custom rule added."
+          {
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list
+            echo "DOMAIN-KEYWORD,apple-relay"
+          } | grep -v '^#' | sort | uniq >> Rule/Ai.list
 
       - name: Fetch and Integrate Global Rules
         run: |
-          echo "# Global Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > Rule/global.list
+          echo "# Global Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/global.list
           echo "" >> Rule/global.list
 
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Google/Google.list" >> Rule/global.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Google/Google.list | grep -v '^#' >> Rule/global.list
-          echo "" >> Rule/global.list
-
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/GitHub/GitHub.list" >> Rule/global.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GitHub/GitHub.list | grep -v '^#' >> Rule/global.list
-          echo "" >> Rule/global.list
-
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Twitter/Twitter.list" >> Rule/global.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Twitter/Twitter.list | grep -v '^#' >> Rule/global.list
-          echo "" >> Rule/global.list
-
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/TikTok/TikTok.list" >> Rule/global.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/TikTok/TikTok.list | grep -v '^#' >> Rule/global.list
-          echo "" >> Rule/global.list
-
-          echo "# Custom rule added by workflow" >> Rule/global.list
-          echo "DOMAIN-KEYWORD,diabrowser" >> Rule/global.list
-          echo "" >> Rule/global.list
-
-          echo "global.list generated successfully in Rule/ with comments removed and custom rule added."
-
-      - name: Fetch and Integrate SpoPaVo Rules
-        run: |
-          echo "# Spotify, PayPal, GoogleVoice Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > Rule/SpoPaVo.list
-          echo "" >> Rule/SpoPaVo.list
-
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/Spotify/Spotify.list" >> Rule/SpoPaVo.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Spotify/Spotify.list | grep -v '^#' >> Rule/SpoPaVo.list
-          echo "" >> Rule/SpoPaVo.list
-
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/PayPal/PayPal.list" >> Rule/SpoPaVo.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/PayPal/PayPal.list | grep -v '^#' >> Rule/SpoPaVo.list
-          echo "" >> Rule/SpoPaVo.list
-
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/GoogleVoice/GoogleVoice.list" >> Rule/SpoPaVo.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GoogleVoice/GoogleVoice.list | grep -v '^#' >> Rule/SpoPaVo.list
-          echo "" >> Rule/SpoPaVo.list
-
-          echo "SpoPaVo.list generated successfully in Rule/ with comments removed."
+          {
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Google/Google.list
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GitHub/GitHub.list
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Twitter/Twitter.list
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/TikTok/TikTok.list
+            echo "DOMAIN-KEYWORD,diabrowser"
+          } | grep -v '^#' | sort | uniq >> Rule/global.list
 
       - name: Fetch and Integrate CN Rules
         run: |
-          echo "# CN Rules - Fetched on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > Rule/CN.list
+          echo "# CN Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/CN.list
           echo "" >> Rule/CN.list
 
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/ChinaMax/ChinaMax_All.list" >> Rule/CN.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax_All.list | grep -v '^#' >> Rule/CN.list
-          echo "" >> Rule/CN.list
-
-          echo "# From: https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/MeiTuan/MeiTuan.list" >> Rule/CN.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/MeiTuan/MeiTuan.list | grep -v '^#' >> Rule/CN.list
-          echo "" >> Rule/CN.list
-
-          echo "CN.list generated successfully in Rule/ with comments removed."
+          {
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax_All.list
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/MeiTuan/MeiTuan.list
+            echo "DOMAIN-SUFFIX,example.cn"
+          } | grep -v '^#' | sort | uniq >> Rule/CN.list
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add Rule/Ai.list Rule/global.list Rule/SpoPaVo.list Rule/CN.list
+
+          git add Rule/Ai.list Rule/global.list Rule/CN.list
           if git diff --staged --quiet; then
             echo "No changes to commit for rule lists in Rule/."
           else
-            git commit -m "Update Ai.list, global.list, SpoPaVo.list, and CN.list in Rule/ folder - $(date -u +'%Y-%m-%d')"
+            COMMIT_TIME=$(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')
+            git commit -m "Update rule lists - $COMMIT_TIME"
             git push
           fi
