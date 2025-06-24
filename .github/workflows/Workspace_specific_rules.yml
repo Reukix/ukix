@@ -78,12 +78,30 @@ jobs:
           echo "" >> Rule/Proxy.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy_All_No_Resolve.list | grep -v '^#' | sort | uniq >> Rule/Proxy.list
 
+      - name: Fetch and Format TikTok Rules
+        run: |
+          echo "# TikTok Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/TikTok.list
+          echo "" >> Rule/TikTok.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/TikTok/TikTok.list | grep -v '^#' | sort | uniq >> Rule/TikTok.list
+
+      - name: Fetch and Format PayPal Rules
+        run: |
+          echo "# PayPal Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/PayPal.list
+          echo "" >> Rule/PayPal.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/PayPal/PayPal.list | grep -v '^#' | sort | uniq >> Rule/PayPal.list
+
+      - name: Fetch and Format XiaoHongShu Rules
+        run: |
+          echo "# XiaoHongShu Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/XHS.list
+          echo "" >> Rule/XHS.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/XiaoHongShu/XiaoHongShu.list | grep -v '^#' | sort | uniq >> Rule/XHS.list
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list Rule/Proxy.list
+          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list Rule/Proxy.list Rule/TikTok.list Rule/PayPal.list Rule/XHS.list
           if git diff --staged --quiet; then
             echo "No changes to commit for rule lists in Rule/."
           else
