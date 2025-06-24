@@ -66,12 +66,18 @@ jobs:
           echo "" >> Rule/FuckAds.list
           curl -sL https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/Loon/rule/rejectAd.list | grep -v '^#' | sort | uniq >> Rule/FuckAds.list
 
+      - name: Fetch and Format Spotify Rules
+        run: |
+          echo "# Spotify Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Spotify.list
+          echo "" >> Rule/Spotify.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Spotify/Spotify.list | grep -v '^#' | sort | uniq >> Rule/Spotify.list
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list
+          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list
           if git diff --staged --quiet; then
             echo "No changes to commit for rule lists in Rule/."
           else
