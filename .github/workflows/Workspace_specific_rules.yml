@@ -72,12 +72,18 @@ jobs:
           echo "" >> Rule/Spotify.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Spotify/Spotify.list | grep -v '^#' | sort | uniq >> Rule/Spotify.list
 
+      - name: Fetch and Format Proxy Rules
+        run: |
+          echo "# Proxy Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Proxy.list
+          echo "" >> Rule/Proxy.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy_All_No_Resolve.list | grep -v '^#' | sort | uniq >> Rule/Proxy.list
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list
+          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list Rule/Proxy.list
           if git diff --staged --quiet; then
             echo "No changes to commit for rule lists in Rule/."
           else
