@@ -42,12 +42,36 @@ jobs:
             echo "DOMAIN-SUFFIX,example.cn"
           } | grep -v '^#' | sort | uniq >> Rule/CN.list
 
+      - name: Fetch and Format Google Rules
+        run: |
+          echo "# Google Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Google.list
+          echo "" >> Rule/Google.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Google/Google.list | grep -v '^#' | sort | uniq >> Rule/Google.list
+
+      - name: Fetch and Format X (Twitter) Rules
+        run: |
+          echo "# X Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/X.list
+          echo "" >> Rule/X.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Twitter/Twitter.list | grep -v '^#' | sort | uniq >> Rule/X.list
+
+      - name: Fetch and Format Github Rules
+        run: |
+          echo "# Github Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Github.list
+          echo "" >> Rule/Github.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/GitHub/GitHub.list | grep -v '^#' | sort | uniq >> Rule/Github.list
+
+      - name: Fetch and Format FuckAds Rules
+        run: |
+          echo "# FuckAds Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/FuckAds.list
+          echo "" >> Rule/FuckAds.list
+          curl -sL https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/Loon/rule/rejectAd.list | grep -v '^#' | sort | uniq >> Rule/FuckAds.list
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-          git add Rule/Intelligence.list Rule/CN.list
+          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list
           if git diff --staged --quiet; then
             echo "No changes to commit for rule lists in Rule/."
           else
