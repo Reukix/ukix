@@ -17,30 +17,18 @@ jobs:
       - name: Create Rule directory
         run: mkdir -p Rule
 
-      - name: Fetch and Integrate AI Rules
+      - name: Fetch and Integrate Intelligence Rules
         run: |
-          echo "# AI Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Ai.list
-          echo "" >> Rule/Ai.list
+          echo "# Intelligence Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Intelligence.list
+          echo "" >> Rule/Intelligence.list
 
           {
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list
+            curl -sL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Rule/OpenAI.list
             echo "DOMAIN-KEYWORD,apple-relay"
-          } | grep -v '^#' | sort | uniq >> Rule/Ai.list
-
-      - name: Fetch and Integrate Global Rules
-        run: |
-          echo "# Global Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/global.list
-          echo "" >> Rule/global.list
-
-          {
-            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Google/Google.list
-            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GitHub/GitHub.list
-            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Twitter/Twitter.list
-            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/TikTok/TikTok.list
-            echo "DOMAIN-KEYWORD,diabrowser"
-          } | grep -v '^#' | sort | uniq >> Rule/global.list
+          } | grep -v '^#' | sort | uniq >> Rule/Intelligence.list
 
       - name: Fetch and Integrate CN Rules
         run: |
@@ -58,7 +46,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-          git add Rule/Ai.list Rule/global.list Rule/CN.list
+          git add Rule/Intelligence.list Rule/CN.list
           if git diff --staged --quiet; then
             echo "No changes to commit for rule lists in Rule/."
           else
