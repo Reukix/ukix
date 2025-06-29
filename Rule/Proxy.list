@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-06-29 03:08:19 GMT+8
+# Proxy Rules - Fetched on 2025-06-30 03:08:14 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -2757,6 +2757,7 @@ DOMAIN-SUFFIX,imago-images.com
 DOMAIN-SUFFIX,imb.org
 DOMAIN-SUFFIX,imdb.com
 DOMAIN-SUFFIX,img.ly
+DOMAIN-SUFFIX,img.picgo.net
 DOMAIN-SUFFIX,imgasd.com
 DOMAIN-SUFFIX,imgchili.net
 DOMAIN-SUFFIX,imgmega.com
