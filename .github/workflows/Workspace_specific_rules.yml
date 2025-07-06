@@ -106,6 +106,13 @@ jobs:
           echo "" >> Rule/Mail.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Mail/Mail.list | grep -v '^#' | sort | uniq >> Rule/Mail.list
 
+
+      - name: Fetch and Format Speedtest Rules
+        run: |
+          echo "# Speedtest Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Speedtest.list
+          echo "" >> Rule/Speedtest.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Speedtest/Speedtest.list | grep -v '^#' | sort | uniq >> Rule/Speedtest.list
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
