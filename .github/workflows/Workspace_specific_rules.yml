@@ -106,7 +106,6 @@ jobs:
           echo "" >> Rule/Mail.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Mail/Mail.list | grep -v '^#' | sort | uniq >> Rule/Mail.list
 
-
       - name: Fetch and Format Speedtest Rules
         run: |
           echo "# Speedtest Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Speedtest.list
@@ -117,7 +116,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list Rule/Proxy.list Rule/TikTok.list Rule/PayPal.list Rule/XHS.list Rule/Apple.list Rule/Mail.list
+          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list Rule/Proxy.list Rule/TikTok.list Rule/PayPal.list Rule/XHS.list Rule/Apple.list Rule/Mail.list Rule/Speedtest.list
           if git diff --staged --quiet; then
             echo "No changes to commit for rule lists in Rule/."
           else
