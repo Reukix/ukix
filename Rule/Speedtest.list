@@ -1,0 +1,8 @@
+# Speedtest Rules - Fetched on 2025-07-07 01:16:03 GMT+8
+
+DOMAIN-KEYWORD,speedtest
+DOMAIN-SUFFIX,fast.com
+DOMAIN-SUFFIX,ooklaserver.net
+DOMAIN-SUFFIX,speed.cloudflare.com
+DOMAIN-SUFFIX,speed.dler.io
+USER-AGENT,SpeedTest*
