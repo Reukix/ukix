@@ -5,4 +5,4 @@ surge非常的好用 简直无敌
 
 pagermaid.sh是Pagermaid的docker安装方式 版本固定了1.5.2
 
-wget https://raw.githubusercontent.com/uki0xc/Rule/refs/heads/main/pagermaid.sh -O pagermaid.sh && chmod +x pagermaid.sh && bash pagermaid.sh
+wget https://raw.githubusercontent.com/uki0xc/ukix/main/pagermaid.sh -O pagermaid.sh && chmod +x pagermaid.sh && bash pagermaid.sh
