@@ -99,10 +99,10 @@ start_docker () {
     echo "正在启动 Docker 容器 . . ."
     case $PGM_WEB in
         true)
-            docker run -dit --restart=always --name="$container_name" --hostname="$container_name" -e WEB_ENABLE="$PGM_WEB" -e WEB_SECRET_KEY="$admin_password" -e WEB_HOST=0.0.0.0 -e WEB_PORT=3333 -e WEB_LOGIN="$PGM_WEB_LOGIN" -p 3333:3333 teampgm/pagermaid_pyro <&1
+            docker run -dit --restart=always --name="$container_name" --hostname="$container_name" -e WEB_ENABLE="$PGM_WEB" -e WEB_SECRET_KEY="$admin_password" -e WEB_HOST=0.0.0.0 -e WEB_PORT=3333 -e WEB_LOGIN="$PGM_WEB_LOGIN" -p 3333:3333 teampgm/pagermaid_pyro:1.5.2 <&1
             ;;
         *)
-            docker run -dit --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro <&1
+            docker run -dit --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro:1.5.2 <&1
             ;;
     esac
     echo
@@ -150,35 +150,29 @@ data_persistence () {
             echo "- 2 [默认]"
             read -r mode <&1
 
-            # 校验用户输入
             if [[ "$mode" = "1" ]]; then
-                # 选择模式1
                 echo "已选择模式1：持久化整个 PagerMaid 目录。"
                 docker cp "$container_name":/pagermaid/workdir "$data_path"
                 mount_args="-v $data_path/workdir:/pagermaid/workdir"
             elif [[  -z "$mode" || "$mode" = "2" ]]; then
-                # 默认选择模式2
                 echo "已选择模式2：仅持久化 data 和 plugins 目录。"
                 docker cp "$container_name":/pagermaid/workdir/data "$data_path"
                 docker cp "$container_name":/pagermaid/workdir/plugins "$data_path"
                 mount_args="-v $data_path/data:/pagermaid/workdir/data -v $data_path/plugins:/pagermaid/workdir/plugins"
             else
-                # 输入无效
                 echo "无效的选择，请重新运行并选择 1 或 2。"
                 exit 1
             fi
 
-            # 停止并删除旧容器
             docker stop "$container_name" &>/dev/null
             docker rm "$container_name" &>/dev/null
 
-            # 启动新容器
             case $PGM_WEB in
                  true)
-                     docker run -dit $mount_args --restart=always --name="$container_name" --hostname="$container_name" -e WEB_ENABLE="$PGM_WEB" -e WEB_SECRET_KEY="$admin_password" -e WEB_HOST=0.0.0.0 -e WEB_PORT=3333 -p 3333:3333 teampgm/pagermaid_pyro <&1
+                     docker run -dit $mount_args --restart=always --name="$container_name" --hostname="$container_name" -e WEB_ENABLE="$PGM_WEB" -e WEB_SECRET_KEY="$admin_password" -e WEB_HOST=0.0.0.0 -e WEB_PORT=3333 -p 3333:3333 teampgm/pagermaid_pyro:1.5.2 <&1
                      ;;
                  *)
-                     docker run -dit $mount_args --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro <&1
+                     docker run -dit $mount_args --restart=always --name="$container_name" --hostname="$container_name" teampgm/pagermaid_pyro:1.5.2 <&1
                      ;;
             esac
 
@@ -291,11 +285,6 @@ redata_persistence () {
 }
 
 shon_online () {
-    echo "一键脚本出现任何问题请转手动搭建！ xtaolabs.com"
-    echo "一键脚本出现任何问题请转手动搭建！ xtaolabs.com"
-    echo "一键脚本出现任何问题请转手动搭建！ xtaolabs.com"
-    echo ""
-    echo ""
     echo "欢迎使用 PagerMaid-Pyro Docker 一键安装脚本。"
     echo
     echo "请选择您需要进行的操作:"
@@ -308,40 +297,20 @@ shon_online () {
     echo "  7) PagerMaid 数据持久化"
     echo "  8) 退出脚本"
     echo
-    echo "     Version：2.3.0"
+    echo "     Version：1.0.0"
     echo
     echo -n "请输入编号: "
     read -r N <&1
     case $N in
-        1)
-            start_installation
-            ;;
-        2)
-            cleanup
-            ;;
-        3)
-            stop_pager
-            ;;
-        4)
-            start_pager
-            ;;
-        5)
-            restart_pager
-            ;;
-        6)
-            reinstall_pager
-            ;;
-        7)  
-            redata_persistence
-            ;;
-        8)
-            exit 0
-            ;;
-        *)
-            echo "Wrong input!"
-            sleep 5s
-            shon_online
-            ;;
+        1) start_installation ;;
+        2) cleanup ;;
+        3) stop_pager ;;
+        4) start_pager ;;
+        5) restart_pager ;;
+        6) reinstall_pager ;;
+        7) redata_persistence ;;
+        8) exit 0 ;;
+        *) echo "Wrong input!" ; sleep 5s ; shon_online ;;
     esac 
 }
 
