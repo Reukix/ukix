@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2025-07-12 03:09:13 GMT+8
+# FuckAds Rules - Fetched on 2025-07-13 03:08:17 GMT+8
 
 
 DOMAIN, 118.89.204.198
@@ -32,6 +32,7 @@ DOMAIN, ad.toutiao.com
 DOMAIN, ad.yixin.im
 DOMAIN, ad.zijieapi.com
 DOMAIN, adashxgc.ut.taobao.com
+DOMAIN, adbehavior.wsa.ximalaya.com
 DOMAIN, adbehavior.ximalaya.com
 DOMAIN, adc.hpplay.cn
 DOMAIN, adcdn.hpplay.cn
@@ -78,6 +79,9 @@ DOMAIN, ads.yahoo.de
 DOMAIN, ads.youtube.com
 DOMAIN, adsapi.snapchat.com
 DOMAIN, adsdk.vivo.com.cn
+DOMAIN, adse.wsa.ximalaya.com
+DOMAIN, adse.ximalaya.com
+DOMAIN, adsehera.ximalaya.com
 DOMAIN, adserviceretry.kugou.com
 DOMAIN, adsfile.bssdlbig.kugou.com
 DOMAIN, adsfs.oppomobile.com
@@ -95,7 +99,6 @@ DOMAIN, adv-ads.variflight.com
 DOMAIN, advertise.baicizhan.com
 DOMAIN, advertise.baicizhan.org
 DOMAIN, advertising.apple.com
-DOMAIN, adwbs.ximalaya.com
 DOMAIN, adx-api.hupu.com
 DOMAIN, adx.hupu.com
 DOMAIN, adx.yiche.com
@@ -1771,7 +1774,6 @@ DOMAIN-SUFFIX, amung.us
 DOMAIN-SUFFIX, amz.steamprices.com
 DOMAIN-SUFFIX, an.m.liebao.cn
 DOMAIN-SUFFIX, an.wikigifth.com
-DOMAIN-SUFFIX, an.yandex.ru
 DOMAIN-SUFFIX, ana.tatahn.com
 DOMAIN-SUFFIX, analysys.cn
 DOMAIN-SUFFIX, analytics.query.yahoo.com
@@ -5678,7 +5680,6 @@ DOMAIN-SUFFIX, mbrowser.news.haosou.com
 DOMAIN-SUFFIX, mbrowser.news.so.com
 DOMAIN-SUFFIX, mbs.weathercn.com
 DOMAIN-SUFFIX, mc.hujiang.com
-DOMAIN-SUFFIX, mc.yandex.ru
 DOMAIN-SUFFIX, mcore.vcgame.cn
 DOMAIN-SUFFIX, mcupdate.gstarcad.com
 DOMAIN-SUFFIX, md.1drj.com
@@ -8450,7 +8451,6 @@ DOMAIN-SUFFIX, yads.c.yimg.jp
 DOMAIN-SUFFIX, yads.yahoo.co.jp
 DOMAIN-SUFFIX, yageben.com
 DOMAIN-SUFFIX, yam.adsbro.com
-DOMAIN-SUFFIX, yandex.ru
 DOMAIN-SUFFIX, yandui.com
 DOMAIN-SUFFIX, yangdasen.cn
 DOMAIN-SUFFIX, yanglaopt.net
@@ -8755,15 +8755,11 @@ DOMAIN-SUFFIX,ad.m.iqiyi.com
 DOMAIN-SUFFIX,ad.player.baidu.com
 DOMAIN-SUFFIX,ad.qq.com
 DOMAIN-SUFFIX,ad.sohu.com
-DOMAIN-SUFFIX,ad.test.ximalaya.com
-DOMAIN-SUFFIX,ad.ximalaya.com
 DOMAIN-SUFFIX,adash-c.ut.taobao.com
 DOMAIN-SUFFIX,adashbc.m.taobao.com
 DOMAIN-SUFFIX,adashbc.ut.taobao.com
 DOMAIN-SUFFIX,adashx4yt.m.taobao.com
 DOMAIN-SUFFIX,adashxgc.ut.taobao.com
-DOMAIN-SUFFIX,adbehavior.wsa.ximalaya.com
-DOMAIN-SUFFIX,adbs.ximalaya.com
 DOMAIN-SUFFIX,adcanvas.com
 DOMAIN-SUFFIX,adguanggao.eee114.com
 DOMAIN-SUFFIX,adiu.amap.com
@@ -8784,10 +8780,6 @@ DOMAIN-SUFFIX,ads1.msn.com
 DOMAIN-SUFFIX,ads2.msn.com
 DOMAIN-SUFFIX,adscdn.baidu.com
 DOMAIN-SUFFIX,adsclick.qq.com
-DOMAIN-SUFFIX,adse.test.ximalaya.com
-DOMAIN-SUFFIX,adse.wsa.ximalaya.com
-DOMAIN-SUFFIX,adse.ximalaya.com
-DOMAIN-SUFFIX,adsebs.ximalaya.com
 DOMAIN-SUFFIX,adsence.sogou.com
 DOMAIN-SUFFIX,adsense.html5.qq.com
 DOMAIN-SUFFIX,adserver.yahoo.com
@@ -8814,8 +8806,6 @@ DOMAIN-SUFFIX,adv.app.qq.com
 DOMAIN-SUFFIX,adver.qq.com
 DOMAIN-SUFFIX,advertising.yahoo.com
 DOMAIN-SUFFIX,advp.apple.com
-DOMAIN-SUFFIX,adweb.test.ximalaya.com
-DOMAIN-SUFFIX,adweb.ximalaya.com
 DOMAIN-SUFFIX,aeventlog.beacon.qq.com
 DOMAIN-SUFFIX,afd.l.google.com
 DOMAIN-SUFFIX,afp.iqiyi.com
@@ -9083,13 +9073,11 @@ DOMAIN-SUFFIX,kuaizip.com
 DOMAIN-SUFFIX,kuwoyy.com
 DOMAIN-SUFFIX,kwmsg.kuwo.cn
 DOMAIN-SUFFIX,l.ykimg.com
-DOMAIN-SUFFIX,linkeye.ximalaya.com
 DOMAIN-SUFFIX,livep.l.ott.video.qq.com
 DOMAIN-SUFFIX,livep.l.qq.com
 DOMAIN-SUFFIX,lives.l.ott.video.qq.com
 DOMAIN-SUFFIX,lives.l.qq.com
 DOMAIN-SUFFIX,lobmuc.cn
-DOMAIN-SUFFIX,location.ximalaya.com
 DOMAIN-SUFFIX,log.cs.pp.cn
 DOMAIN-SUFFIX,log.hunantv.com
 DOMAIN-SUFFIX,log.stat.kugou.com
@@ -9340,7 +9328,6 @@ DOMAIN-SUFFIX,wxsnsdythumb.wxs.qq.com
 DOMAIN-SUFFIX,x.da.hunantv.com
 DOMAIN-SUFFIX,x.da.mgtv.com
 DOMAIN-SUFFIX,x1.da.hunantv.com
-DOMAIN-SUFFIX,xdcs-collector.ximalaya.com
 DOMAIN-SUFFIX,xitongqingli.com
 DOMAIN-SUFFIX,y.da.hunantv.com
 DOMAIN-SUFFIX,y.da.mgtv.com
