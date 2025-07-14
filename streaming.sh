@@ -1036,10 +1036,7 @@ function Global_UnlockTest() {
 }
 
 function showScriptTitle() {
-    echo -e " [流媒体平台及游戏区域限制测试]"
-    echo ''
-    echo -e "${Font_Green}项目地址${Font_Suffix} ${Font_Yellow}https://github.com/lmc999/RegionRestrictionCheck ${Font_Suffix}"
-    echo -e "${Font_Green}BUG 反馈或使用交流可加 TG 群组${Font_Suffix} ${Font_Yellow}https://t.me/gameaccelerate ${Font_Suffix}"
+    echo -e " [流媒体平台测试]"
     echo ''
     echo -e " ** 测试时间: $(date)"
     echo -e " ** 版本: ${VER}"
@@ -1098,14 +1095,6 @@ function checkIPConn() {
         return
     fi
 }
-
-function showGoodbye() {
-    echo -e "${Font_Green}本次测试已结束，感谢使用此脚本${Font_Suffix}"
-    echo -e ''
-    echo -e "${Font_Yellow}检测脚本当天运行次数: ${TODAY_RUN_TIMES}; 共计运行次数: ${TOTAL_RUN_TIMES}${Font_Suffix}"
-    echo -e ''
-}
-
 # --- Main Execution Block ---
 
 main() {
