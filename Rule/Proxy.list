@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-07-15 03:10:20 GMT+8
+# Proxy Rules - Fetched on 2025-07-16 03:11:51 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -6241,6 +6241,7 @@ DOMAIN-SUFFIX,wuw.red
 DOMAIN-SUFFIX,wuyanblog.com
 DOMAIN-SUFFIX,wwe.com
 DOMAIN-SUFFIX,wwitv.com
+DOMAIN-SUFFIX,www.xicons.org
 DOMAIN-SUFFIX,www1.biz
 DOMAIN-SUFFIX,wwwhost.biz
 DOMAIN-SUFFIX,wzyboy.im
