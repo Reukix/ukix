@@ -1123,8 +1123,6 @@ main() {
     if [ "$USE_IPV6" -eq 1 ]; then
         Global_UnlockTest
     fi
-
-    showGoodbye
 }
 
 main "$@"
