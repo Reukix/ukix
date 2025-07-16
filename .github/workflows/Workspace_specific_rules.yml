@@ -27,6 +27,7 @@ jobs:
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list
             curl -sL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Rule/OpenAI.list
             echo "DOMAIN-KEYWORD,apple-relay"
+            echo "DOMAIN-KEYWORD,diabrowser"
           } | grep -v '^#' | sort | uniq >> Rule/Intelligence.list
 
       - name: Fetch and Integrate CN Rules
