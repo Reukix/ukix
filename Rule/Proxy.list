@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-07-19 03:10:27 GMT+8
+# Proxy Rules - Fetched on 2025-07-20 03:08:16 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -424,7 +424,6 @@ DOMAIN-SUFFIX,appspot-preview.com
 DOMAIN-SUFFIX,appspot.com
 DOMAIN-SUFFIX,appsto.re
 DOMAIN-SUFFIX,aptoide.com
-DOMAIN-SUFFIX,ar.hao123.com
 DOMAIN-SUFFIX,arcgis.com
 DOMAIN-SUFFIX,archive.fo
 DOMAIN-SUFFIX,archive.is
@@ -4038,7 +4037,6 @@ DOMAIN-SUFFIX,onmoon.com
 DOMAIN-SUFFIX,onmoon.net
 DOMAIN-SUFFIX,onmypc.biz
 DOMAIN-SUFFIX,onmypc.info
-DOMAIN-SUFFIX,onmypc.net
 DOMAIN-SUFFIX,onmypc.org
 DOMAIN-SUFFIX,onmypc.us
 DOMAIN-SUFFIX,onthehunt.com
