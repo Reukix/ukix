@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2025-07-21 03:08:19 GMT+8
+# FuckAds Rules - Fetched on 2025-07-22 03:11:54 GMT+8
 
 
 DOMAIN, 118.89.204.198
@@ -2282,6 +2282,7 @@ DOMAIN-SUFFIX, brandshow.58.com
 DOMAIN-SUFFIX, brcache.madthumbs.com
 DOMAIN-SUFFIX, breeze.olclient.baofeng.com
 DOMAIN-SUFFIX, breezily168.com
+DOMAIN-SUFFIX, bridgeoos.com
 DOMAIN-SUFFIX, brizads.com
 DOMAIN-SUFFIX, bro.flyme.cn
 DOMAIN-SUFFIX, browser.gwdang.com
@@ -2665,6 +2666,7 @@ DOMAIN-SUFFIX, clkservice.mail.youdao.com
 DOMAIN-SUFFIX, clkservice.union.youdao.com
 DOMAIN-SUFFIX, clkservice.youdao.com
 DOMAIN-SUFFIX, clkservice2.dict.youdao.com
+DOMAIN-SUFFIX, cloooud.com
 DOMAIN-SUFFIX, clotfun.mobi
 DOMAIN-SUFFIX, clotfun.online
 DOMAIN-SUFFIX, cloud.codenow.cn
@@ -8593,6 +8595,7 @@ DOMAIN-SUFFIX, yunbofangbt.com
 DOMAIN-SUFFIX, yundingjiayuan.com
 DOMAIN-SUFFIX, yunjiasu.com
 DOMAIN-SUFFIX, yunshipei.com
+DOMAIN-SUFFIX, yunxinfw.com
 DOMAIN-SUFFIX, yunxuu.com
 DOMAIN-SUFFIX, yuyue008.cn
 DOMAIN-SUFFIX, ywjxsp168.cn
@@ -9381,6 +9384,7 @@ IP-CIDR, 112.74.95.46/32, no-resolve
 IP-CIDR, 113.207.57.24/32, no-resolve
 IP-CIDR, 113.57.230.88/32, no-resolve
 IP-CIDR, 114.119.160.0/21, no-resolve
+IP-CIDR, 114.132.165.205/32
 IP-CIDR, 114.247.28.96/32, no-resolve
 IP-CIDR, 114.55.123.44/32, no-resolve
 IP-CIDR, 114.95.102.77/32, no-resolve
