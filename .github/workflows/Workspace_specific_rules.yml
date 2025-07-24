@@ -25,9 +25,19 @@ jobs:
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list
-            curl -sL https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Rule/OpenAI.list
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Copilot/Copilot.list
+            curl -sL http://raw.githubusercontent.com/blankmagic/surge/refs/heads/main/rule/AI.list
             echo "DOMAIN-KEYWORD,apple-relay"
             echo "DOMAIN-KEYWORD,diabrowser"
+            echo "DOMAIN-SUFFIX,cursor-cdn.com"
+            echo "DOMAIN-SUFFIX,cursor.com"
+            echo "DOMAIN-SUFFIX,cursor.sh"
+            echo "DOMAIN-SUFFIX,cursorapi.com"
+            echo "DOMAIN-SUFFIX,grok.com"
+            echo "DOMAIN-SUFFIX,x.ai"
+            echo "DOMAIN-SUFFIX,meta.ai"
+            echo "DOMAIN-SUFFIX,meta.com"
+            echo "DOMAIN-SUFFIX,metademolab.com"
           } | grep -v '^#' | sort | uniq >> Rule/Intelligence.list
 
       - name: Fetch and Integrate CN Rules
