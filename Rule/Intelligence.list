@@ -65,7 +65,8 @@ DOMAIN-SUFFIX,chatgpt.com
 DOMAIN-SUFFIX,chatgpt.livekit.cloud
 DOMAIN-SUFFIX,claude.ai
 DOMAIN-SUFFIX,client-api.arkoselabs.com
-DOMAIN-SUFFIX,cursor-cdn.com
+DOMAIN-SUFFIX,
+or-cdn.com
 DOMAIN-SUFFIX,cursor.com
 DOMAIN-SUFFIX,cursor.sh
 DOMAIN-SUFFIX,cursorapi.com
