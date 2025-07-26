@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2025-07-26 03:11:14 GMT+8
+# FuckAds Rules - Fetched on 2025-07-27 03:08:27 GMT+8
 
 
 DOMAIN, 118.89.204.198
@@ -2572,6 +2572,7 @@ DOMAIN-SUFFIX, cdnmaster.com
 DOMAIN-SUFFIX, cdnny.com
 DOMAIN-SUFFIX, cdnpa.hyperpromote.com
 DOMAIN-SUFFIX, cdntest.a8tiyu.com
+DOMAIN-SUFFIX, cdntips.net
 DOMAIN-SUFFIX, cds.51y5.net
 DOMAIN-SUFFIX, cdyqc.com
 DOMAIN-SUFFIX, ced.sascdn.com
@@ -3788,6 +3789,7 @@ DOMAIN-SUFFIX, fghm.ga25.com
 DOMAIN-SUFFIX, fghmc.ga25.com
 DOMAIN-SUFFIX, fghmimg.ga25.com
 DOMAIN-SUFFIX, file.bmob.cn
+DOMAIN-SUFFIX, file.myqcloud.com
 DOMAIN-SUFFIX, files2.sogou.com
 DOMAIN-SUFFIX, fimserve.ign.com
 DOMAIN-SUFFIX, findicons.com
@@ -6157,6 +6159,7 @@ DOMAIN-SUFFIX, oss-asq-static.11222.cn
 DOMAIN-SUFFIX, otf.msn.com
 DOMAIN-SUFFIX, otheve.play.aiseet.atianqi.com
 DOMAIN-SUFFIX, othstr.play.aiseet.atianqi.com
+DOMAIN-SUFFIX, ott.cibntv.net
 DOMAIN-SUFFIX, ou188.com
 DOMAIN-SUFFIX, output.nend.net
 DOMAIN-SUFFIX, overture.com
@@ -6501,6 +6504,7 @@ DOMAIN-SUFFIX, pups.bdimg.com
 DOMAIN-SUFFIX, pupu.xnhh120.com
 DOMAIN-SUFFIX, push-android.myzaker.com
 DOMAIN-SUFFIX, push-dc.51y5.net
+DOMAIN-SUFFIX, push-service-ios.sginput.qq.com, reject
 DOMAIN-SUFFIX, push.126.net
 DOMAIN-SUFFIX, push.5z5zw.com
 DOMAIN-SUFFIX, push.air-matters.com
@@ -7571,6 +7575,7 @@ DOMAIN-SUFFIX, test.surepush.cn
 DOMAIN-SUFFIX, tf.caohua.com
 DOMAIN-SUFFIX, tf.hdfdm.com
 DOMAIN-SUFFIX, tf.hftaili.com
+DOMAIN-SUFFIX, tfogc.com
 DOMAIN-SUFFIX, tfosrv.com
 DOMAIN-SUFFIX, tfssl.caohua.com
 DOMAIN-SUFFIX, tg.1155t.cn
