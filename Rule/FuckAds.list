@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2025-07-28 15:01:30 GMT+8
+# FuckAds Rules - Fetched on 2025-07-29 03:12:53 GMT+8
 
 
 DOMAIN, 118.89.204.198
@@ -1212,6 +1212,7 @@ DOMAIN-SUFFIX, ad.beihai365.com
 DOMAIN-SUFFIX, ad.bitmedia.io
 DOMAIN-SUFFIX, ad.bjmama.net
 DOMAIN-SUFFIX, ad.bn.netease.com
+DOMAIN-SUFFIX, ad.bwton.com
 DOMAIN-SUFFIX, ad.cacafly.com
 DOMAIN-SUFFIX, ad.caiyunapp.com
 DOMAIN-SUFFIX, ad.cooks.com
@@ -1865,6 +1866,7 @@ DOMAIN-SUFFIX, api.uniplayad.com
 DOMAIN-SUFFIX, api.userstyles.org
 DOMAIN-SUFFIX, api.viglink.com
 DOMAIN-SUFFIX, api.whizzone.com
+DOMAIN-SUFFIX, api.wxcjgg.cn
 DOMAIN-SUFFIX, api.xk.miui.com
 DOMAIN-SUFFIX, api.y.igexin.com
 DOMAIN-SUFFIX, api.youxiaoad.com
@@ -2087,6 +2089,7 @@ DOMAIN-SUFFIX, bai3.gushiwen.org
 DOMAIN-SUFFIX, baiapk.com
 DOMAIN-SUFFIX, baifendian.com
 DOMAIN-SUFFIX, baigm.com
+DOMAIN-SUFFIX, baihemob.com
 DOMAIN-SUFFIX, baiwanchuangyi.com
 DOMAIN-SUFFIX, bam.nr-data.net
 DOMAIN-SUFFIX, banmamedia.com
@@ -7124,6 +7127,7 @@ DOMAIN-SUFFIX, shrek.6.cn
 DOMAIN-SUFFIX, shtt.shuqw.com
 DOMAIN-SUFFIX, shucaihangjia.com
 DOMAIN-SUFFIX, shuiguo.com
+DOMAIN-SUFFIX, shunchangzhixing.com
 DOMAIN-SUFFIX, shuqw.com
 DOMAIN-SUFFIX, shushijiameng123.com
 DOMAIN-SUFFIX, shuttle.bayescom.com
