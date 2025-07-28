@@ -1,8 +1,10 @@
-# Binance Rules - Fetched on 2025-07-28 14:03:03 GMT+8
+# Binance Rules - Fetched on 2025-07-28 15:01:32 GMT+8
 
+DOMAIN-KEYWORD,binance
 DOMAIN-SUFFIX,appsflayer.com
 DOMAIN-SUFFIX,binance.cloud
 DOMAIN-SUFFIX,binance.com
+DOMAIN-SUFFIX,binance.info
 DOMAIN-SUFFIX,binance.me
 DOMAIN-SUFFIX,binancecnt.com
 DOMAIN-SUFFIX,binancefuture.com
