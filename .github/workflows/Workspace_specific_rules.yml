@@ -48,7 +48,6 @@ jobs:
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax_All.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/MeiTuan/MeiTuan.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/WeChat/WeChat.list
-            echo "DOMAIN-SUFFIX,example.cn"
           } | grep -v '^#' | sort | uniq >> Rule/CN.list
 
       - name: Fetch and Format Google Rules
@@ -127,7 +126,11 @@ jobs:
         run: |
           echo "# Binance Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Binance.list
           echo "" >> Rule/Binance.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Binance/Binance.list | grep -v '^#' | sort | uniq >> Rule/Binance.list
+          {
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Binance/Binance.list
+            echo "DOMAIN-SUFFIX,binance.info"
+            echo "DOMAIN-KEYWORD,binance" 
+          } | grep -v '^#' | sort | uniq >> Rule/Binance.list
 
       - name: Commit and push changes
         run: |
