@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-07-29 03:12:53 GMT+8
+# Proxy Rules - Fetched on 2025-07-30 03:14:34 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -3314,6 +3314,7 @@ DOMAIN-SUFFIX,lsmwebcast.com
 DOMAIN-SUFFIX,lsxszzg.com
 DOMAIN-SUFFIX,ltn.com.tw
 DOMAIN-SUFFIX,luckydesigner.space
+DOMAIN-SUFFIX,ludepress.com
 DOMAIN-SUFFIX,luke54.com
 DOMAIN-SUFFIX,luke54.org
 DOMAIN-SUFFIX,lupm.org
