@@ -84,7 +84,7 @@ jobs:
         run: |
           echo "# Proxy Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Proxy.list
           echo "" >> Rule/Proxy.list
-          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy_All_No_Resolve.list | grep -v '^#' | sort | uniq >> Rule/Proxy.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy_All.list | grep -v '^#' | sort | uniq >> Rule/Proxy.list
 
       - name: Fetch and Format TikTok Rules
         run: |
