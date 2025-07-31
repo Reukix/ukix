@@ -2,7 +2,7 @@
 
 DOMAIN-SUFFIX,konami.net
 DOMAIN-SUFFIX,konami.com
-DOMAIN-SUFFIX,elb.bc.googleusercontent.com
+DOMAIN-SUFFIX,bc.googleusercontent.com
 DOMAIN-SUFFIX,elb.ap-southeast-7.amazonaws.com
 DOMAIN-SUFFIX,elb.me-central-1.amazonaws.com
 DOMAIN-SUFFIX,awsglobalaccelerator.com
