@@ -1,0 +1,16 @@
+# efootball,7/31手动抓包
+
+DOMAIN-SUFFIX,konami.net
+DOMAIN-SUFFIX,konami.com
+DOMAIN-SUFFIX,elb.bc.googleusercontent.com
+DOMAIN-SUFFIX,elb.ap-southeast-7.amazonaws.com
+DOMAIN-SUFFIX,elb.me-central-1.amazonaws.com
+DOMAIN-SUFFIX,awsglobalaccelerator.com
+DOMAIN-SUFFIX,elb.eu-south-2.amazonaws.com
+DOMAIN-SUFFIX,elb.eu-west-3.amazonaws.com
+DOMAIN-SUFFIX,elb.me-south-1.amazonaws.com
+DOMAIN-SUFFIX,elb.il-central-1.amazonaws.com
+DOMAIN-SUFFIX,elb.eu-central-2.amazonaws.com
+DOMAIN-SUFFIX,elb.eu-south-1.amazonaws.com
+DOMAIN-KEYWORD,konami
+IP-CIDR,15.220.160.208/32,no-resolve
