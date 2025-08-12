@@ -78,6 +78,7 @@ jobs:
             echo "DOMAIN,route-stats.d.meituan.net"
             echo "DOMAIN,maplocatesdksnapshot.d.meituan.net"
             echo "DOMAIN,al-log.d.meituan.net"
+            echo "IP-CIDR,103.37.155.60/32, no-resolve"
           } | grep -v '^#' | sort | uniq >> Rule/FuckAds.list
 
       - name: Fetch and Format Spotify Rules
