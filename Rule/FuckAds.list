@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2025-08-13 02:46:45 GMT+8
+# FuckAds Rules - Fetched on 2025-08-13 02:51:45 GMT+8
 
 
 DOMAIN,1500020991.vodplayer.wxamedia.com
@@ -150,6 +150,7 @@ DOMAIN,aem.dentsuchina.cn
 DOMAIN,afs.googlesyndication.com
 DOMAIN,agn.aty.sohu.com
 DOMAIN,aiseet.aa.atianqi.com
+DOMAIN,al-log.d.meituan.net
 DOMAIN,ali-ad.a.yximgs.com
 DOMAIN,ali-p2p-v2.pull.yximgs.com
 DOMAIN,alicoccdncnc-xn.inter.71edge.com
@@ -491,6 +492,7 @@ DOMAIN,m.atm.youku.com
 DOMAIN,m.iqiyipic.com
 DOMAIN,m1.ad.10010.com
 DOMAIN,mapi.m.jd.com
+DOMAIN,maplocatesdksnapshot.d.meituan.net
 DOMAIN,masdkv6.3g.qq.com
 DOMAIN,mazu.m.qq.com
 DOMAIN,mbdlog.iqiyi.com
@@ -610,6 +612,7 @@ DOMAIN,review.gdtimg.com
 DOMAIN,rlog.popin.cc
 DOMAIN,rms-drcn.platform.dbankcloud.cn
 DOMAIN,roi.soulapp.cn
+DOMAIN,route-stats.d.meituan.net
 DOMAIN,rp.hpplay.cn
 DOMAIN,rps.hpplay.cn
 DOMAIN,rpt.gdt.qq.com
