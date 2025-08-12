@@ -75,6 +75,9 @@ jobs:
           {
             curl -sL https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/refs/heads/main/Filters/AWAvenue-Ads-Rule-Surge-RULE-SET.list
             echo "DOMAIN,metrics-picture.d.meituan.net"
+            echo "DOMAIN,route-stats.d.meituan.net"
+            echo "DOMAIN,maplocatesdksnapshot.d.meituan.net"
+            echo "DOMAIN,al-log.d.meituan.net"
           } | grep -v '^#' | sort | uniq >> Rule/FuckAds.list
 
       - name: Fetch and Format Spotify Rules
