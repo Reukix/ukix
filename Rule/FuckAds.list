@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2025-08-13 03:09:56 GMT+8
+# FuckAds Rules - Fetched on 2025-08-14 03:09:18 GMT+8
 
 
 DOMAIN,1500020991.vodplayer.wxamedia.com
@@ -859,3 +859,4 @@ DOMAIN-SUFFIX,ubixioe.com
 DOMAIN-SUFFIX,vlion.cn
 DOMAIN-SUFFIX,yfanads.com
 DOMAIN-SUFFIX,zhangyuyidong.cn
+IP-CIDR,103.37.155.60/32, no-resolve
