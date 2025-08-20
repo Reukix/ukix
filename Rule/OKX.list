@@ -1,5 +1,11 @@
-# OKX Rules - Fetched on 2025-08-20 17:07:05 GMT+8
+# OKX Rules - Fetched on 2025-08-20 17:16:11 GMT+8
 
+DOMAIN,api.onesignal.com
+DOMAIN,www.okx.com.cdn.cloudflare.net
+DOMAIN-KEYWORD,d1w1p0smpsoh5j
+DOMAIN-KEYWORD,d2p7qknqur0nu9
+DOMAIN-KEYWORD,ipyp0a
+DOMAIN-KEYWORD,okx
 DOMAIN-SUFFIX,okex.com
 DOMAIN-SUFFIX,oklink.com
 DOMAIN-SUFFIX,okx.com
