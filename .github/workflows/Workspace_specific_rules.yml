@@ -139,6 +139,14 @@ jobs:
             echo "DOMAIN-KEYWORD,binance" 
           } | grep -v '^#' | sort | uniq >> Rule/Binance.list
 
+      - name: Fetch and Format OKX Rules
+        run: |
+          echo "# OKX Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/OKX.list
+          echo "" >> Rule/OKX.list
+          { 
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/OKX/OKX.list
+          } | grep -v '^#' | sort | uniq >> Rule/OKX.list
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
