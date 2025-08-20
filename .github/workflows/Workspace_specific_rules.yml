@@ -145,6 +145,12 @@ jobs:
           echo "" >> Rule/OKX.list
           {
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/OKX/OKX.list
+            echo "DOMAIN-KEYWORD,okx"
+            echo "DOMAIN,www.okx.com.cdn.cloudflare.net"
+            echo "DOMAIN-KEYWORD,ipyp0a"
+            echo "DOMAIN-KEYWORD,d2p7qknqur0nu9"
+            echo "DOMAIN,api.onesignal.com"
+            echo "DOMAIN-KEYWORD,d1w1p0smpsoh5j"
           } | grep -v '^#' | sort | uniq >> Rule/OKX.list
 
       - name: Commit and push changes
