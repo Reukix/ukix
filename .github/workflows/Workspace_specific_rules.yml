@@ -149,8 +149,11 @@ jobs:
             echo "DOMAIN,www.okx.com.cdn.cloudflare.net"
             echo "DOMAIN-KEYWORD,ipyp0a"
             echo "DOMAIN-KEYWORD,d2p7qknqur0nu9"
+            echo "DOMAIN-KEYWORD,d1nil3qbkxfj92"
             echo "DOMAIN,api.onesignal.com"
+            echo "DOMAIN,api.amplitudeexperiment.com"
             echo "DOMAIN-KEYWORD,d1w1p0smpsoh5j"
+            echo "DOMAIN-SUFFIX,online-metrix.net"
           } | grep -v '^#' | sort | uniq >> Rule/OKX.list
 
       - name: Commit and push changes
