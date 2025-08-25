@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-08-25 17:19:01 GMT+8
+# Proxy Rules - Fetched on 2025-08-26 03:08:40 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -2062,6 +2062,8 @@ DOMAIN-SUFFIX,ftx.com
 DOMAIN-SUFFIX,fubo.tv
 DOMAIN-SUFFIX,fucd.com
 DOMAIN-SUFFIX,fuchsia.dev
+DOMAIN-SUFFIX,fuckccp.com
+DOMAIN-SUFFIX,fuckccp.xyz
 DOMAIN-SUFFIX,fuckcnnic.net
 DOMAIN-SUFFIX,fuckgfw.org
 DOMAIN-SUFFIX,fuckgfw233.org
