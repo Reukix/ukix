@@ -1,4 +1,4 @@
-# Intelligence Rules - Fetched on 2025-08-25 03:08:01 GMT+8
+# Intelligence Rules - Fetched on 2025-08-25 17:19:00 GMT+8
 
 
 DOMAIN,ai.google.dev
@@ -7,6 +7,7 @@ DOMAIN,alkalimakersuite-pa.clients6.google.com
 DOMAIN,api-iam.intercom.io
 DOMAIN,api.msn.com
 DOMAIN,api.statsig.com
+DOMAIN,api3.siftscience.com
 DOMAIN,apple-relay.apple.com
 DOMAIN,apple-relay.cloudflare.com
 DOMAIN,apple-relay.fastly-edge.com
@@ -43,6 +44,7 @@ DOMAIN,sfo3.turn.livekit.cloud
 DOMAIN,static.cloudflareinsights.com
 DOMAIN,sydney.bing.com
 DOMAIN,www.bing.com
+DOMAIN,xai.chronosphere.io
 DOMAIN-KEYWORD,apple-relay
 DOMAIN-KEYWORD,colab
 DOMAIN-KEYWORD,developerprofiles
@@ -51,6 +53,8 @@ DOMAIN-KEYWORD,generativelanguage
 DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,openaicom
 DOMAIN-KEYWORD,openaicom-api
+DOMAIN-KEYWORD,pplx
+DOMAIN-KEYWORD,xai
 DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,algolia.net
 DOMAIN-SUFFIX,anthropic.com
