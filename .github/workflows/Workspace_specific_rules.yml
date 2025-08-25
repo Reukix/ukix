@@ -38,6 +38,10 @@ jobs:
             echo "DOMAIN-SUFFIX,meta.ai"
             echo "DOMAIN-SUFFIX,meta.com"
             echo "DOMAIN-SUFFIX,metademolab.com"
+            echo "DOMAIN,api3.siftscience.com"
+            echo "DOMAIN,xai.chronosphere.io"
+            echo "DOMAIN-KEYWORD,xai"
+            echo "DOMAIN-KEYWORD,pplx"
           } | grep -v '^#' | sort | uniq >> Rule/Intelligence.list
 
       - name: Fetch and Integrate CN Rules
