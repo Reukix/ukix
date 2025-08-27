@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-08-27 03:08:18 GMT+8
+# Proxy Rules - Fetched on 2025-08-28 03:09:07 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -3578,6 +3578,7 @@ DOMAIN-SUFFIX,mog.com
 DOMAIN-SUFFIX,mohu.club
 DOMAIN-SUFFIX,mohu.ml
 DOMAIN-SUFFIX,mohu.rocks
+DOMAIN-SUFFIX,moj.gov.tw
 DOMAIN-SUFFIX,mojim.com
 DOMAIN-SUFFIX,mol.gov.tw
 DOMAIN-SUFFIX,molihua.org
