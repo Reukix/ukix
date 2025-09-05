@@ -14,4 +14,6 @@ DOMAIN-SUFFIX,elb.eu-central-2.amazonaws.com
 DOMAIN-SUFFIX,elb.eu-south-1.amazonaws.com
 DOMAIN,nt-www.applilink.jp
 DOMAIN-KEYWORD,konami
-IP-CIDR,15.220.160.208/32,no-resolve
+DOMAIN-KEYWORD,d1ln4m3c7n87ju
+IP-CIDR,15.220.160.0/24,no-resolve
+IP-CIDR,15.220.152.0/24,no-resolve
