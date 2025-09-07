@@ -3,7 +3,6 @@
 #!date=2025-08-13
 
 [Map Local]
-# 美团 & 美团外卖 //flowplus.meituan.net, img.meituan.net, s3plus.meituan.net
 ^http:\/\/wmapi\.meituan\.com\/api\/v7\/(?:loadInfo|openscreen|startpicture) data-type=text data="{}" status-code=200 header="Content-Type:application/json"
 
 ^https:\/\/flowplus\.meituan\.net\/v1\/mss_\w+\/linglong\/\d+\.jpg data-type=text data="{}" status-code=200 header="Content-Type:application/json"
