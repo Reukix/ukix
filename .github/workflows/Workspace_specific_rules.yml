@@ -78,10 +78,17 @@ jobs:
           echo "" >> Rule/FuckAds.list
           {
             curl -sL https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/refs/heads/main/Filters/AWAvenue-Ads-Rule-Surge-RULE-SET.list
-            echo "DOMAIN,metrics-picture.d.meituan.net"
-            echo "DOMAIN,route-stats.d.meituan.net"
-            echo "DOMAIN,maplocatesdksnapshot.d.meituan.net"
-            echo "DOMAIN,al-log.d.meituan.net"
+            echo "DOMAIN-SUFFIX,d.meituan.net"
+            echo "DOMAIN-SUFFIX,analytics.meituan.net"
+            echo "DOMAIN-SUFFIX,meituan.xn"
+            echo "DOMAIN-SUFFIX,meituan.yoga"
+            echo "DOMAIN-SUFFIX,meituangov.cn"
+            echo "DOMAIN-SUFFIX,report.meituan.com"
+            echo "DOMAIN-SUFFIX,wmlog.meituan.com"
+            echo "DOMAIN-SUFFIX,ad.e.waimai.sankuai.com"
+            echo "DOMAIN-SUFFIX,mads.meituan.com"
+            echo "DOMAIN-SUFFIX,dreport.meituan.net"
+            echo "DOMAIN,flowplus.meituan.net"
             echo "IP-CIDR,103.37.155.60/32, no-resolve"
           } | grep -v '^#' | sort | uniq >> Rule/FuckAds.list
 
