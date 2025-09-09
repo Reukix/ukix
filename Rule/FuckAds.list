@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2025-09-09 03:08:40 GMT+8
+# FuckAds Rules - Fetched on 2025-09-09 23:34:14 GMT+8
 
 
 DOMAIN,1500020991.vodplayer.wxamedia.com
@@ -150,7 +150,6 @@ DOMAIN,aem.dentsuchina.cn
 DOMAIN,afs.googlesyndication.com
 DOMAIN,agn.aty.sohu.com
 DOMAIN,aiseet.aa.atianqi.com
-DOMAIN,al-log.d.meituan.net
 DOMAIN,ali-ad.a.yximgs.com
 DOMAIN,ali-p2p-v2.pull.yximgs.com
 DOMAIN,alicoccdncnc-xn.inter.71edge.com
@@ -334,6 +333,7 @@ DOMAIN,fclog.baidu.com
 DOMAIN,feed-image.baidu.com
 DOMAIN,file.daihuo.qq.com
 DOMAIN,firebaselogging-pa.googleapis.com
+DOMAIN,flowplus.meituan.net
 DOMAIN,flurry.com
 DOMAIN,frontend-perf-service.e.kuaishou.com
 DOMAIN,fundingchoicesmessages.google.com
@@ -495,12 +495,10 @@ DOMAIN,m.atm.youku.com
 DOMAIN,m.iqiyipic.com
 DOMAIN,m1.ad.10010.com
 DOMAIN,mapi.m.jd.com
-DOMAIN,maplocatesdksnapshot.d.meituan.net
 DOMAIN,masdkv6.3g.qq.com
 DOMAIN,mazu.m.qq.com
 DOMAIN,mbdlog.iqiyi.com
 DOMAIN,mcs.zijieapi.com
-DOMAIN,metrics-picture.d.meituan.net
 DOMAIN,metrics.data.hicloud.com
 DOMAIN,metrics.icloud.com
 DOMAIN,metrics.mzstatic.com
@@ -616,7 +614,6 @@ DOMAIN,review.gdtimg.com
 DOMAIN,rlog.popin.cc
 DOMAIN,rms-drcn.platform.dbankcloud.cn
 DOMAIN,roi.soulapp.cn
-DOMAIN,route-stats.d.meituan.net
 DOMAIN,rp.hpplay.cn
 DOMAIN,rps.hpplay.cn
 DOMAIN,rpt.gdt.qq.com
@@ -855,13 +852,23 @@ DOMAIN-KEYWORD,-be-pack-sign.pglstatp-toutiao.com
 DOMAIN-KEYWORD,-normal.zijieapi.com
 DOMAIN-SUFFIX,1rtb.com
 DOMAIN-SUFFIX,a.market.xiaomi.com
+DOMAIN-SUFFIX,ad.e.waimai.sankuai.com
 DOMAIN-SUFFIX,ad.gameley.com
 DOMAIN-SUFFIX,adintl.cn
 DOMAIN-SUFFIX,adx.adwangmai.com
+DOMAIN-SUFFIX,analytics.meituan.net
+DOMAIN-SUFFIX,d.meituan.net
 DOMAIN-SUFFIX,data.hicloud.com
+DOMAIN-SUFFIX,dreport.meituan.net
 DOMAIN-SUFFIX,log.aliyuncs.com
+DOMAIN-SUFFIX,mads.meituan.com
+DOMAIN-SUFFIX,meituan.xn
+DOMAIN-SUFFIX,meituan.yoga
+DOMAIN-SUFFIX,meituangov.cn
+DOMAIN-SUFFIX,report.meituan.com
 DOMAIN-SUFFIX,ubixioe.com
 DOMAIN-SUFFIX,vlion.cn
+DOMAIN-SUFFIX,wmlog.meituan.com
 DOMAIN-SUFFIX,yfanads.com
 DOMAIN-SUFFIX,zhangyuyidong.cn
 IP-CIDR,103.37.155.60/32, no-resolve
