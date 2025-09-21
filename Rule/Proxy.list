@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-09-21 03:06:47 GMT+8
+# Proxy Rules - Fetched on 2025-09-22 03:07:34 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -2131,6 +2131,7 @@ DOMAIN-SUFFIX,gardennetworks.com
 DOMAIN-SUFFIX,gardennetworks.org
 DOMAIN-SUFFIX,garena.com
 DOMAIN-SUFFIX,gartlive.com
+DOMAIN-SUFFIX,garudalinux.org
 DOMAIN-SUFFIX,gate-project.com
 DOMAIN-SUFFIX,gate.io
 DOMAIN-SUFFIX,gatecoin.com
@@ -3872,6 +3873,7 @@ DOMAIN-SUFFIX,nintendium.com
 DOMAIN-SUFFIX,nintendo.com
 DOMAIN-SUFFIX,nintendo.net
 DOMAIN-SUFFIX,ninth.biz
+DOMAIN-SUFFIX,nirsoft.net
 DOMAIN-SUFFIX,nitter.cc
 DOMAIN-SUFFIX,nitter.net
 DOMAIN-SUFFIX,niu.moe
@@ -5989,6 +5991,7 @@ DOMAIN-SUFFIX,vpnunlimitedapp.com
 DOMAIN-SUFFIX,vpnvip.com
 DOMAIN-SUFFIX,vpnworldwide.com
 DOMAIN-SUFFIX,vpser.net
+DOMAIN-SUFFIX,vpsxb.net
 DOMAIN-SUFFIX,vraiesagesse.net
 DOMAIN-SUFFIX,vrchat.com
 DOMAIN-SUFFIX,vrmtr.com
