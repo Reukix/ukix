@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-10-05 03:07:04 GMT+8
+# Proxy Rules - Fetched on 2025-10-06 03:07:39 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -176,6 +176,7 @@ DOMAIN-SUFFIX,91dasai.com
 DOMAIN-SUFFIX,91vps.club
 DOMAIN-SUFFIX,92ccav.com
 DOMAIN-SUFFIX,991.com
+DOMAIN-SUFFIX,996.icu
 DOMAIN-SUFFIX,99btgc01.com
 DOMAIN-SUFFIX,99cn.info
 DOMAIN-SUFFIX,9bis.com
