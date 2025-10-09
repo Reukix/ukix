@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-10-09 03:08:38 GMT+8
+# Proxy Rules - Fetched on 2025-10-10 03:09:04 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -4937,6 +4937,7 @@ DOMAIN-SUFFIX,sokmil.com
 DOMAIN-SUFFIX,solana.com
 DOMAIN-SUFFIX,solidaritetibet.org
 DOMAIN-SUFFIX,solidfiles.com
+DOMAIN-SUFFIX,solscan.io
 DOMAIN-SUFFIX,solv.finance
 DOMAIN-SUFFIX,somee.com
 DOMAIN-SUFFIX,sonatype.org
