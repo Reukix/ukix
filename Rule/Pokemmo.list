@@ -1,2 +1,3 @@
 DOMAIN-SUFFIX,pokemmo.com
 IP-CIDR, 74.211.100.0/24,no-resolve
+IP-CIDR, 167.114.78.0/24,no-resolve
