@@ -42,6 +42,14 @@ jobs:
             echo "DOMAIN,xai.chronosphere.io"
             echo "DOMAIN-KEYWORD,xai"
             echo "DOMAIN-KEYWORD,pplx"
+            echo "DOMAIN-SUFFIX,apple-relay.apple.com"
+            echo "DOMAIN-SUFFIX,apple-relay.fastly-edge.com"
+            echo "DOMAIN-SUFFIX,apple-relay.cloudflare.com"
+            echo "DOMAIN-SUFFIX,gateway.icloud.com"
+            echo "DOMAIN-SUFFIX,guzzoni.apple.com"
+            echo "DOMAIN-SUFFIX,cp4.cloudflare.com"
+            echo "DOMAIN-SUFFIX,gspe1-ssl.ls.apple.com"
+            echo "DOMAIN-SUFFIX,apps.mzstatic.com"
           } | grep -v '^#' | sort | uniq >> Rule/Intelligence.list
 
       - name: Fetch and Integrate CN Rules
