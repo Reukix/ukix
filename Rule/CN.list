@@ -1,4 +1,4 @@
-# CN Rules - Fetched on 2025-10-21 03:09:26 GMT+8
+# CN Rules - Fetched on 2025-10-22 03:09:34 GMT+8
 
 DOMAIN,1-fss24-s0.streamhoster.com
 DOMAIN,14033.live.streamtheworld.com
@@ -160,8 +160,6 @@ DOMAIN,mgugaklive.nowcdn.co.kr
 DOMAIN,mobile.ccdntech.com
 DOMAIN,monitoring.qpdp1.net
 DOMAIN,movie.mcas.jp
-DOMAIN,msgr.dlservice.microsoft.com
-DOMAIN,msgruser.dlservice.microsoft.com
 DOMAIN,n18.rcs.revma.com
 DOMAIN,necgokr2-724.acs.wecandeo.com
 DOMAIN,nettvpro.live
@@ -185,7 +183,6 @@ DOMAIN,prod.databe.floonet.goog
 DOMAIN,productcard.gog-statics.com
 DOMAIN,qagpublic.qatp1.net
 DOMAIN,qgadmin.qcpp1.net
-DOMAIN,qh.dlservice.microsoft.com
 DOMAIN,qqlivepull.seedata.top
 DOMAIN,qualysapi.qatp1.net
 DOMAIN,qualysguard.qpdp1.net
@@ -210,10 +207,8 @@ DOMAIN,sdn-global-live-streaming-packager-cache-3qsdn.akamaized.net
 DOMAIN,seb.sason.top
 DOMAIN,service.urchin.com
 DOMAIN,si.cdn.dell.com
-DOMAIN,silverlight.dlservice.microsoft.com
 DOMAIN,slife.xy-asia.com
 DOMAIN,slive.ytn.co.kr
-DOMAIN,slupdate.dlservice.microsoft.com
 DOMAIN,sm.dell.com
 DOMAIN,smart.uhdnow.com
 DOMAIN,sms.imagetasks.com
@@ -262,7 +257,6 @@ DOMAIN,wcnc-lh.akamaihd.net
 DOMAIN,weather-lh.akamaihd.net
 DOMAIN,weixin110.qq.com
 DOMAIN,weizhiyundong.list
-DOMAIN,wl.dlservice.microsoft.com
 DOMAIN,wosu.streamguys1.com
 DOMAIN,wowza-stream.wbur.org
 DOMAIN,wowza.montevideo.com.uy
@@ -281,7 +275,6 @@ DOMAIN,www.soundvideostar.com
 DOMAIN,www.szmgiptv.com
 DOMAIN,www.yxssp.com
 DOMAIN,www4-static.gog-statics.com
-DOMAIN,xb.dlservice.microsoft.com
 DOMAIN,xn--flw351e.com
 DOMAIN,youku.cdn2-youku.com
 DOMAIN,zb.dehua.tv
@@ -8682,6 +8675,7 @@ DOMAIN-SUFFIX,900.vc
 DOMAIN-SUFFIX,9000wy.com
 DOMAIN-SUFFIX,900112.com
 DOMAIN-SUFFIX,900501.xyz
+DOMAIN-SUFFIX,900cha.com
 DOMAIN-SUFFIX,900php.com
 DOMAIN-SUFFIX,900ppt.com
 DOMAIN-SUFFIX,900yi.com
@@ -53838,6 +53832,7 @@ DOMAIN-SUFFIX,iprun.com
 DOMAIN-SUFFIX,ips.com
 DOMAIN-SUFFIX,ips8.com
 DOMAIN-SUFFIX,ipsebe.com
+DOMAIN-SUFFIX,ipshu.com
 DOMAIN-SUFFIX,ipshudi.com
 DOMAIN-SUFFIX,ipsmap.com
 DOMAIN-SUFFIX,ipssh.net
@@ -54130,6 +54125,7 @@ DOMAIN-SUFFIX,issjj.com
 DOMAIN-SUFFIX,issks.com
 DOMAIN-SUFFIX,ist-zl.com
 DOMAIN-SUFFIX,istcw.com
+DOMAIN-SUFFIX,istoreos.com
 DOMAIN-SUFFIX,istpei.com
 DOMAIN-SUFFIX,istrongcloud.com
 DOMAIN-SUFFIX,istrongcloud.net
@@ -59286,6 +59282,7 @@ DOMAIN-SUFFIX,jxnyc.net
 DOMAIN-SUFFIX,jxpdf.com
 DOMAIN-SUFFIX,jxphone.com
 DOMAIN-SUFFIX,jxphyz.com
+DOMAIN-SUFFIX,jxpp.com
 DOMAIN-SUFFIX,jxpta.com
 DOMAIN-SUFFIX,jxqcw.com
 DOMAIN-SUFFIX,jxqtkj.com
@@ -71697,6 +71694,7 @@ DOMAIN-SUFFIX,network-hk.com
 DOMAIN-SUFFIX,networkesl.com
 DOMAIN-SUFFIX,networklo.com
 DOMAIN-SUFFIX,netzonesoft.com
+DOMAIN-SUFFIX,netzz.net
 DOMAIN-SUFFIX,neu-reality.com
 DOMAIN-SUFFIX,neucrack.com
 DOMAIN-SUFFIX,neuedu.com
@@ -101863,6 +101861,7 @@ DOMAIN-SUFFIX,wsfnk.com
 DOMAIN-SUFFIX,wsgeogen.com
 DOMAIN-SUFFIX,wsgjj.com
 DOMAIN-SUFFIX,wsgjp.com
+DOMAIN-SUFFIX,wsglb.com
 DOMAIN-SUFFIX,wsglb.net
 DOMAIN-SUFFIX,wsglb0.com
 DOMAIN-SUFFIX,wsglb0.info
@@ -103363,6 +103362,7 @@ DOMAIN-SUFFIX,xdsp.mobi
 DOMAIN-SUFFIX,xdsyzzs.com
 DOMAIN-SUFFIX,xdter.com
 DOMAIN-SUFFIX,xdtev.com
+DOMAIN-SUFFIX,xdtool.com
 DOMAIN-SUFFIX,xdtos.com
 DOMAIN-SUFFIX,xduim.com
 DOMAIN-SUFFIX,xduoo.com
@@ -122323,6 +122323,7 @@ IP-CIDR,193.119.0.0/19
 IP-CIDR,193.17.120.0/22
 IP-CIDR,193.20.64.0/22
 IP-CIDR,193.200.222.160/28
+IP-CIDR,193.233.49.0/24
 IP-CIDR,193.3.56.73/32
 IP-CIDR,193.32.227.48/28
 IP-CIDR,193.56.20.0/24
@@ -136928,6 +136929,7 @@ IP-CIDR6,2a0e:ec05:79c0::/42
 IP-CIDR6,2a0e:ec05:7a00::/40
 IP-CIDR6,2a0e:ec05:7b00::/42
 IP-CIDR6,2a0f:5707:ac00::/47
+IP-CIDR6,2a0f:6284:4b00::/40
 IP-CIDR6,2a0f:7803:e300::/40
 IP-CIDR6,2a0f:7803:f5d0::/44
 IP-CIDR6,2a0f:7803:f5e0::/43
@@ -136947,7 +136949,6 @@ IP-CIDR6,2a0f:7803:fd80::/41
 IP-CIDR6,2a0f:7803:fe41::/48
 IP-CIDR6,2a0f:7803:fe44::/47
 IP-CIDR6,2a0f:7803:fe46::/48
-IP-CIDR6,2a0f:7803:fe60::/48
 IP-CIDR6,2a0f:7803:fe81::/48
 IP-CIDR6,2a0f:7803:fe82::/48
 IP-CIDR6,2a0f:7803:ff02:4000::/50
@@ -137040,7 +137041,6 @@ IP-CIDR6,2a13:a5c7:31a0::/43
 IP-CIDR6,2a13:a5c7:3301::/48
 IP-CIDR6,2a13:a5c7:3304::/48
 IP-CIDR6,2a13:a5c7:3306::/48
-IP-CIDR6,2a13:a5c7:3400::/44
 IP-CIDR6,2a13:aac4::/32
 IP-CIDR6,2a13:b487:1b86::/47
 IP-CIDR6,2a13:b487:1b88::/47
@@ -137070,7 +137070,7 @@ IP-CIDR6,2a14:67c1:a081::/48
 IP-CIDR6,2a14:67c1:a091::/48
 IP-CIDR6,2a14:67c1:a093::/48
 IP-CIDR6,2a14:67c1:a094::/46
-IP-CIDR6,2a14:67c1:a099::/48
+IP-CIDR6,2a14:67c1:a098::/47
 IP-CIDR6,2a14:67c1:a100::/43
 IP-CIDR6,2a14:67c1:a125::/48
 IP-CIDR6,2a14:67c1:a144::/48
