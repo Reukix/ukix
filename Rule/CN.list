@@ -1,4 +1,4 @@
-# CN Rules - Fetched on 2025-10-29 03:09:03 GMT+8
+# CN Rules - Fetched on 2025-10-30 03:08:51 GMT+8
 
 DOMAIN,1-fss24-s0.streamhoster.com
 DOMAIN,14033.live.streamtheworld.com
@@ -46669,7 +46669,10 @@ DOMAIN-SUFFIX,herllamo-med.com
 DOMAIN-SUFFIX,herllamo.com
 DOMAIN-SUFFIX,hermod1.com
 DOMAIN-SUFFIX,hero-geek.com
+DOMAIN-SUFFIX,hero.com
 DOMAIN-SUFFIX,herocoming.com
+DOMAIN-SUFFIX,heroesports.com
+DOMAIN-SUFFIX,herogame.com
 DOMAIN-SUFFIX,herohr.net
 DOMAIN-SUFFIX,heroic-ltd.com
 DOMAIN-SUFFIX,heroje.com
@@ -86491,6 +86494,7 @@ DOMAIN-SUFFIX,shyuwl.com
 DOMAIN-SUFFIX,shyuzhai.com
 DOMAIN-SUFFIX,shywly.com
 DOMAIN-SUFFIX,shyx-bio.com
+DOMAIN-SUFFIX,shyxhy.com
 DOMAIN-SUFFIX,shyxi5.com
 DOMAIN-SUFFIX,shyxwz.com
 DOMAIN-SUFFIX,shyy6688.com
@@ -136698,6 +136702,8 @@ IP-CIDR6,2a0e:aa07:e0e0::/44
 IP-CIDR6,2a0e:aa07:e151::/48
 IP-CIDR6,2a0e:aa07:e155::/48
 IP-CIDR6,2a0e:aa07:e15f::/48
+IP-CIDR6,2a0e:aa07:e160::/47
+IP-CIDR6,2a0e:aa07:e162::/48
 IP-CIDR6,2a0e:aa07:e16a::/48
 IP-CIDR6,2a0e:aa07:e192::/48
 IP-CIDR6,2a0e:aa07:e1a0::/44
@@ -136865,7 +136871,7 @@ IP-CIDR6,2a13:df85:beff:ff42::/64
 IP-CIDR6,2a13:df87:5030::/48
 IP-CIDR6,2a14:4c41::/32
 IP-CIDR6,2a14:67c1:20::/44
-IP-CIDR6,2a14:67c1:702::/48
+IP-CIDR6,2a14:67c1:702::/47
 IP-CIDR6,2a14:67c1:704::/48
 IP-CIDR6,2a14:67c1:70::/48
 IP-CIDR6,2a14:67c1:73::/48
@@ -136900,6 +136906,7 @@ IP-CIDR6,2a14:67c1:b140::/48
 IP-CIDR6,2a14:67c1:b4a1::/48
 IP-CIDR6,2a14:67c1:b4a2::/48
 IP-CIDR6,2a14:67c1:b4a8::/47
+IP-CIDR6,2a14:67c1:b4aa::/48
 IP-CIDR6,2a14:67c1:b4c0::/45
 IP-CIDR6,2a14:67c1:b4e0::/43
 IP-CIDR6,2a14:67c1:b500::/47
