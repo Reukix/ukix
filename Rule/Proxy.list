@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-11-03 03:07:50 GMT+8
+# Proxy Rules - Fetched on 2025-11-04 03:08:52 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -5261,6 +5261,7 @@ DOMAIN-SUFFIX,telegra.ph
 DOMAIN-SUFFIX,telegraph.co.uk
 DOMAIN-SUFFIX,telesco.pe
 DOMAIN-SUFFIX,tellme.pw
+DOMAIN-SUFFIX,temu.com
 DOMAIN-SUFFIX,tenacy.com
 DOMAIN-SUFFIX,tenor.com
 DOMAIN-SUFFIX,tensorflow.org
