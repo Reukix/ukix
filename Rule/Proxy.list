@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-11-21 03:09:03 GMT+8
+# Proxy Rules - Fetched on 2025-11-22 03:10:08 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -1160,6 +1160,7 @@ DOMAIN-SUFFIX,cloudcone.com
 DOMAIN-SUFFIX,cloudflare-dns.com
 DOMAIN-SUFFIX,cloudflare-ipfs.com
 DOMAIN-SUFFIX,cloudflare.com
+DOMAIN-SUFFIX,cloudflarestatus.com
 DOMAIN-SUFFIX,cloudfront.net
 DOMAIN-SUFFIX,cloudfunctions.net
 DOMAIN-SUFFIX,cloudgarage.jp
@@ -3244,6 +3245,7 @@ DOMAIN-SUFFIX,liaowangxizang.net
 DOMAIN-SUFFIX,liberal.org.hk
 DOMAIN-SUFFIX,libertysculpturepark.com
 DOMAIN-SUFFIX,libertytimes.com.tw
+DOMAIN-SUFFIX,library-access.sk
 DOMAIN-SUFFIX,libraryinformationtechnology.com
 DOMAIN-SUFFIX,libredd.it
 DOMAIN-SUFFIX,libsyn.com
@@ -3530,6 +3532,7 @@ DOMAIN-SUFFIX,middle-way.net
 DOMAIN-SUFFIX,mihk.hk
 DOMAIN-SUFFIX,mihr.com
 DOMAIN-SUFFIX,mihua.org
+DOMAIN-SUFFIX,mij.rip
 DOMAIN-SUFFIX,mikanani.me
 DOMAIN-SUFFIX,mikesoltys.com
 DOMAIN-SUFFIX,mikocon.com
@@ -3584,6 +3587,7 @@ DOMAIN-SUFFIX,mixin.one
 DOMAIN-SUFFIX,mixpod.com
 DOMAIN-SUFFIX,mixx.com
 DOMAIN-SUFFIX,mizzmona.com
+DOMAIN-SUFFIX,mji.rip
 DOMAIN-SUFFIX,mjib.gov.tw
 DOMAIN-SUFFIX,mjj.rip
 DOMAIN-SUFFIX,mk5000.com
@@ -6349,6 +6353,7 @@ DOMAIN-SUFFIX,xmovies.com
 DOMAIN-SUFFIX,xn--11xs86f.icu
 DOMAIN-SUFFIX,xn--4gq171p.com
 DOMAIN-SUFFIX,xn--90wwvt03e.com
+DOMAIN-SUFFIX,xn--9iqy04a7fi01l.com
 DOMAIN-SUFFIX,xn--9pr62r24a.com
 DOMAIN-SUFFIX,xn--czq75pvv1aj5c.org
 DOMAIN-SUFFIX,xn--i2ru8q2qg.com
