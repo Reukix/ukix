@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-11-23 03:08:05 GMT+8
+# Proxy Rules - Fetched on 2025-11-24 03:08:32 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -3770,6 +3770,7 @@ DOMAIN-SUFFIX,nalandawest.org
 DOMAIN-SUFFIX,name.com
 DOMAIN-SUFFIX,namgyal.org
 DOMAIN-SUFFIX,namgyalmonastery.org
+DOMAIN-SUFFIX,namu.wiki
 DOMAIN-SUFFIX,nanopool.org
 DOMAIN-SUFFIX,nanyang.com
 DOMAIN-SUFFIX,nanyangpost.com
@@ -4264,6 +4265,7 @@ DOMAIN-SUFFIX,picasaweb.com
 DOMAIN-SUFFIX,picgo.net
 DOMAIN-SUFFIX,picidae.net
 DOMAIN-SUFFIX,picjs.xyz
+DOMAIN-SUFFIX,picsart.com
 DOMAIN-SUFFIX,picturedip.com
 DOMAIN-SUFFIX,picturesocial.com
 DOMAIN-SUFFIX,picuki.com
