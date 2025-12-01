@@ -1,4 +1,4 @@
-# CN Rules - Fetched on 2025-12-01 03:08:38 GMT+8
+# CN Rules - Fetched on 2025-12-02 03:14:45 GMT+8
 
 DOMAIN,1-fss24-s0.streamhoster.com
 DOMAIN,14033.live.streamtheworld.com
@@ -137906,6 +137906,7 @@ IP-CIDR6,2a14:67c1:b130::/46
 IP-CIDR6,2a14:67c1:b134::/47
 IP-CIDR6,2a14:67c1:b136::/48
 IP-CIDR6,2a14:67c1:b140::/48
+IP-CIDR6,2a14:67c1:b142::/48
 IP-CIDR6,2a14:67c1:b4a1::/48
 IP-CIDR6,2a14:67c1:b4a8::/47
 IP-CIDR6,2a14:67c1:b4c0::/45
