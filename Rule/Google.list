@@ -1,4 +1,4 @@
-# Google Rules - Fetched on 2025-12-07 03:08:17 GMT+8
+# Google Rules - Fetched on 2025-12-08 03:08:23 GMT+8
 
 DOMAIN,voice.telephony.goog
 DOMAIN-KEYWORD,appspot
@@ -144,6 +144,7 @@ DOMAIN-SUFFIX,bumptop.com
 DOMAIN-SUFFIX,bumptop.net
 DOMAIN-SUFFIX,bumptop.org
 DOMAIN-SUFFIX,bumptunes.com
+DOMAIN-SUFFIX,c.gle
 DOMAIN-SUFFIX,campuslondon.com
 DOMAIN-SUFFIX,capitalg.com
 DOMAIN-SUFFIX,certificate-transparency.dev
