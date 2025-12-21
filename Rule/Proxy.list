@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-12-21 03:08:34 GMT+8
+# Proxy Rules - Fetched on 2025-12-22 03:08:34 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -4189,6 +4189,7 @@ DOMAIN-SUFFIX,parkansky.com
 DOMAIN-SUFFIX,parler.com
 DOMAIN-SUFFIX,parse.com
 DOMAIN-SUFFIX,parsevideo.com
+DOMAIN-SUFFIX,partnerstack.xyz
 DOMAIN-SUFFIX,passion.com
 DOMAIN-SUFFIX,passiontimes.hk
 DOMAIN-SUFFIX,paste.ee
