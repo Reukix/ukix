@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2025-12-25 03:09:39 GMT+8
+# Proxy Rules - Fetched on 2025-12-26 03:09:10 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -3812,6 +3812,7 @@ DOMAIN-SUFFIX,nekoslovakia.net
 DOMAIN-SUFFIX,neo-miracle.com
 DOMAIN-SUFFIX,neoforged.net
 DOMAIN-SUFFIX,neowin.net
+DOMAIN-SUFFIX,nephobox.com
 DOMAIN-SUFFIX,netalert.me
 DOMAIN-SUFFIX,netbirds.com
 DOMAIN-SUFFIX,netcolony.com
