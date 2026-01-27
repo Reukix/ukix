@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2026-01-27 03:16:48 GMT+8
+# FuckAds Rules - Fetched on 2026-01-28 03:20:23 GMT+8
 
 
 DOMAIN,1500020991.vodplayer.wxamedia.com
@@ -36,6 +36,7 @@ DOMAIN,ad.shunchangzhixing.com
 DOMAIN,ad.tencentmusic.com
 DOMAIN,ad.toutiao.com
 DOMAIN,ad.v3mh.com
+DOMAIN,ad.weibo.com
 DOMAIN,ad.winrar.com.cn
 DOMAIN,ad.ximalaya.com
 DOMAIN,ad.xunkids.com
@@ -58,6 +59,7 @@ DOMAIN,adexp.liftoff.io
 DOMAIN,adexpo.tencentmusic.com
 DOMAIN,adfilter.imtt.qq.com
 DOMAIN,adguanggao.eee114.com
+DOMAIN,adimg.uve.weibo.com
 DOMAIN,adjust.cn
 DOMAIN,adjust.com
 DOMAIN,adks.hpplay.cn
@@ -124,12 +126,14 @@ DOMAIN,adstat.izuiyou.com
 DOMAIN,adstats.tencentmusic.com
 DOMAIN,adstore-1252524079.file.myqcloud.com
 DOMAIN,adstore-index-1252524079.file.myqcloud.com
+DOMAIN,adstrategy.biz.weibo.com
 DOMAIN,adstudio-assets.scdn.co
 DOMAIN,adstudio.spotify.com
 DOMAIN,adtago.s3.amazonaws.com
 DOMAIN,adtech.yahooinc.com
 DOMAIN,adtrack.quark.cn
 DOMAIN,adtracker.medproad.com
+DOMAIN,adui.tg.meitu.com
 DOMAIN,adv-api.shenshiads.com
 DOMAIN,adv.sec.intl.miui.com
 DOMAIN,adv.sec.miui.com
@@ -150,6 +154,7 @@ DOMAIN,adx-drcn.op.dbankcloud.cn
 DOMAIN,adx-open-service.youku.com
 DOMAIN,adx-os.anythinktech.com
 DOMAIN,adx-saas.advlion.com
+DOMAIN,adx-strategy-api-cn.statisticslinks.com
 DOMAIN,adx.ads.heytapmobi.com
 DOMAIN,adx.ads.oppomobile.com
 DOMAIN,adx.appsdk.com.cn
@@ -550,6 +555,7 @@ DOMAIN,monitor.adxsenmeng.com
 DOMAIN,monitor.music.qq.com
 DOMAIN,monitor.uu.qq.com
 DOMAIN,monsetting.toutiao.com
+DOMAIN,mores.toponad.com
 DOMAIN,ms.applovin.com
 DOMAIN,ms.applvn.com
 DOMAIN,ms4.applovin.com
@@ -672,6 +678,7 @@ DOMAIN,sdk.hzsanjiaomao.com
 DOMAIN,sdk.markmedia.com.cn
 DOMAIN,sdk.mobads.adwangmai.com
 DOMAIN,sdkapi.cloooud.com
+DOMAIN,sdkapp.uve.weibo.com
 DOMAIN,sdkauth.hpplay.cn
 DOMAIN,sdkconf.avlyun.com
 DOMAIN,sdkconfig.ad.intl.xiaomi.com
@@ -736,6 +743,7 @@ DOMAIN,t2.a.market.xiaomi.com
 DOMAIN,t2.fancyapi.com
 DOMAIN,t3.a.market.xiaomi.com
 DOMAIN,t7z.cupid.ptqy.gitv.tv
+DOMAIN,tagtic.cn
 DOMAIN,tangram.e.qq.com
 DOMAIN,target.ads.jihuoniao.com
 DOMAIN,tdc.qq.com
@@ -788,6 +796,7 @@ DOMAIN,tracker.ai.xiaomi.com
 DOMAIN,tracker.gitee.com
 DOMAIN,tracking.miui.com
 DOMAIN,tracking.rus.miui.com
+DOMAIN,tuiguang.meitu.com
 DOMAIN,tvapp.hpplay.cn
 DOMAIN,tvuser-ch.cedock.com
 DOMAIN,tx-ad.a.yximgs.com
