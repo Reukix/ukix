@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2026-01-28 03:20:23 GMT+8
+# FuckAds Rules - Fetched on 2026-01-29 03:19:28 GMT+8
 
 
 DOMAIN,1500020991.vodplayer.wxamedia.com
@@ -77,6 +77,7 @@ DOMAIN,ads-sg.tiktok.com
 DOMAIN,ads-video-al.xhscdn.com
 DOMAIN,ads-video-qc.xhscdn.com
 DOMAIN,ads.95516.com
+DOMAIN,ads.auctions.yahoo.com
 DOMAIN,ads.cup.com.cn
 DOMAIN,ads.google.cn
 DOMAIN,ads.huan.tv
@@ -232,7 +233,6 @@ DOMAIN,applog.lc.quark.cn
 DOMAIN,applog.uc.cn
 DOMAIN,applog.zijieapi.com
 DOMAIN,applovin.com
-DOMAIN,appversion.115.com
 DOMAIN,aqyad.com
 DOMAIN,aspect-upush.umeng.com
 DOMAIN,auction.unityads.unity3d.com
