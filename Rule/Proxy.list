@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-01-31 03:24:53 GMT+8
+# Proxy Rules - Fetched on 2026-02-01 03:14:10 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -101,7 +101,6 @@ DOMAIN-SUFFIX,24smile.org
 DOMAIN-SUFFIX,25u.com
 DOMAIN-SUFFIX,2du5.com
 DOMAIN-SUFFIX,2lipstube.com
-DOMAIN-SUFFIX,2mdn.net
 DOMAIN-SUFFIX,2shared.com
 DOMAIN-SUFFIX,2waky.com
 DOMAIN-SUFFIX,3-a.net
@@ -2052,6 +2051,7 @@ DOMAIN-SUFFIX,freerk.com
 DOMAIN-SUFFIX,freess.org
 DOMAIN-SUFFIX,freessh.us
 DOMAIN-SUFFIX,freetcp.com
+DOMAIN-SUFFIX,freeterabox.com
 DOMAIN-SUFFIX,freetibet.net
 DOMAIN-SUFFIX,freetibet.org
 DOMAIN-SUFFIX,freetibetanheroes.org
@@ -4885,6 +4885,7 @@ DOMAIN-SUFFIX,sijihuisuo.club
 DOMAIN-SUFFIX,sijihuisuo.com
 DOMAIN-SUFFIX,silkbook.com
 DOMAIN-SUFFIX,silvergatebank.com
+DOMAIN-SUFFIX,simianx.ai
 DOMAIN-SUFFIX,simp.ly
 DOMAIN-SUFFIX,simplecd.me
 DOMAIN-SUFFIX,simplecd.org
@@ -6475,6 +6476,7 @@ DOMAIN-SUFFIX,yes123.com.tw
 DOMAIN-SUFFIX,yesasia.com
 DOMAIN-SUFFIX,yesasia.com.hk
 DOMAIN-SUFFIX,yeyeclub.com
+DOMAIN-SUFFIX,yfsp.tv
 DOMAIN-SUFFIX,ygto.com
 DOMAIN-SUFFIX,yhcw.net
 DOMAIN-SUFFIX,yibada.com
