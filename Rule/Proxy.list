@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-02-01 03:14:10 GMT+8
+# Proxy Rules - Fetched on 2026-02-02 03:17:36 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -578,6 +578,7 @@ DOMAIN-SUFFIX,bbc.co
 DOMAIN-SUFFIX,bbc.co.uk
 DOMAIN-SUFFIX,bbc.com
 DOMAIN-SUFFIX,bbc.in
+DOMAIN-SUFFIX,bbc.pdn.tritondigital.com
 DOMAIN-SUFFIX,bbcchinese.com
 DOMAIN-SUFFIX,bbchat.tv
 DOMAIN-SUFFIX,bbci.co.uk
