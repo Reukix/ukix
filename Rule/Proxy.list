@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-02-05 03:32:37 GMT+8
+# Proxy Rules - Fetched on 2026-02-06 03:31:22 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -4782,6 +4782,7 @@ DOMAIN-SUFFIX,seehua.com
 DOMAIN-SUFFIX,seesmic.com
 DOMAIN-SUFFIX,seevpn.com
 DOMAIN-SUFFIX,seezone.net
+DOMAIN-SUFFIX,sef.org.tw
 DOMAIN-SUFFIX,sehuatang.net
 DOMAIN-SUFFIX,sehuatang.org
 DOMAIN-SUFFIX,sejie.com
