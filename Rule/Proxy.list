@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-02-23 03:17:40 GMT+8
+# Proxy Rules - Fetched on 2026-02-24 03:51:16 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -273,6 +273,7 @@ DOMAIN-SUFFIX,akamaihd.net
 DOMAIN-SUFFIX,akamaistream.net
 DOMAIN-SUFFIX,akiba-online.com
 DOMAIN-SUFFIX,akiba-web.com
+DOMAIN-SUFFIX,akile.io
 DOMAIN-SUFFIX,akinator.com
 DOMAIN-SUFFIX,akow.org
 DOMAIN-SUFFIX,al-islam.com
@@ -481,6 +482,7 @@ DOMAIN-SUFFIX,aspi.org.au
 DOMAIN-SUFFIX,aspistrategist.org.au
 DOMAIN-SUFFIX,aspnetcdn.com
 DOMAIN-SUFFIX,assembla.com
+DOMAIN-SUFFIX,assets.nxtrace.org
 DOMAIN-SUFFIX,assimp.org
 DOMAIN-SUFFIX,astrill.com
 DOMAIN-SUFFIX,async.be
@@ -3464,6 +3466,7 @@ DOMAIN-SUFFIX,mediafire.com
 DOMAIN-SUFFIX,mediafreakcity.com
 DOMAIN-SUFFIX,mediawiki.org
 DOMAIN-SUFFIX,medium.com
+DOMAIN-SUFFIX,meee.com.tw
 DOMAIN-SUFFIX,meetav.com
 DOMAIN-SUFFIX,meetup.com
 DOMAIN-SUFFIX,mefeedia.com
@@ -4082,6 +4085,7 @@ DOMAIN-SUFFIX,ooyala.com
 DOMAIN-SUFFIX,open.com.hk
 DOMAIN-SUFFIX,openallweb.com
 DOMAIN-SUFFIX,openbase.com
+DOMAIN-SUFFIX,opencritic.com
 DOMAIN-SUFFIX,opendemocracy.net
 DOMAIN-SUFFIX,opendn.xyz
 DOMAIN-SUFFIX,openervpn.in
@@ -5545,6 +5549,7 @@ DOMAIN-SUFFIX,topnews.in
 DOMAIN-SUFFIX,topshareware.com
 DOMAIN-SUFFIX,toptip.ca
 DOMAIN-SUFFIX,toptoon.net
+DOMAIN-SUFFIX,tor.eff.org
 DOMAIN-SUFFIX,tora.to
 DOMAIN-SUFFIX,torcn.com
 DOMAIN-SUFFIX,torguard.net
@@ -5818,6 +5823,7 @@ DOMAIN-SUFFIX,unicode.org
 DOMAIN-SUFFIX,unification.net
 DOMAIN-SUFFIX,unification.org.tw
 DOMAIN-SUFFIX,unirule.cloud
+DOMAIN-SUFFIX,uniswap.org
 DOMAIN-SUFFIX,unitedsocialpress.com
 DOMAIN-SUFFIX,unity3d.com
 DOMAIN-SUFFIX,unix100.com
@@ -6291,6 +6297,7 @@ DOMAIN-SUFFIX,wuw.red
 DOMAIN-SUFFIX,wuyanblog.com
 DOMAIN-SUFFIX,wwe.com
 DOMAIN-SUFFIX,wwitv.com
+DOMAIN-SUFFIX,www.clashverge.dev
 DOMAIN-SUFFIX,www.lamenhu.com
 DOMAIN-SUFFIX,www.orchidbbs.com
 DOMAIN-SUFFIX,www.taup.org.tw
