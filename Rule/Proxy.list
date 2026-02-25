@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-02-25 03:43:10 GMT+8
+# Proxy Rules - Fetched on 2026-02-26 03:44:39 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -2011,6 +2011,7 @@ DOMAIN-SUFFIX,freechina.news
 DOMAIN-SUFFIX,freechinaforum.org
 DOMAIN-SUFFIX,freechinaweibo.com
 DOMAIN-SUFFIX,freedl.org
+DOMAIN-SUFFIX,freedom.gov
 DOMAIN-SUFFIX,freedomchina.info
 DOMAIN-SUFFIX,freedomcollection.org
 DOMAIN-SUFFIX,freedomhongkong.org
