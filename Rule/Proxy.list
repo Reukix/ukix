@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-03-05 03:30:55 GMT+8
+# Proxy Rules - Fetched on 2026-03-06 03:48:34 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -448,6 +448,7 @@ DOMAIN-SUFFIX,archiveofourown.org
 DOMAIN-SUFFIX,archives.gov
 DOMAIN-SUFFIX,arctosia.com
 DOMAIN-SUFFIX,areca-backup.org
+DOMAIN-SUFFIX,arena.ai
 DOMAIN-SUFFIX,arena.taipei
 DOMAIN-SUFFIX,arethusa.su
 DOMAIN-SUFFIX,arlingtoncemetery.mil
@@ -461,6 +462,7 @@ DOMAIN-SUFFIX,artstation.com
 DOMAIN-SUFFIX,artsy.net
 DOMAIN-SUFFIX,arunachalforests.gov.in
 DOMAIN-SUFFIX,arvanstorage.ir
+DOMAIN-SUFFIX,arweave.org
 DOMAIN-SUFFIX,asacp.org
 DOMAIN-SUFFIX,asdfg.jp
 DOMAIN-SUFFIX,asg.to
@@ -6236,6 +6238,7 @@ DOMAIN-SUFFIX,wiredpen.com
 DOMAIN-SUFFIX,wireguard.com
 DOMAIN-SUFFIX,wisdompubs.org
 DOMAIN-SUFFIX,wisevid.com
+DOMAIN-SUFFIX,wispbyte.com
 DOMAIN-SUFFIX,wistia.com
 DOMAIN-SUFFIX,witnessleeteaching.com
 DOMAIN-SUFFIX,witopia.net
