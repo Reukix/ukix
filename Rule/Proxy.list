@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-03-09 03:16:35 GMT+8
+# Proxy Rules - Fetched on 2026-03-10 03:33:34 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -4847,6 +4847,7 @@ DOMAIN-SUFFIX,shinychan.com
 DOMAIN-SUFFIX,shipcamouflage.com
 DOMAIN-SUFFIX,shireyishunjian.com
 DOMAIN-SUFFIX,shitaotv.org
+DOMAIN-SUFFIX,shitjournal.org
 DOMAIN-SUFFIX,shixiao.org
 DOMAIN-SUFFIX,shizhao.org
 DOMAIN-SUFFIX,shkspr.mobi
