@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-04-05 03:23:42 GMT+8
+# Proxy Rules - Fetched on 2026-04-06 03:27:01 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -4124,6 +4124,7 @@ DOMAIN-SUFFIX,orn.jp
 DOMAIN-SUFFIX,orzistic.org
 DOMAIN-SUFFIX,osfoora.com
 DOMAIN-SUFFIX,osha.gov
+DOMAIN-SUFFIX,osmand.net
 DOMAIN-SUFFIX,osxdaily.com
 DOMAIN-SUFFIX,otcbtc.com
 DOMAIN-SUFFIX,otnd.org
