@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2026-04-07 03:44:24 GMT+8
+# FuckAds Rules - Fetched on 2026-04-08 03:50:04 GMT+8
 
 
 DOMAIN,1500020991.vodplayer.wxamedia.com
@@ -197,6 +197,7 @@ DOMAIN,ap.dongqiudi.com
 DOMAIN,apd-pcdnwxlogin.teg.tencent-cloud.net
 DOMAIN,apd-pcdnwxnat.teg.tencent-cloud.net
 DOMAIN,apd-pcdnwxstat.teg.tencent-cloud.net
+DOMAIN,api-access.pangolin-sdk-toutiao-b.com
 DOMAIN,api-access.pangolin-sdk-toutiao.com
 DOMAIN,api-access.pangolin-sdk-toutiao1.com
 DOMAIN,api-access.pangolin-sdk-toutiao2.com
@@ -545,6 +546,7 @@ DOMAIN,mobads-pre-config.cdn.bcebos.com
 DOMAIN,mobads.baidu.com
 DOMAIN,mobaliyun.res.mgtv.com
 DOMAIN,mobile.da.mgtv.com
+DOMAIN,mobile.events.data.microsoft.com
 DOMAIN,mobilead.kuwo.cn
 DOMAIN,mobilelog.kugou.com
 DOMAIN,mobilelog.upqzfile.com
