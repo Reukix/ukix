@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-04-09 03:52:49 GMT+8
+# Proxy Rules - Fetched on 2026-04-10 03:57:42 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -1268,6 +1268,7 @@ DOMAIN-SUFFIX,cpj.org
 DOMAIN-SUFFIX,cpu-monkey.com
 DOMAIN-SUFFIX,cq99.us
 DOMAIN-SUFFIX,crackle.com
+DOMAIN-SUFFIX,crashlytics.com
 DOMAIN-SUFFIX,crazypool.org
 DOMAIN-SUFFIX,crazys.cc
 DOMAIN-SUFFIX,crazyshit.com
@@ -3592,6 +3593,7 @@ DOMAIN-SUFFIX,mirrormedia.mg
 DOMAIN-SUFFIX,missav.com
 DOMAIN-SUFFIX,missav.ws
 DOMAIN-SUFFIX,mist.vip
+DOMAIN-SUFFIX,mistral.ai
 DOMAIN-SUFFIX,mit.edu
 DOMAIN-SUFFIX,mitao.com.tw
 DOMAIN-SUFFIX,mitbbs.com
