@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-04-11 03:36:23 GMT+8
+# Proxy Rules - Fetched on 2026-04-12 03:28:06 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -362,10 +362,10 @@ DOMAIN-SUFFIX,angularjs.org
 DOMAIN-SUFFIX,animecrazy.net
 DOMAIN-SUFFIX,animeshippuuden.com
 DOMAIN-SUFFIX,aniscartujo.com
-DOMAIN-SUFFIX,annas-archive.in
-DOMAIN-SUFFIX,annas-archive.li
+DOMAIN-SUFFIX,annas-archive.gd
+DOMAIN-SUFFIX,annas-archive.gl
 DOMAIN-SUFFIX,annas-archive.org
-DOMAIN-SUFFIX,annas-archive.pm
+DOMAIN-SUFFIX,annas-archive.pk
 DOMAIN-SUFFIX,annas-archive.se
 DOMAIN-SUFFIX,annatam.com
 DOMAIN-SUFFIX,anobii.com
