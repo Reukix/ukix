@@ -26,7 +26,6 @@ jobs:
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Copilot/Copilot.list
-            curl -sL http://raw.githubusercontent.com/blankmagic/surge/refs/heads/main/rule/AI.list
             echo "DOMAIN-KEYWORD,apple-relay"
             echo "DOMAIN-KEYWORD,diabrowser"
             echo "DOMAIN-SUFFIX,cursor-cdn.com"
