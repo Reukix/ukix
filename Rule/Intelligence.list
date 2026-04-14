@@ -1,6 +1,5 @@
-# Intelligence Rules - Fetched on 2026-04-14 03:58:43 GMT+8
+# Intelligence Rules - Fetched on 2026-04-14 17:55:23 GMT+8
 
-404: Not FoundDOMAIN-KEYWORD,apple-relay
 DOMAIN,ai.google.dev
 DOMAIN,alkalimakersuite-pa.clients6.google.com
 DOMAIN,api.msn.com
@@ -28,6 +27,7 @@ DOMAIN,static.cloudflareinsights.com
 DOMAIN,sydney.bing.com
 DOMAIN,www.bing.com
 DOMAIN,xai.chronosphere.io
+DOMAIN-KEYWORD,apple-relay
 DOMAIN-KEYWORD,colab
 DOMAIN-KEYWORD,developerprofiles
 DOMAIN-KEYWORD,diabrowser
