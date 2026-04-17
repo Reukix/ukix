@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-04-17 03:55:56 GMT+8
+# Proxy Rules - Fetched on 2026-04-18 03:51:24 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -515,6 +515,7 @@ DOMAIN-SUFFIX,avfantasy.com
 DOMAIN-SUFFIX,avg.com
 DOMAIN-SUFFIX,avgle.com
 DOMAIN-SUFFIX,avidemux.org
+DOMAIN-SUFFIX,avistaz.to
 DOMAIN-SUFFIX,avmo.pw
 DOMAIN-SUFFIX,avmoo.com
 DOMAIN-SUFFIX,avmoo.net
