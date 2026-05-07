@@ -1,0 +1,14 @@
+#!name=URl重定向
+#!desc=URL重定向
+#!date=2025-08-13
+
+[URL Rewrite]
+^https?:\/\/(www.)?(g|google)\.cn https://www.google.com 307
+^https?:\/\/(ditu|maps).google\.cn https://maps.google.com 307
+^https?://(www\.)?google\.com\.hk https://www.google.com 307
+
+[Header Rewrite]
+http-request ^https?:\/\/(.+\.)?embyplus\.org header-replace User-Agent "HamHub/1.9.2 CFNetwork/3860.500.112 Darwin/25.4.0"
+
+[MITM]
+hostname = *.embyplus.org, embyplus.org , www.google.cn, *.google.com.hk , *.google.com
