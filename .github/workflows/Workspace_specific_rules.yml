@@ -105,6 +105,12 @@ jobs:
           echo "" >> Rule/Spotify.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Spotify/Spotify.list | grep -v '^#' | sort | uniq >> Rule/Spotify.list
 
+      - name: Fetch and Format Telegram Rules
+        run: |
+          echo "# Telegram Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Telegram.list
+          echo "" >> Rule/Telegram.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Telegram/Telegram.list | grep -v '^#' | sort | uniq >> Rule/Telegram.list
+
       - name: Fetch and Format Proxy Rules
         run: |
           echo "# Proxy Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Proxy.list
