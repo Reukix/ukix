@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-05-11 03:52:25 GMT+8
+# Proxy Rules - Fetched on 2026-05-12 04:26:12 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -1396,6 +1396,7 @@ DOMAIN-SUFFIX,dartlang.org
 DOMAIN-SUFFIX,dashlane.com
 DOMAIN-SUFFIX,dastrassi.org
 DOMAIN-SUFFIX,data-vocabulary.org
+DOMAIN-SUFFIX,data18.com
 DOMAIN-SUFFIX,datalabour.com
 DOMAIN-SUFFIX,daum.net
 DOMAIN-SUFFIX,david-kilgour.com
@@ -1578,6 +1579,7 @@ DOMAIN-SUFFIX,dscn.info
 DOMAIN-SUFFIX,dsmtp.com
 DOMAIN-SUFFIX,dssott.com
 DOMAIN-SUFFIX,dstk.dk
+DOMAIN-SUFFIX,dt18.com
 DOMAIN-SUFFIX,dtdns.net
 DOMAIN-SUFFIX,dtiblog.com
 DOMAIN-SUFFIX,dtic.mil
