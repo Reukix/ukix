@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-05-15 04:22:50 GMT+8
+# Proxy Rules - Fetched on 2026-05-16 04:09:16 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -1109,6 +1109,7 @@ DOMAIN-SUFFIX,chingcheong.com
 DOMAIN-SUFFIX,chinman.net
 DOMAIN-SUFFIX,chithu.org
 DOMAIN-SUFFIX,chobit.cc
+DOMAIN-SUFFIX,chonglangtv.org
 DOMAIN-SUFFIX,chosun.com
 DOMAIN-SUFFIX,chrdnet.com
 DOMAIN-SUFFIX,christianfreedom.org
