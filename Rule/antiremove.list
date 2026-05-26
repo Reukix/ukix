@@ -1,0 +1,26 @@
+[Rule]
+# ===== Apple Revocation =====
+DOMAIN,ocsp.apple.com
+DOMAIN,ocsp2.apple.com
+DOMAIN,crl.apple.com
+DOMAIN,certs.apple.com
+DOMAIN,valid.apple.com
+DOMAIN,ppq.apple.com
+DOMAIN,ppq-ext.v.aaplimg.com
+DOMAIN,analytics.apple.com
+
+# ===== DigiCert (Apple 证书链) =====
+DOMAIN,ocsp.digicert.com
+DOMAIN,ocsp.digicert.cn
+DOMAIN,crl3.digicert.com
+DOMAIN,crl4.digicert.com
+
+# ===== Entrust (Apple WWDR 根之一) =====
+DOMAIN,ocsp.entrust.net
+DOMAIN,crl.entrust.net
+
+# ===== Sectigo / USERTrust (第三方企业签常见) =====
+DOMAIN,ocsp.sectigo.com
+DOMAIN,crl.sectigo.com
+DOMAIN,ocsp.usertrust.com
+DOMAIN,crl.usertrust.com
