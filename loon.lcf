@@ -62,10 +62,6 @@ https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Proxy.list, policy=Proxy
 https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/CN.list, policy=DIRECT, enabled=true
 
 [Rewrite]
-# URL 302 重定向
-^http:\/\/river\/(.*?)(_.*)?$ https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/$1.list 302
-^http:\/\/bm7\/(.*?)(_.*)?$ https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/$1/$1$2.list 302
-
 # 请求头重写 (Header Replace)
 ^https?:\/\/.*\.githubusercontent\.com\/ header-replace Accept-Language en-us
 ^https?:\/\/.*\.github\.com\/ header-replace Accept-Language en-us
