@@ -1,0 +1,75 @@
+# Author: https://t.me/uki0x
+# Converted for Loon
+
+[General]
+skip-proxy = 192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,127.0.0.1,localhost,*.local
+bypass-tun = 10.0.0.0/8,100.64.0.0/10,127.0.0.0/8,169.254.0.0/16,172.16.0.0/12,192.0.0.0/24,192.0.2.0/24,192.88.99.0/24,192.168.0.0/16,198.51.100.0/24,203.0.113.0/24,224.0.0.0/4,255.255.255.255/32
+dns-server = system, 223.5.5.5, 119.29.29.29
+allow-wifi-access = false
+wifi-access-http-port = 6789
+wifi-access-socks5-port = 6879
+proxy-test-url = http://www.gstatic.com/generate_204
+test-timeout = 2
+
+[Proxy]
+# 本地单节点配置可放置于此
+
+[Remote Proxy]
+
+[Remote Filter]
+美国节点 = NameRegex, Subs, FilterKey = (?i)(🇺🇸|States|US|美国|美國)
+香港节点 = NameRegex, Subs, FilterKey = (?i)(🇭🇰|港|香港|HK|Hong)
+台湾节点 = NameRegex, Subs, FilterKey = (?i)(🇹🇼|台|Tai|TW|台湾|台灣)
+日本节点 = NameRegex, Subs, FilterKey = (?i)(🇯🇵|Japan|JP|日本)
+新加坡节点 = NameRegex, Subs, FilterKey = (?i)(🇸🇬|坡|Singapore|SG|狮城)
+欧洲节点 = NameRegex, Subs, FilterKey = (?i)(德|法|荷)
+
+[Proxy Group]
+# 节点选择组
+Proxy = select, 香港, 台湾, 日本, 新加坡, 美国
+Spotify = select, 香港, 台湾, 日本, 新加坡, 美国
+Intelligence = select, 香港, 台湾, 日本, 新加坡, 美国
+Apple = select, 香港, 台湾, 日本, 新加坡, 美国
+Telegram = select, 香港, 台湾, 日本, 新加坡, 美国, 欧洲
+
+美国 = url-test, 美国节点, url = http://www.gstatic.com/generate_204, interval = 600
+香港 = url-test, 香港节点, url = http://www.gstatic.com/generate_204, interval = 600
+台湾 = url-test, 台湾节点, url = http://www.gstatic.com/generate_204, interval = 600
+日本 = url-test, 日本节点, url = http://www.gstatic.com/generate_204, interval = 600
+新加坡 = url-test, 新加坡节点, url = http://www.gstatic.com/generate_204, interval = 600
+欧洲 = url-test, 欧洲节点, url = http://www.gstatic.com/generate_204, interval = 600
+
+
+[Rule]
+GEOIP,CN,DIRECT
+FINAL,Proxy
+
+[Remote Rule]
+
+# 去广告
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/FuckAds.list, policy=REJECT, enabled=true
+# 常用分流
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Intelligence.list, policy=Intelligence, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/X.list, policy=Proxy, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Github.list, policy=Proxy, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Spotify.list, policy=Spotify, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Google.list, policy=Proxy, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Apple.list, policy=Apple, enabled=true
+# Telegram 分流
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Telegram.list, policy=Telegram, enabled=true
+# 兜底分流
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Proxy.list, policy=Proxy, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/CN.list, policy=DIRECT, enabled=true
+
+[Rewrite]
+# URL 302 重定向
+^http:\/\/river\/(.*?)(_.*)?$ https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/$1.list 302
+^http:\/\/bm7\/(.*?)(_.*)?$ https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/$1/$1$2.list 302
+
+# 请求头重写 (Header Replace)
+^https?:\/\/.*\.githubusercontent\.com\/ header-replace Accept-Language en-us
+^https?:\/\/.*\.github\.com\/ header-replace Accept-Language en-us
+
+[MITM]
+hostname = *.githubusercontent.com, *.github.com
+skip-server-cert-verify = true
