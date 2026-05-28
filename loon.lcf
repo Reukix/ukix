@@ -61,6 +61,12 @@ https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Telegram.list, policy=Te
 https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Proxy.list, policy=Proxy, enabled=true
 https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/CN.list, policy=DIRECT, enabled=true
 
+[Plugin]
+https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/Loon/plugin/Block_HTTPDNS.plugin, enabled=true
+https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/Loon/plugin/blockAds.plugin, enabled=true
+https://kelee.one/Tool/Loon/Lpx/Sub-Store.lpx, enabled=true
+https://kelee.one/Tool/Loon/Lpx/Script-Hub.lpx, enabled=true
+
 [Rewrite]
 # 请求头重写 (Header Replace)
 ^https?:\/\/.*\.githubusercontent\.com\/ header-replace Accept-Language en-us
