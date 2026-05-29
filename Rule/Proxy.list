@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-05-29 05:02:12 GMT+8
+# Proxy Rules - Fetched on 2026-05-30 05:04:20 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -1560,6 +1560,7 @@ DOMAIN-SUFFIX,douhokanko.net
 DOMAIN-SUFFIX,doujincafe.com
 DOMAIN-SUFFIX,dowei.org
 DOMAIN-SUFFIX,dowjones.com
+DOMAIN-SUFFIX,dowjones.io
 DOMAIN-SUFFIX,download.dappcdn.com
 DOMAIN-SUFFIX,dphk.org
 DOMAIN-SUFFIX,dpool.top
