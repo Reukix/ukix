@@ -45,21 +45,20 @@ GEOIP,CN,DIRECT
 FINAL,Proxy
 
 [Remote Rule]
-
 # 去广告
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/FuckAds.list, policy=REJECT, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/FuckAds.list, policy=REJECT, tag=去广告, enabled=true
 # 常用分流
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Intelligence.list, policy=Intelligence, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/X.list, policy=Proxy, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Github.list, policy=Proxy, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Spotify.list, policy=Spotify, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Google.list, policy=Proxy, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Apple.list, policy=Apple, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Intelligence.list, policy=Intelligence, tag=Intelligence, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/X.list, policy=Proxy, tag=X, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Github.list, policy=Proxy, tag=Github, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Spotify.list, policy=Spotify, tag=Spotify, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Google.list, policy=Proxy, tag=Google, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Apple.list, policy=Apple, tag=Apple, enabled=true
 # Telegram 分流
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Telegram.list, policy=Telegram, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Telegram.list, policy=Telegram, tag=Telegram, enabled=true
 # 兜底分流
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Proxy.list, policy=Proxy, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/CN.list, policy=DIRECT, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Proxy.list, policy=Proxy, tag=Proxy, enabled=true
+https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/CN.list, policy=DIRECT, tag=CN, enabled=true
 
 [Plugin]
 https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/Loon/plugin/Block_HTTPDNS.plugin, enabled=true
