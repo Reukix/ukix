@@ -233,7 +233,7 @@ create_config() {
     mkdir -p "$CONFIG_DIR"
 
     # 获取服务器 IP
-    local server_ip=$(curl -s4m5 ip.sb 2>/dev/null || curl -s4m5 ifconfig.co 2>/dev/null || echo "YOUR_SERVER_IP")
+    local server_ip=$(curl -s4m5 ip.sb 2>/dev/null || echo "YOUR_SERVER_IP")
 
     # 构建监听地址
     local listen_addr="0.0.0.0:${USER_PORT}"
