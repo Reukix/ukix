@@ -102,17 +102,20 @@ select_snell_version() {
         1)
             SNELL_CHOICE="v5"
             SNELL_VERSION="$SNELL_VERSION_V5"
+            SNELL_BINARY="${INSTALL_DIR}/snell-server-v5"
             print_info "已选择 Snell v5"
             ;;
         2)
             SNELL_CHOICE="v6"
             SNELL_VERSION="$SNELL_VERSION_V6"
+            SNELL_BINARY="${INSTALL_DIR}/snell-server-v6"
             print_info "已选择 Snell v6"
             ;;
         *)
             print_warning "无效选择，默认使用 v6"
             SNELL_CHOICE="v6"
             SNELL_VERSION="$SNELL_VERSION_V6"
+            SNELL_BINARY="${INSTALL_DIR}/snell-server-v6"
             ;;
     esac
 }
