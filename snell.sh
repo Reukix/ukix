@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #================================================================
-# Snell 一键部署脚本
+# Snell v6 一键部署脚本
 # 支持自动检测架构、下载、安装、配置和启动 Snell 服务
 #================================================================
 
@@ -305,11 +305,19 @@ get_user_config() {
 
 # 下载 Snell 服务器
 download_snell() {
-    local download_url="https://dl.nssurge.com/snell/snell-server-${SNELL_VERSION}-linux-${ARCH}.zip"
+    # 根据选择的版本构建下载链接
+    local download_url=""
+
+    if [ "$SNELL_CHOICE" = "v5" ]; then
+        download_url="https://dl.nssurge.com/snell/snell-server-${SNELL_VERSION_V5}-linux-${ARCH}.zip"
+    else
+        download_url="https://dl.nssurge.com/snell/snell-server-${SNELL_VERSION_V6}-linux-${ARCH}.zip"
+    fi
+
     local temp_dir=$(mktemp -d)
     local zip_file="${temp_dir}/snell-server.zip"
 
-    print_info "开始下载 Snell ${SNELL_CHOICE}..."
+    print_info "开始下载 Snell ${SNELL_CHOICE} (${SNELL_VERSION})..."
     print_info "下载地址: $download_url"
 
     if command -v wget &> /dev/null; then
@@ -343,6 +351,10 @@ download_snell() {
 
     rm -rf "$temp_dir"
     print_info "Snell ${SNELL_CHOICE} 服务器安装完成"
+
+    # 验证安装的版本
+    local installed_version=$("${INSTALL_DIR}/snell-server" --version 2>&1 | head -1)
+    print_info "已安装版本: $installed_version"
 }
 
 # 创建配置文件
