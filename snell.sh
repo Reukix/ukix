@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #================================================================
-# Snell v6 一键部署脚本
+# Snell 一键部署脚本
 # 支持自动检测架构、下载、安装、配置和启动 Snell 服务
 #================================================================
 
@@ -15,11 +15,14 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # 配置变量
-SNELL_VERSION="v6.0.0b2"
+SNELL_VERSION_V6="v6.0.0b2"
+SNELL_VERSION_V5="v5.0.1"
+SNELL_VERSION=""
 INSTALL_DIR="/usr/local/bin"
 CONFIG_DIR="/etc/snell"
 CONFIG_FILE="${CONFIG_DIR}/snell-server.conf"
 SERVICE_FILE="/etc/systemd/system/snell.service"
+MULTI_USER_DIR="${CONFIG_DIR}/users"
 
 # 用户配置变量
 USER_PORT=""
@@ -27,6 +30,9 @@ USER_PORT_V6=""
 USER_PSK=""
 USER_IPV6="true"
 USER_DNS_PREF="default"
+USER_DNS=""
+CURRENT_USER=""
+SNELL_CHOICE=""  # v5 或 v6
 
 # 打印信息函数
 print_info() {
@@ -66,12 +72,47 @@ detect_architecture() {
         aarch64|arm64)
             ARCH="aarch64"
             ;;
+        armv7l|armv7)
+            ARCH="armv7l"
+            ;;
         *)
             print_error "不支持的架构: $arch"
             exit 1
             ;;
     esac
     print_info "检测到系统架构: $arch -> $ARCH"
+}
+
+# 选择 Snell 版本
+select_snell_version() {
+    echo ""
+    print_info "=========================================="
+    print_info "请选择要安装的 Snell 版本:"
+    print_info "=========================================="
+    echo ""
+    echo "  1) Snell v5 (稳定版 - 推荐)"
+    echo "  2) Snell v6 (测试版)"
+    echo ""
+    print_prompt "请输入选项 [1-2]: "
+    read -r version_choice
+
+    case "$version_choice" in
+        1)
+            SNELL_CHOICE="v5"
+            SNELL_VERSION="$SNELL_VERSION_V5"
+            print_info "已选择 Snell v5"
+            ;;
+        2)
+            SNELL_CHOICE="v6"
+            SNELL_VERSION="$SNELL_VERSION_V6"
+            print_info "已选择 Snell v6"
+            ;;
+        *)
+            print_warning "无效选择，默认使用 v6"
+            SNELL_CHOICE="v6"
+            SNELL_VERSION="$SNELL_VERSION_V6"
+            ;;
+    esac
 }
 
 # 生成随机密码
@@ -88,7 +129,7 @@ generate_port() {
 get_user_config() {
     echo ""
     print_info "=========================================="
-    print_info "Snell v6 配置向导"
+    print_info "Snell ${SNELL_CHOICE} 配置向导"
     print_info "=========================================="
     echo ""
     print_info "提示: 直接按回车将使用随机生成的值"
@@ -96,7 +137,13 @@ get_user_config() {
 
     # 获取端口
     local default_port=$(generate_port)
-    print_prompt "请输入 IPv4 监听端口 (默认: $default_port, 范围: 6000-65535): "
+
+    if [ "$SNELL_CHOICE" = "v5" ]; then
+        print_prompt "请输入监听端口 (默认: $default_port, 范围: 6000-65535): "
+    else
+        print_prompt "请输入 IPv4 监听端口 (默认: $default_port, 范围: 6000-65535): "
+    fi
+
     read -r input_port
     if [ -z "$input_port" ]; then
         USER_PORT="$default_port"
@@ -132,30 +179,37 @@ get_user_config() {
     if [ -z "$input_ipv6" ] || [[ "$input_ipv6" =~ ^[Yy]$ ]]; then
         USER_IPV6="true"
 
-        # 如果启用 IPv6，询问是否使用不同端口
-        echo ""
-        print_prompt "IPv6 是否使用与 IPv4 相同的端口 $USER_PORT? (y/n, 默认: y): "
-        read -r same_port
-        if [ -z "$same_port" ] || [[ "$same_port" =~ ^[Yy]$ ]]; then
-            USER_PORT_V6="$USER_PORT"
-            print_info "IPv6 使用相同端口: $USER_PORT_V6"
-        else
-            local default_port_v6=$(generate_port)
-            print_prompt "请输入 IPv6 监听端口 (默认: $default_port_v6, 范围: 6000-65535): "
-            read -r input_port_v6
-            if [ -z "$input_port_v6" ]; then
-                USER_PORT_V6="$default_port_v6"
-                print_info "IPv6 使用随机端口: $USER_PORT_V6"
+        # v6 版本支持不同端口
+        if [ "$SNELL_CHOICE" = "v6" ]; then
+            # 如果启用 IPv6，询问是否使用不同端口
+            echo ""
+            print_prompt "IPv6 是否使用与 IPv4 相同的端口 $USER_PORT? (y/n, 默认: y): "
+            read -r same_port
+            if [ -z "$same_port" ] || [[ "$same_port" =~ ^[Yy]$ ]]; then
+                USER_PORT_V6="$USER_PORT"
+                print_info "IPv6 使用相同端口: $USER_PORT_V6"
             else
-                if [[ "$input_port_v6" =~ ^[0-9]+$ ]] && [ "$input_port_v6" -ge 6000 ] && [ "$input_port_v6" -le 65535 ]; then
-                    USER_PORT_V6="$input_port_v6"
-                    print_info "IPv6 使用端口: $USER_PORT_V6"
-                else
-                    print_error "无效的端口号，使用默认端口: $default_port_v6"
+                local default_port_v6=$(generate_port)
+                print_prompt "请输入 IPv6 监听端口 (默认: $default_port_v6, 范围: 6000-65535): "
+                read -r input_port_v6
+                if [ -z "$input_port_v6" ]; then
                     USER_PORT_V6="$default_port_v6"
+                    print_info "IPv6 使用随机端口: $USER_PORT_V6"
+                else
+                    if [[ "$input_port_v6" =~ ^[0-9]+$ ]] && [ "$input_port_v6" -ge 6000 ] && [ "$input_port_v6" -le 65535 ]; then
+                        USER_PORT_V6="$input_port_v6"
+                        print_info "IPv6 使用端口: $USER_PORT_V6"
+                    else
+                        print_error "无效的端口号，使用默认端口: $default_port_v6"
+                        USER_PORT_V6="$default_port_v6"
+                    fi
                 fi
             fi
+        else
+            # v5 版本使用统一端口
+            USER_PORT_V6="$USER_PORT"
         fi
+
         print_info "IPv6: 已启用"
     else
         USER_IPV6="false"
@@ -163,47 +217,69 @@ get_user_config() {
         print_info "IPv6: 已禁用"
     fi
 
-    # 获取 DNS IP 偏好
-    echo ""
-    print_info "DNS IP 偏好选项:"
-    print_info "  1) default - 系统默认"
-    print_info "  2) prefer-ipv4 - 优先 IPv4"
-    print_info "  3) prefer-ipv6 - 优先 IPv6"
-    print_info "  4) ipv4-only - 仅 IPv4"
-    print_info "  5) ipv6-only - 仅 IPv6"
-    echo ""
-    print_prompt "请选择 DNS IP 偏好 (1-5, 默认: 1): "
-    read -r input_dns
-    case "$input_dns" in
-        2)
-            USER_DNS_PREF="prefer-ipv4"
-            ;;
-        3)
-            USER_DNS_PREF="prefer-ipv6"
-            ;;
-        4)
-            USER_DNS_PREF="ipv4-only"
-            ;;
-        5)
-            USER_DNS_PREF="ipv6-only"
-            ;;
-        *)
-            USER_DNS_PREF="default"
-            ;;
-    esac
-    print_info "DNS IP 偏好: $USER_DNS_PREF"
+    # v5 需要配置 DNS，v6 需要配置 DNS 偏好
+    if [ "$SNELL_CHOICE" = "v5" ]; then
+        echo ""
+        print_prompt "请输入 DNS 服务器 (默认: 1.1.1.1,8.8.8.8): "
+        read -r input_dns
+        if [ -z "$input_dns" ]; then
+            USER_DNS="1.1.1.1,8.8.8.8"
+        else
+            USER_DNS="$input_dns"
+        fi
+        print_info "DNS: $USER_DNS"
+    else
+        # 获取 DNS IP 偏好
+        echo ""
+        print_info "DNS IP 偏好选项:"
+        print_info "  1) default - 系统默认"
+        print_info "  2) prefer-ipv4 - 优先 IPv4"
+        print_info "  3) prefer-ipv6 - 优先 IPv6"
+        print_info "  4) ipv4-only - 仅 IPv4"
+        print_info "  5) ipv6-only - 仅 IPv6"
+        echo ""
+        print_prompt "请选择 DNS IP 偏好 (1-5, 默认: 1): "
+        read -r input_dns
+        case "$input_dns" in
+            2)
+                USER_DNS_PREF="prefer-ipv4"
+                ;;
+            3)
+                USER_DNS_PREF="prefer-ipv6"
+                ;;
+            4)
+                USER_DNS_PREF="ipv4-only"
+                ;;
+            5)
+                USER_DNS_PREF="ipv6-only"
+                ;;
+            *)
+                USER_DNS_PREF="default"
+                ;;
+        esac
+        print_info "DNS IP 偏好: $USER_DNS_PREF"
+    fi
 
     echo ""
     print_info "=========================================="
     print_info "配置确认"
     print_info "=========================================="
-    print_info "IPv4 端口: $USER_PORT"
-    if [ "$USER_IPV6" = "true" ]; then
-        print_info "IPv6 端口: $USER_PORT_V6"
+    print_info "版本: Snell ${SNELL_CHOICE}"
+    if [ "$SNELL_CHOICE" = "v6" ]; then
+        print_info "IPv4 端口: $USER_PORT"
+        if [ "$USER_IPV6" = "true" ]; then
+            print_info "IPv6 端口: $USER_PORT_V6"
+        fi
+    else
+        print_info "监听端口: $USER_PORT"
     fi
     print_info "PSK: $USER_PSK"
     print_info "IPv6: $USER_IPV6"
-    print_info "DNS IP 偏好: $USER_DNS_PREF"
+    if [ "$SNELL_CHOICE" = "v5" ]; then
+        print_info "DNS: $USER_DNS"
+    else
+        print_info "DNS IP 偏好: $USER_DNS_PREF"
+    fi
     print_info "=========================================="
     echo ""
     print_prompt "确认以上配置并继续安装? (y/n): "
@@ -220,7 +296,7 @@ download_snell() {
     local temp_dir=$(mktemp -d)
     local zip_file="${temp_dir}/snell-server.zip"
 
-    print_info "开始下载 Snell 服务器..."
+    print_info "开始下载 Snell ${SNELL_CHOICE}..."
     print_info "下载地址: $download_url"
 
     if command -v wget &> /dev/null; then
@@ -253,7 +329,7 @@ download_snell() {
     chmod +x "${INSTALL_DIR}/snell-server"
 
     rm -rf "$temp_dir"
-    print_info "Snell 服务器安装完成"
+    print_info "Snell ${SNELL_CHOICE} 服务器安装完成"
 }
 
 # 创建配置文件
@@ -265,14 +341,24 @@ create_config() {
     # 获取服务器 IP
     local server_ip=$(curl -s4m5 ip.sb 2>/dev/null || echo "YOUR_SERVER_IP")
 
-    # 构建监听地址
-    local listen_addr="0.0.0.0:${USER_PORT}"
-    if [ "$USER_IPV6" = "true" ]; then
-        listen_addr="${listen_addr}, [::]:${USER_PORT_V6}"
-    fi
+    # 根据版本创建不同格式的配置文件
+    if [ "$SNELL_CHOICE" = "v5" ]; then
+        # v5 配置格式
+        cat > "$CONFIG_FILE" <<EOF
+[snell-server]
+listen = ::0:${USER_PORT}
+psk = ${USER_PSK}
+ipv6 = ${USER_IPV6}
+dns = ${USER_DNS}
+EOF
+    else
+        # v6 配置格式
+        local listen_addr="0.0.0.0:${USER_PORT}"
+        if [ "$USER_IPV6" = "true" ]; then
+            listen_addr="${listen_addr}, [::]:${USER_PORT_V6}"
+        fi
 
-    # 创建配置文件
-    cat > "$CONFIG_FILE" <<EOF
+        cat > "$CONFIG_FILE" <<EOF
 [snell-server]
 listen = ${listen_addr}
 psk = ${USER_PSK}
@@ -282,6 +368,7 @@ dns-ip-preference = ${USER_DNS_PREF}
 # Snell v6 会自动从 PSK 派生部署级别的协议配置文件
 # 不同的 PSK 会产生不同的流量特征
 EOF
+    fi
 
     # 设置正确的文件权限，确保 nobody 用户可以读取
     chmod 644 "$CONFIG_FILE"
@@ -290,24 +377,54 @@ EOF
     print_info "配置文件已创建: $CONFIG_FILE"
     echo ""
     print_info "=========================================="
-    print_info "Snell 服务器配置信息:"
+    print_info "Snell ${SNELL_CHOICE} 服务器配置信息:"
     print_info "=========================================="
     print_info "服务器地址: ${server_ip}"
-    print_info "IPv4 端口: ${USER_PORT}"
-    if [ "$USER_IPV6" = "true" ]; then
-        print_info "IPv6 端口: ${USER_PORT_V6}"
+
+    if [ "$SNELL_CHOICE" = "v5" ]; then
+        print_info "监听端口: ${USER_PORT}"
+    else
+        print_info "IPv4 端口: ${USER_PORT}"
+        if [ "$USER_IPV6" = "true" ]; then
+            print_info "IPv6 端口: ${USER_PORT_V6}"
+        fi
     fi
+
     print_info "密码(PSK): ${USER_PSK}"
     print_info "IPv6: ${USER_IPV6}"
-    print_info "DNS IP 偏好: ${USER_DNS_PREF}"
-    print_info "版本: Snell v6"
+
+    if [ "$SNELL_CHOICE" = "v5" ]; then
+        print_info "DNS: ${USER_DNS}"
+    else
+        print_info "DNS IP 偏好: ${USER_DNS_PREF}"
+    fi
+
+    print_info "版本: Snell ${SNELL_CHOICE}"
     print_info "=========================================="
     echo ""
     print_warning "请妥善保存以上信息，特别是 PSK（密码）"
     echo ""
 
     # 保存配置信息到文件
-    cat > "${CONFIG_DIR}/connection-info.txt" <<EOF
+    if [ "$SNELL_CHOICE" = "v5" ]; then
+        cat > "${CONFIG_DIR}/connection-info.txt" <<EOF
+Snell v5 连接信息
+==========================================
+服务器地址: ${server_ip}
+端口: ${USER_PORT}
+密码(PSK): ${USER_PSK}
+IPv6: ${USER_IPV6}
+DNS: ${USER_DNS}
+
+Surge 配置示例 (v4兼容):
+==========================================
+[Proxy]
+Snell = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=4
+
+注意: Snell v5 使用 version=4 配置以保持兼容性
+EOF
+    else
+        cat > "${CONFIG_DIR}/connection-info.txt" <<EOF
 Snell v6 连接信息
 ==========================================
 服务器地址: ${server_ip}
@@ -326,6 +443,7 @@ $([ "$USER_IPV6" = "true" ] && [ "$USER_PORT_V6" != "$USER_PORT" ] && echo "Snel
 
 注意: Snell v6 仍在 Beta 测试中，需要使用最新的 Surge Beta 版本
 EOF
+    fi
 
     chmod 644 "${CONFIG_DIR}/connection-info.txt"
     print_info "连接信息已保存到: ${CONFIG_DIR}/connection-info.txt"
@@ -765,17 +883,341 @@ stop_snell() {
     print_info "Snell 服务已停止"
 }
 
+# ============================================
+# 多用户管理功能
+# ============================================
+
+# 列出所有用户
+list_users() {
+    echo ""
+    print_info "=========================================="
+    print_info "Snell 用户列表"
+    print_info "=========================================="
+    echo ""
+
+    # 主用户
+    if systemctl list-units --type=service --all | grep -q "^snell.service"; then
+        local status=$(systemctl is-active snell.service)
+        local port=$(grep -oP 'listen = 0\.0\.0\.0:\K\d+' "$CONFIG_FILE" 2>/dev/null || echo "N/A")
+        printf "  %-20s %-10s %-10s\n" "default (主用户)" "$port" "$status"
+    fi
+
+    # 多用户
+    if [ -d "$MULTI_USER_DIR" ]; then
+        for user_conf in "$MULTI_USER_DIR"/*.conf; do
+            if [ -f "$user_conf" ]; then
+                local username=$(basename "$user_conf" .conf)
+                local service_name="snell@${username}.service"
+                local status=$(systemctl is-active "$service_name" 2>/dev/null || echo "inactive")
+                local port=$(grep -oP 'listen = 0\.0\.0\.0:\K\d+' "$user_conf" 2>/dev/null || echo "N/A")
+                printf "  %-20s %-10s %-10s\n" "$username" "$port" "$status"
+            fi
+        done
+    fi
+
+    echo ""
+    print_info "使用方法："
+    print_info "  systemctl start snell           # 启动主用户"
+    print_info "  systemctl start snell@user1     # 启动指定用户"
+    echo ""
+}
+
+# 添加用户
+add_user() {
+    echo ""
+    print_info "=========================================="
+    print_info "添加新用户"
+    print_info "=========================================="
+    echo ""
+
+    # 输入用户名
+    print_prompt "请输入用户名 (字母数字下划线，如: user1): "
+    read -r username
+
+    if [ -z "$username" ]; then
+        print_error "用户名不能为空"
+        return 1
+    fi
+
+    # 验证用户名格式
+    if ! [[ "$username" =~ ^[a-zA-Z0-9_]+$ ]]; then
+        print_error "用户名只能包含字母、数字和下划线"
+        return 1
+    fi
+
+    # 检查用户是否已存在
+    if [ "$username" = "default" ] || [ -f "${MULTI_USER_DIR}/${username}.conf" ]; then
+        print_error "用户 $username 已存在"
+        return 1
+    fi
+
+    CURRENT_USER="$username"
+
+    # 创建多用户目录
+    mkdir -p "$MULTI_USER_DIR"
+
+    # 选择版本
+    select_snell_version
+
+    # 获取配置
+    get_user_config
+
+    # 获取服务器 IP
+    local server_ip=$(curl -s4m5 ip.sb 2>/dev/null || echo "YOUR_SERVER_IP")
+
+    # 创建用户配置文件
+    local user_config="${MULTI_USER_DIR}/${username}.conf"
+
+    if [ "$SNELL_CHOICE" = "v5" ]; then
+        # v5 配置格式
+        cat > "$user_config" <<EOF
+[snell-server]
+listen = ::0:${USER_PORT}
+psk = ${USER_PSK}
+ipv6 = ${USER_IPV6}
+dns = ${USER_DNS}
+EOF
+    else
+        # v6 配置格式
+        local listen_addr="0.0.0.0:${USER_PORT}"
+        if [ "$USER_IPV6" = "true" ]; then
+            listen_addr="${listen_addr}, [::]:${USER_PORT_V6}"
+        fi
+
+        cat > "$user_config" <<EOF
+[snell-server]
+listen = ${listen_addr}
+psk = ${USER_PSK}
+ipv6 = ${USER_IPV6}
+dns-ip-preference = ${USER_DNS_PREF}
+
+# Snell v6 会自动从 PSK 派生部署级别的协议配置文件
+# 不同的 PSK 会产生不同的流量特征
+EOF
+    fi
+
+    chmod 644 "$user_config"
+    print_info "用户配置已创建: $user_config"
+
+    # 创建用户连接信息文件
+    if [ "$SNELL_CHOICE" = "v5" ]; then
+        cat > "${MULTI_USER_DIR}/${username}-info.txt" <<EOF
+Snell v5 用户: ${username}
+==========================================
+服务器地址: ${server_ip}
+端口: ${USER_PORT}
+密码(PSK): ${USER_PSK}
+IPv6: ${USER_IPV6}
+DNS: ${USER_DNS}
+
+Surge 配置示例 (v4兼容):
+==========================================
+[Proxy]
+Snell-${username} = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=4
+
+服务管理:
+==========================================
+启动: systemctl start snell@${username}
+停止: systemctl stop snell@${username}
+重启: systemctl restart snell@${username}
+状态: systemctl status snell@${username}
+EOF
+    else
+        cat > "${MULTI_USER_DIR}/${username}-info.txt" <<EOF
+Snell v6 用户: ${username}
+==========================================
+服务器地址: ${server_ip}
+IPv4 端口: ${USER_PORT}
+$([ "$USER_IPV6" = "true" ] && echo "IPv6 端口: ${USER_PORT_V6}")
+密码(PSK): ${USER_PSK}
+IPv6: ${USER_IPV6}
+DNS IP 偏好: ${USER_DNS_PREF}
+版本: 6
+
+Surge 配置示例:
+==========================================
+[Proxy]
+Snell-${username}-IPv4 = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=6
+$([ "$USER_IPV6" = "true" ] && [ "$USER_PORT_V6" != "$USER_PORT" ] && echo "Snell-${username}-IPv6 = snell, ${server_ip}, ${USER_PORT_V6}, psk=${USER_PSK}, version=6")
+
+服务管理:
+==========================================
+启动: systemctl start snell@${username}
+停止: systemctl stop snell@${username}
+重启: systemctl restart snell@${username}
+状态: systemctl status snell@${username}
+EOF
+    fi
+
+    chmod 644 "${MULTI_USER_DIR}/${username}-info.txt"
+
+    # 创建 systemd 模板服务（如果不存在）
+    local template_service="/etc/systemd/system/snell@.service"
+    if [ ! -f "$template_service" ]; then
+        cat > "$template_service" <<EOF
+[Unit]
+Description=Snell Proxy Service - %i
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+Group=nogroup
+LimitNOFILE=32768
+ExecStart=${INSTALL_DIR}/snell-server -c ${MULTI_USER_DIR}/%i.conf
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+EOF
+        systemctl daemon-reload
+        print_info "已创建 systemd 模板服务"
+    fi
+
+    # 启动用户服务
+    echo ""
+    print_info "启动用户 ${username} 的服务..."
+    systemctl enable "snell@${username}"
+    systemctl start "snell@${username}"
+    sleep 2
+
+    if systemctl is-active --quiet "snell@${username}"; then
+        print_info "用户 ${username} 服务启动成功！"
+        echo ""
+        cat "${MULTI_USER_DIR}/${username}-info.txt"
+    else
+        print_error "用户 ${username} 服务启动失败"
+        journalctl -u "snell@${username}" -n 10 --no-pager
+    fi
+
+    # 配置防火墙
+    if command -v ufw &> /dev/null && ufw status | grep -q "active"; then
+        ufw allow "${USER_PORT}"/tcp
+        [ "$USER_IPV6" = "true" ] && [ "$USER_PORT_V6" != "$USER_PORT" ] && [ "$SNELL_CHOICE" = "v6" ] && ufw allow "${USER_PORT_V6}"/tcp
+    elif command -v firewall-cmd &> /dev/null; then
+        firewall-cmd --permanent --add-port="${USER_PORT}"/tcp
+        [ "$USER_IPV6" = "true" ] && [ "$USER_PORT_V6" != "$USER_PORT" ] && [ "$SNELL_CHOICE" = "v6" ] && firewall-cmd --permanent --add-port="${USER_PORT_V6}"/tcp
+        firewall-cmd --reload
+    fi
+}
+
+# 删除用户
+delete_user() {
+    echo ""
+    print_info "=========================================="
+    print_info "删除用户"
+    print_info "=========================================="
+    echo ""
+
+    # 列出用户
+    if [ ! -d "$MULTI_USER_DIR" ] || [ -z "$(ls -A $MULTI_USER_DIR/*.conf 2>/dev/null)" ]; then
+        print_error "没有可删除的用户"
+        return 1
+    fi
+
+    print_info "现有用户列表："
+    local i=1
+    declare -a user_list
+    for user_conf in "$MULTI_USER_DIR"/*.conf; do
+        if [ -f "$user_conf" ]; then
+            local username=$(basename "$user_conf" .conf)
+            user_list[$i]="$username"
+            echo "  $i) $username"
+            ((i++))
+        fi
+    done
+
+    echo ""
+    print_prompt "请输入要删除的用户编号: "
+    read -r choice
+
+    if ! [[ "$choice" =~ ^[0-9]+$ ]] || [ "$choice" -lt 1 ] || [ "$choice" -ge "$i" ]; then
+        print_error "无效的选择"
+        return 1
+    fi
+
+    local username="${user_list[$choice]}"
+    echo ""
+    print_warning "警告: 将删除用户 ${username} 及其所有配置"
+    print_prompt "确认删除? (y/n): "
+    read -r confirm
+
+    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        print_info "已取消删除"
+        return 0
+    fi
+
+    # 停止并禁用服务
+    systemctl stop "snell@${username}" 2>/dev/null
+    systemctl disable "snell@${username}" 2>/dev/null
+    print_info "已停止服务"
+
+    # 删除配置文件
+    rm -f "${MULTI_USER_DIR}/${username}.conf"
+    rm -f "${MULTI_USER_DIR}/${username}-info.txt"
+    print_info "已删除配置文件"
+
+    systemctl daemon-reload
+    print_info "用户 ${username} 已删除"
+}
+
+# 查看用户信息
+show_user_info() {
+    echo ""
+    print_info "=========================================="
+    print_info "查看用户信息"
+    print_info "=========================================="
+    echo ""
+
+    if [ ! -d "$MULTI_USER_DIR" ] || [ -z "$(ls -A $MULTI_USER_DIR/*.conf 2>/dev/null)" ]; then
+        print_error "没有多用户配置"
+        return 1
+    fi
+
+    print_info "选择用户："
+    local i=1
+    declare -a user_list
+    for user_conf in "$MULTI_USER_DIR"/*.conf; do
+        if [ -f "$user_conf" ]; then
+            local username=$(basename "$user_conf" .conf)
+            user_list[$i]="$username"
+            echo "  $i) $username"
+            ((i++))
+        fi
+    done
+
+    echo ""
+    print_prompt "请输入用户编号: "
+    read -r choice
+
+    if ! [[ "$choice" =~ ^[0-9]+$ ]] || [ "$choice" -lt 1 ] || [ "$choice" -ge "$i" ]; then
+        print_error "无效的选择"
+        return 1
+    fi
+
+    local username="${user_list[$choice]}"
+    echo ""
+
+    if [ -f "${MULTI_USER_DIR}/${username}-info.txt" ]; then
+        cat "${MULTI_USER_DIR}/${username}-info.txt"
+    else
+        print_error "未找到用户 ${username} 的信息文件"
+    fi
+}
+
 # 显示主菜单
 show_menu() {
     clear
     echo ""
     echo -e "${CYAN}=========================================="
-    echo -e "    Snell v6 一键部署管理脚本"
+    echo -e "    Snell v5/v6 一键部署管理脚本"
     echo -e "==========================================${NC}"
     echo ""
     echo -e "${GREEN}请选择要执行的操作:${NC}"
     echo ""
-    echo "  1) 安装 Snell v6 服务器"
+    echo -e "${YELLOW}基础管理:${NC}"
+    echo "  1) 安装 Snell (支持 v5/v6)"
     echo "  2) 启动 Snell 服务"
     echo "  3) 停止 Snell 服务"
     echo "  4) 重启 Snell 服务"
@@ -786,6 +1228,13 @@ show_menu() {
     echo "  9) 修改配置"
     echo " 10) 检查更新"
     echo " 11) 卸载 Snell"
+    echo ""
+    echo -e "${YELLOW}多用户管理:${NC}"
+    echo " 12) 列出所有用户"
+    echo " 13) 添加新用户 (支持 v5/v6)"
+    echo " 14) 删除用户"
+    echo " 15) 查看用户信息"
+    echo ""
     echo "  0) 退出"
     echo ""
     echo -e "${CYAN}==========================================${NC}"
@@ -799,7 +1248,7 @@ Snell v6 一键部署脚本
 
 用法: $0 [命令]
 
-命令:
+基础命令:
     install     安装并配置 Snell v6 服务器
     uninstall   卸载 Snell 服务器
     update      检查并更新 Snell 到最新版本
@@ -811,12 +1260,21 @@ Snell v6 一键部署脚本
     log         查看 Snell 服务日志
     config      查看 Snell 配置
     info        显示连接信息
+
+多用户命令:
+    list        列出所有用户
+    adduser     添加新用户
+    deluser     删除用户
+    userinfo    查看用户信息
+
+其他命令:
     help        显示此帮助信息
 
 示例:
     $0              # 显示交互式菜单
     $0 install      # 直接安装 Snell
-    $0 modify       # 直接修改配置
+    $0 adduser      # 添加新用户
+    $0 list         # 列出所有用户
     $0 status       # 直接查看状态
 
 EOF
@@ -828,14 +1286,15 @@ main() {
     if [ $# -eq 0 ]; then
         while true; do
             show_menu
-            print_prompt "请输入选项 [0-11]: "
+            print_prompt "请输入选项 [0-15]: "
             read -r choice
 
             case $choice in
                 1)
                     check_root
-                    print_info "开始安装 Snell v6..."
+                    print_info "开始安装 Snell..."
                     detect_architecture
+                    select_snell_version
                     get_user_config
                     download_snell
                     create_config
@@ -844,7 +1303,7 @@ main() {
                     configure_firewall
                     echo ""
                     print_info "=========================================="
-                    print_info "Snell v6 安装完成！"
+                    print_info "Snell ${SNELL_CHOICE} 安装完成！"
                     print_info "=========================================="
                     echo ""
                     print_prompt "按回车键返回主菜单..."
@@ -934,12 +1393,38 @@ main() {
                     print_prompt "按回车键返回主菜单..."
                     read
                     ;;
+                12)
+                    list_users
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                13)
+                    check_root
+                    add_user
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                14)
+                    check_root
+                    delete_user
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                15)
+                    show_user_info
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
                 0)
                     print_info "退出脚本"
                     exit 0
                     ;;
                 *)
-                    print_error "无效的选项，请输入 0-11"
+                    print_error "无效的选项，请输入 0-15"
                     sleep 2
                     ;;
             esac
@@ -952,8 +1437,9 @@ main() {
     case $action in
         install)
             check_root
-            print_info "开始安装 Snell v6..."
+            print_info "开始安装 Snell..."
             detect_architecture
+            select_snell_version
             get_user_config
             download_snell
             create_config
@@ -962,7 +1448,7 @@ main() {
             configure_firewall
             echo ""
             print_info "=========================================="
-            print_info "Snell v6 安装完成！"
+            print_info "Snell ${SNELL_CHOICE} 安装完成！"
             print_info "=========================================="
             ;;
         uninstall)
@@ -1040,6 +1526,20 @@ main() {
                 print_error "未找到连接信息文件，请确认 Snell 已安装"
                 exit 1
             fi
+            ;;
+        list)
+            list_users
+            ;;
+        adduser)
+            check_root
+            add_user
+            ;;
+        deluser)
+            check_root
+            delete_user
+            ;;
+        userinfo)
+            show_user_info
             ;;
         help|--help|-h)
             show_help
