@@ -23,6 +23,7 @@ CONFIG_DIR="/etc/snell"
 CONFIG_FILE="${CONFIG_DIR}/snell-server.conf"
 SERVICE_FILE="/etc/systemd/system/snell.service"
 MULTI_USER_DIR="${CONFIG_DIR}/users"
+SNELL_BINARY=""  # 将根据版本动态设置
 
 # 用户配置变量
 USER_PORT=""
@@ -305,13 +306,23 @@ get_user_config() {
 
 # 下载 Snell 服务器
 download_snell() {
-    # 根据选择的版本构建下载链接
+    # 根据选择的版本构建下载链接和二进制文件名
     local download_url=""
+    local binary_name=""
 
     if [ "$SNELL_CHOICE" = "v5" ]; then
         download_url="https://dl.nssurge.com/snell/snell-server-${SNELL_VERSION_V5}-linux-${ARCH}.zip"
+        binary_name="snell-server-v5"
     else
         download_url="https://dl.nssurge.com/snell/snell-server-${SNELL_VERSION_V6}-linux-${ARCH}.zip"
+        binary_name="snell-server-v6"
+    fi
+
+    SNELL_BINARY="${INSTALL_DIR}/${binary_name}"
+
+    # 检查是否已安装该版本
+    if [ -f "$SNELL_BINARY" ]; then
+        print_warning "Snell ${SNELL_CHOICE} 已安装，将覆盖现有版本"
     fi
 
     local temp_dir=$(mktemp -d)
@@ -345,15 +356,15 @@ download_snell() {
         exit 1
     }
 
-    print_info "安装 Snell 服务器到 $INSTALL_DIR..."
-    mv "${temp_dir}/snell-server" "$INSTALL_DIR/snell-server"
-    chmod +x "${INSTALL_DIR}/snell-server"
+    print_info "安装 Snell 服务器到 $SNELL_BINARY..."
+    mv "${temp_dir}/snell-server" "$SNELL_BINARY"
+    chmod +x "$SNELL_BINARY"
 
     rm -rf "$temp_dir"
     print_info "Snell ${SNELL_CHOICE} 服务器安装完成"
 
     # 验证安装的版本
-    local installed_version=$("${INSTALL_DIR}/snell-server" --version 2>&1 | head -1)
+    local installed_version=$("$SNELL_BINARY" --version 2>&1 | head -1)
     print_info "已安装版本: $installed_version"
 }
 
@@ -370,6 +381,8 @@ create_config() {
     if [ "$SNELL_CHOICE" = "v5" ]; then
         # v5 配置格式
         cat > "$CONFIG_FILE" <<EOF
+# Snell Version: v5
+# Binary: ${SNELL_BINARY}
 [snell-server]
 listen = ::0:${USER_PORT}
 psk = ${USER_PSK}
@@ -385,6 +398,8 @@ EOF
         fi
 
         cat > "$CONFIG_FILE" <<EOF
+# Snell Version: v6
+# Binary: ${SNELL_BINARY}
 [snell-server]
 listen = ${listen_addr}
 psk = ${USER_PSK}
@@ -484,7 +499,7 @@ create_service() {
 
     cat > "$SERVICE_FILE" <<EOF
 [Unit]
-Description=Snell Proxy Service v6
+Description=Snell Proxy Service ${SNELL_CHOICE}
 After=network.target
 
 [Service]
@@ -492,7 +507,7 @@ Type=simple
 User=nobody
 Group=nogroup
 LimitNOFILE=32768
-ExecStart=${INSTALL_DIR}/snell-server -c ${CONFIG_FILE}
+ExecStart=${SNELL_BINARY} -c ${CONFIG_FILE}
 Restart=on-failure
 RestartSec=5s
 
@@ -988,6 +1003,22 @@ add_user() {
     # 选择版本
     select_snell_version
 
+    # 设置二进制文件路径
+    if [ "$SNELL_CHOICE" = "v5" ]; then
+        SNELL_BINARY="${INSTALL_DIR}/snell-server-v5"
+    else
+        SNELL_BINARY="${INSTALL_DIR}/snell-server-v6"
+    fi
+
+    # 检查对应版本的二进制文件是否存在，不存在则下载
+    if [ ! -f "$SNELL_BINARY" ]; then
+        print_warning "未找到 Snell ${SNELL_CHOICE} 二进制文件，开始下载..."
+        detect_architecture
+        download_snell
+    else
+        print_info "使用已安装的 Snell ${SNELL_CHOICE}: $SNELL_BINARY"
+    fi
+
     # 获取配置
     get_user_config
 
@@ -1000,6 +1031,8 @@ add_user() {
     if [ "$SNELL_CHOICE" = "v5" ]; then
         # v5 配置格式
         cat > "$user_config" <<EOF
+# Snell Version: v5
+# Binary: ${SNELL_BINARY}
 [snell-server]
 listen = ::0:${USER_PORT}
 psk = ${USER_PSK}
@@ -1015,6 +1048,8 @@ EOF
         fi
 
         cat > "$user_config" <<EOF
+# Snell Version: v6
+# Binary: ${SNELL_BINARY}
 [snell-server]
 listen = ${listen_addr}
 psk = ${USER_PSK}
@@ -1087,6 +1122,45 @@ EOF
     # 创建 systemd 模板服务（如果不存在）
     local template_service="/etc/systemd/system/snell@.service"
     if [ ! -f "$template_service" ]; then
+        # 创建启动脚本来解析配置文件中的二进制路径
+        cat > "${INSTALL_DIR}/snell-launcher.sh" <<'LAUNCHER_EOF'
+#!/bin/bash
+# Snell 启动器 - 从配置文件读取正确的二进制路径
+
+CONFIG_FILE="$1"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "配置文件不存在: $CONFIG_FILE"
+    exit 1
+fi
+
+# 从配置文件中读取二进制路径
+BINARY_PATH=$(grep "^# Binary:" "$CONFIG_FILE" | cut -d' ' -f3)
+
+if [ -z "$BINARY_PATH" ] || [ ! -f "$BINARY_PATH" ]; then
+    # 如果没有找到或文件不存在，尝试检测版本
+    if grep -q "^# Snell Version: v5" "$CONFIG_FILE"; then
+        BINARY_PATH="/usr/local/bin/snell-server-v5"
+    elif grep -q "^# Snell Version: v6" "$CONFIG_FILE"; then
+        BINARY_PATH="/usr/local/bin/snell-server-v6"
+    else
+        # 向后兼容：尝试使用默认路径
+        BINARY_PATH="/usr/local/bin/snell-server"
+    fi
+fi
+
+if [ ! -f "$BINARY_PATH" ]; then
+    echo "找不到 Snell 二进制文件: $BINARY_PATH"
+    exit 1
+fi
+
+# 执行 snell-server
+exec "$BINARY_PATH" -c "$CONFIG_FILE"
+LAUNCHER_EOF
+
+        chmod +x "${INSTALL_DIR}/snell-launcher.sh"
+        print_info "已创建 Snell 启动器脚本"
+
         cat > "$template_service" <<EOF
 [Unit]
 Description=Snell Proxy Service - %i
@@ -1097,7 +1171,7 @@ Type=simple
 User=nobody
 Group=nogroup
 LimitNOFILE=32768
-ExecStart=${INSTALL_DIR}/snell-server -c ${MULTI_USER_DIR}/%i.conf
+ExecStart=${INSTALL_DIR}/snell-launcher.sh ${MULTI_USER_DIR}/%i.conf
 Restart=on-failure
 RestartSec=5s
 
