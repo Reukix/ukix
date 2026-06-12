@@ -23,6 +23,7 @@ SERVICE_FILE="/etc/systemd/system/snell.service"
 
 # 用户配置变量
 USER_PORT=""
+USER_PORT_V6=""
 USER_PSK=""
 USER_IPV6="true"
 USER_DNS_PREF="default"
@@ -95,7 +96,7 @@ get_user_config() {
 
     # 获取端口
     local default_port=$(generate_port)
-    print_prompt "请输入监听端口 (默认: $default_port, 范围: 6000-65535): "
+    print_prompt "请输入 IPv4 监听端口 (默认: $default_port, 范围: 6000-65535): "
     read -r input_port
     if [ -z "$input_port" ]; then
         USER_PORT="$default_port"
@@ -130,9 +131,35 @@ get_user_config() {
     read -r input_ipv6
     if [ -z "$input_ipv6" ] || [[ "$input_ipv6" =~ ^[Yy]$ ]]; then
         USER_IPV6="true"
+
+        # 如果启用 IPv6，询问是否使用不同端口
+        echo ""
+        print_prompt "IPv6 是否使用与 IPv4 相同的端口 $USER_PORT? (y/n, 默认: y): "
+        read -r same_port
+        if [ -z "$same_port" ] || [[ "$same_port" =~ ^[Yy]$ ]]; then
+            USER_PORT_V6="$USER_PORT"
+            print_info "IPv6 使用相同端口: $USER_PORT_V6"
+        else
+            local default_port_v6=$(generate_port)
+            print_prompt "请输入 IPv6 监听端口 (默认: $default_port_v6, 范围: 6000-65535): "
+            read -r input_port_v6
+            if [ -z "$input_port_v6" ]; then
+                USER_PORT_V6="$default_port_v6"
+                print_info "IPv6 使用随机端口: $USER_PORT_V6"
+            else
+                if [[ "$input_port_v6" =~ ^[0-9]+$ ]] && [ "$input_port_v6" -ge 6000 ] && [ "$input_port_v6" -le 65535 ]; then
+                    USER_PORT_V6="$input_port_v6"
+                    print_info "IPv6 使用端口: $USER_PORT_V6"
+                else
+                    print_error "无效的端口号，使用默认端口: $default_port_v6"
+                    USER_PORT_V6="$default_port_v6"
+                fi
+            fi
+        fi
         print_info "IPv6: 已启用"
     else
         USER_IPV6="false"
+        USER_PORT_V6=""
         print_info "IPv6: 已禁用"
     fi
 
@@ -170,7 +197,10 @@ get_user_config() {
     print_info "=========================================="
     print_info "配置确认"
     print_info "=========================================="
-    print_info "端口: $USER_PORT"
+    print_info "IPv4 端口: $USER_PORT"
+    if [ "$USER_IPV6" = "true" ]; then
+        print_info "IPv6 端口: $USER_PORT_V6"
+    fi
     print_info "PSK: $USER_PSK"
     print_info "IPv6: $USER_IPV6"
     print_info "DNS IP 偏好: $USER_DNS_PREF"
@@ -238,7 +268,7 @@ create_config() {
     # 构建监听地址
     local listen_addr="0.0.0.0:${USER_PORT}"
     if [ "$USER_IPV6" = "true" ]; then
-        listen_addr="${listen_addr}, [::]:${USER_PORT}"
+        listen_addr="${listen_addr}, [::]:${USER_PORT_V6}"
     fi
 
     # 创建配置文件
@@ -263,7 +293,10 @@ EOF
     print_info "Snell 服务器配置信息:"
     print_info "=========================================="
     print_info "服务器地址: ${server_ip}"
-    print_info "监听端口: ${USER_PORT}"
+    print_info "IPv4 端口: ${USER_PORT}"
+    if [ "$USER_IPV6" = "true" ]; then
+        print_info "IPv6 端口: ${USER_PORT_V6}"
+    fi
     print_info "密码(PSK): ${USER_PSK}"
     print_info "IPv6: ${USER_IPV6}"
     print_info "DNS IP 偏好: ${USER_DNS_PREF}"
@@ -278,7 +311,8 @@ EOF
 Snell v6 连接信息
 ==========================================
 服务器地址: ${server_ip}
-端口: ${USER_PORT}
+IPv4 端口: ${USER_PORT}
+$([ "$USER_IPV6" = "true" ] && echo "IPv6 端口: ${USER_PORT_V6}")
 密码(PSK): ${USER_PSK}
 IPv6: ${USER_IPV6}
 DNS IP 偏好: ${USER_DNS_PREF}
@@ -287,7 +321,8 @@ DNS IP 偏好: ${USER_DNS_PREF}
 Surge 配置示例:
 ==========================================
 [Proxy]
-Snell = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=6
+Snell-IPv4 = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=6
+$([ "$USER_IPV6" = "true" ] && [ "$USER_PORT_V6" != "$USER_PORT" ] && echo "Snell-IPv6 = snell, ${server_ip}, ${USER_PORT_V6}, psk=${USER_PSK}, version=6")
 
 注意: Snell v6 仍在 Beta 测试中，需要使用最新的 Surge Beta 版本
 EOF
@@ -492,6 +527,229 @@ show_config() {
     fi
 }
 
+# 修改配置函数
+modify_config() {
+    if [ ! -f "$CONFIG_FILE" ]; then
+        print_error "配置文件不存在，请先安装 Snell"
+        return 1
+    fi
+
+    print_info "当前配置内容:"
+    echo ""
+    cat "$CONFIG_FILE"
+    echo ""
+
+    # 读取当前配置
+    local current_port=$(grep -oP 'listen = 0\.0\.0\.0:\K\d+' "$CONFIG_FILE" | head -1)
+    local current_port_v6=$(grep -oP 'listen = .*\[::\]:\K\d+' "$CONFIG_FILE" | head -1)
+    local current_psk=$(grep -oP 'psk = \K.*' "$CONFIG_FILE")
+    local current_ipv6=$(grep -oP 'ipv6 = \K.*' "$CONFIG_FILE")
+    local current_dns=$(grep -oP 'dns-ip-preference = \K.*' "$CONFIG_FILE")
+
+    print_info "=========================================="
+    print_info "当前配置:"
+    print_info "IPv4 端口: $current_port"
+    if [ -n "$current_port_v6" ]; then
+        print_info "IPv6 端口: $current_port_v6"
+    fi
+    print_info "PSK: $current_psk"
+    print_info "IPv6: $current_ipv6"
+    print_info "DNS IP 偏好: $current_dns"
+    print_info "=========================================="
+    echo ""
+
+    # 获取新的 IPv4 端口
+    print_prompt "请输入新的 IPv4 监听端口 (回车保持不变 $current_port): "
+    read -r input_port
+    if [ -z "$input_port" ]; then
+        USER_PORT="$current_port"
+    else
+        if [[ "$input_port" =~ ^[0-9]+$ ]] && [ "$input_port" -ge 6000 ] && [ "$input_port" -le 65535 ]; then
+            USER_PORT="$input_port"
+        else
+            print_error "无效的端口号，保持原端口: $current_port"
+            USER_PORT="$current_port"
+        fi
+    fi
+
+    # 获取 IPv6 配置
+    echo ""
+    print_prompt "是否启用 IPv6? (y/n, 回车保持当前: $current_ipv6): "
+    read -r input_ipv6
+    if [ -z "$input_ipv6" ]; then
+        USER_IPV6="$current_ipv6"
+    else
+        if [[ "$input_ipv6" =~ ^[Yy]$ ]]; then
+            USER_IPV6="true"
+        else
+            USER_IPV6="false"
+        fi
+    fi
+
+    # 如果启用 IPv6，询问端口
+    if [ "$USER_IPV6" = "true" ]; then
+        echo ""
+        if [ -n "$current_port_v6" ]; then
+            print_prompt "IPv6 是否使用与 IPv4 相同的端口 $USER_PORT? (y/n, 当前 IPv6 端口: $current_port_v6): "
+        else
+            print_prompt "IPv6 是否使用与 IPv4 相同的端口 $USER_PORT? (y/n, 默认: y): "
+        fi
+        read -r same_port
+        if [[ "$same_port" =~ ^[Yy]$ ]] || [ -z "$same_port" ]; then
+            USER_PORT_V6="$USER_PORT"
+            print_info "IPv6 使用相同端口: $USER_PORT_V6"
+        else
+            local default_v6=${current_port_v6:-$(generate_port)}
+            print_prompt "请输入 IPv6 监听端口 (回车保持 $default_v6): "
+            read -r input_port_v6
+            if [ -z "$input_port_v6" ]; then
+                USER_PORT_V6="$default_v6"
+            else
+                if [[ "$input_port_v6" =~ ^[0-9]+$ ]] && [ "$input_port_v6" -ge 6000 ] && [ "$input_port_v6" -le 65535 ]; then
+                    USER_PORT_V6="$input_port_v6"
+                else
+                    print_error "无效的端口号，使用: $default_v6"
+                    USER_PORT_V6="$default_v6"
+                fi
+            fi
+        fi
+    else
+        USER_PORT_V6=""
+    fi
+
+    # 获取新 PSK
+    echo ""
+    print_prompt "请输入新的 PSK 密码 (回车保持不变): "
+    read -r input_psk
+    if [ -z "$input_psk" ]; then
+        USER_PSK="$current_psk"
+    else
+        USER_PSK="$input_psk"
+    fi
+
+    # 获取 DNS IP 偏好
+    echo ""
+    print_info "DNS IP 偏好选项:"
+    print_info "  1) default"
+    print_info "  2) prefer-ipv4"
+    print_info "  3) prefer-ipv6"
+    print_info "  4) ipv4-only"
+    print_info "  5) ipv6-only"
+    echo ""
+    print_prompt "请选择 DNS IP 偏好 (回车保持当前: $current_dns): "
+    read -r input_dns
+    if [ -z "$input_dns" ]; then
+        USER_DNS_PREF="$current_dns"
+    else
+        case "$input_dns" in
+            1)
+                USER_DNS_PREF="default"
+                ;;
+            2)
+                USER_DNS_PREF="prefer-ipv4"
+                ;;
+            3)
+                USER_DNS_PREF="prefer-ipv6"
+                ;;
+            4)
+                USER_DNS_PREF="ipv4-only"
+                ;;
+            5)
+                USER_DNS_PREF="ipv6-only"
+                ;;
+            *)
+                USER_DNS_PREF="$current_dns"
+                ;;
+        esac
+    fi
+
+    echo ""
+    print_info "=========================================="
+    print_info "新配置:"
+    print_info "IPv4 端口: $USER_PORT"
+    if [ "$USER_IPV6" = "true" ]; then
+        print_info "IPv6 端口: $USER_PORT_V6"
+    fi
+    print_info "PSK: $USER_PSK"
+    print_info "IPv6: $USER_IPV6"
+    print_info "DNS IP 偏好: $USER_DNS_PREF"
+    print_info "=========================================="
+    echo ""
+    print_prompt "确认修改配置? (y/n): "
+    read -r confirm
+    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        print_info "已取消修改"
+        return 0
+    fi
+
+    # 获取服务器 IP
+    local server_ip=$(curl -s4m5 ip.sb 2>/dev/null || echo "YOUR_SERVER_IP")
+
+    # 构建监听地址
+    local listen_addr="0.0.0.0:${USER_PORT}"
+    if [ "$USER_IPV6" = "true" ]; then
+        listen_addr="${listen_addr}, [::]:${USER_PORT_V6}"
+    fi
+
+    # 备份旧配置
+    cp "$CONFIG_FILE" "${CONFIG_FILE}.backup"
+    print_info "已备份原配置到: ${CONFIG_FILE}.backup"
+
+    # 写入新配置
+    cat > "$CONFIG_FILE" <<EOF
+[snell-server]
+listen = ${listen_addr}
+psk = ${USER_PSK}
+ipv6 = ${USER_IPV6}
+dns-ip-preference = ${USER_DNS_PREF}
+
+# Snell v6 会自动从 PSK 派生部署级别的协议配置文件
+# 不同的 PSK 会产生不同的流量特征
+EOF
+
+    chmod 644 "$CONFIG_FILE"
+    print_info "配置文件已更新"
+
+    # 更新连接信息文件
+    cat > "${CONFIG_DIR}/connection-info.txt" <<EOF
+Snell v6 连接信息
+==========================================
+服务器地址: ${server_ip}
+IPv4 端口: ${USER_PORT}
+$([ "$USER_IPV6" = "true" ] && echo "IPv6 端口: ${USER_PORT_V6}")
+密码(PSK): ${USER_PSK}
+IPv6: ${USER_IPV6}
+DNS IP 偏好: ${USER_DNS_PREF}
+版本: 6
+
+Surge 配置示例:
+==========================================
+[Proxy]
+Snell-IPv4 = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=6
+$([ "$USER_IPV6" = "true" ] && [ "$USER_PORT_V6" != "$USER_PORT" ] && echo "Snell-IPv6 = snell, ${server_ip}, ${USER_PORT_V6}, psk=${USER_PSK}, version=6")
+
+注意: Snell v6 仍在 Beta 测试中，需要使用最新的 Surge Beta 版本
+EOF
+
+    chmod 644 "${CONFIG_DIR}/connection-info.txt"
+
+    # 重启服务
+    echo ""
+    print_info "正在重启 Snell 服务以应用新配置..."
+    systemctl restart snell
+    sleep 2
+
+    if systemctl is-active --quiet snell; then
+        print_info "服务重启成功！新配置已生效"
+        systemctl status snell --no-pager -l
+    else
+        print_error "服务启动失败，正在恢复原配置..."
+        mv "${CONFIG_FILE}.backup" "$CONFIG_FILE"
+        systemctl restart snell
+        print_error "已恢复原配置，请检查配置是否正确"
+    fi
+}
+
 # 启动服务函数
 start_snell() {
     print_info "启动 Snell 服务..."
@@ -525,8 +783,9 @@ show_menu() {
     echo "  6) 查看实时日志"
     echo "  7) 查看配置信息"
     echo "  8) 查看连接信息"
-    echo "  9) 检查更新"
-    echo " 10) 卸载 Snell"
+    echo "  9) 修改配置"
+    echo " 10) 检查更新"
+    echo " 11) 卸载 Snell"
     echo "  0) 退出"
     echo ""
     echo -e "${CYAN}==========================================${NC}"
@@ -544,6 +803,7 @@ Snell v6 一键部署脚本
     install     安装并配置 Snell v6 服务器
     uninstall   卸载 Snell 服务器
     update      检查并更新 Snell 到最新版本
+    modify      修改配置
     start       启动 Snell 服务
     stop        停止 Snell 服务
     restart     重启 Snell 服务
@@ -556,6 +816,7 @@ Snell v6 一键部署脚本
 示例:
     $0              # 显示交互式菜单
     $0 install      # 直接安装 Snell
+    $0 modify       # 直接修改配置
     $0 status       # 直接查看状态
 
 EOF
@@ -567,7 +828,7 @@ main() {
     if [ $# -eq 0 ]; then
         while true; do
             show_menu
-            print_prompt "请输入选项 [0-10]: "
+            print_prompt "请输入选项 [0-11]: "
             read -r choice
 
             case $choice in
@@ -654,12 +915,19 @@ main() {
                     ;;
                 9)
                     check_root
-                    check_update
+                    modify_config
                     echo ""
                     print_prompt "按回车键返回主菜单..."
                     read
                     ;;
                 10)
+                    check_root
+                    check_update
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                11)
                     check_root
                     uninstall
                     echo ""
@@ -671,7 +939,7 @@ main() {
                     exit 0
                     ;;
                 *)
-                    print_error "无效的选项，请输入 0-10"
+                    print_error "无效的选项，请输入 0-11"
                     sleep 2
                     ;;
             esac
@@ -704,6 +972,10 @@ main() {
         update)
             check_root
             check_update
+            ;;
+        modify)
+            check_root
+            modify_config
             ;;
         start)
             check_root
