@@ -507,6 +507,32 @@ stop_snell() {
     print_info "Snell 服务已停止"
 }
  
+# 显示主菜单
+show_menu() {
+    clear
+    echo ""
+    echo -e "${CYAN}=========================================="
+    echo -e "    Snell v6 一键部署管理脚本"
+    echo -e "==========================================${NC}"
+    echo ""
+    echo -e "${GREEN}请选择要执行的操作:${NC}"
+    echo ""
+    echo "  1) 安装 Snell v6 服务器"
+    echo "  2) 启动 Snell 服务"
+    echo "  3) 停止 Snell 服务"
+    echo "  4) 重启 Snell 服务"
+    echo "  5) 查看服务状态"
+    echo "  6) 查看实时日志"
+    echo "  7) 查看配置信息"
+    echo "  8) 查看连接信息"
+    echo "  9) 检查更新"
+    echo " 10) 卸载 Snell"
+    echo "  0) 退出"
+    echo ""
+    echo -e "${CYAN}==========================================${NC}"
+    echo ""
+}
+ 
 # 显示使用帮助
 show_help() {
     cat <<EOF
@@ -515,7 +541,7 @@ Snell v6 一键部署脚本
 用法: $0 [命令]
  
 命令:
-    install     安装并配置 Snell v6 服务器（默认，交互式配置）
+    install     安装并配置 Snell v6 服务器
     uninstall   卸载 Snell 服务器
     update      检查并更新 Snell 到最新版本
     start       启动 Snell 服务
@@ -528,23 +554,132 @@ Snell v6 一键部署脚本
     help        显示此帮助信息
  
 示例:
-    $0              # 交互式安装 Snell
-    $0 install      # 交互式安装 Snell
-    $0 update       # 检查更新
-    $0 start        # 启动服务
-    $0 stop         # 停止服务
-    $0 restart      # 重启服务
-    $0 status       # 查看状态
-    $0 config       # 查看配置
-    $0 log          # 查看日志
-    $0 uninstall    # 卸载
+    $0              # 显示交互式菜单
+    $0 install      # 直接安装 Snell
+    $0 status       # 直接查看状态
  
 EOF
 }
  
 # 主函数
 main() {
-    local action="${1:-install}"
+    # 如果没有参数，显示交互式菜单
+    if [ $# -eq 0 ]; then
+        while true; do
+            show_menu
+            print_prompt "请输入选项 [0-10]: "
+            read -r choice
+ 
+            case $choice in
+                1)
+                    check_root
+                    print_info "开始安装 Snell v6..."
+                    detect_architecture
+                    get_user_config
+                    download_snell
+                    create_config
+                    create_service
+                    start_service
+                    configure_firewall
+                    echo ""
+                    print_info "=========================================="
+                    print_info "Snell v6 安装完成！"
+                    print_info "=========================================="
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                2)
+                    check_root
+                    start_snell
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                3)
+                    check_root
+                    stop_snell
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                4)
+                    check_root
+                    echo ""
+                    print_prompt "确认重启 Snell 服务? (y/n): "
+                    read -r confirm
+                    if [[ "$confirm" =~ ^[Yy]$ ]]; then
+                        print_info "重启 Snell 服务..."
+                        systemctl restart snell
+                        sleep 2
+                        systemctl status snell --no-pager
+                    else
+                        print_info "已取消重启"
+                    fi
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                5)
+                    systemctl status snell --no-pager -l
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                6)
+                    echo ""
+                    print_info "即将进入日志查看模式（按 Ctrl+C 返回菜单）"
+                    print_prompt "继续查看实时日志? (y/n): "
+                    read -r confirm
+                    if [[ "$confirm" =~ ^[Yy]$ ]]; then
+                        journalctl -u snell -f
+                    fi
+                    ;;
+                7)
+                    show_config
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                8)
+                    if [ -f "${CONFIG_DIR}/connection-info.txt" ]; then
+                        echo ""
+                        cat "${CONFIG_DIR}/connection-info.txt"
+                    else
+                        print_error "未找到连接信息文件，请确认 Snell 已安装"
+                    fi
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                9)
+                    check_root
+                    check_update
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                10)
+                    check_root
+                    uninstall
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
+                0)
+                    print_info "退出脚本"
+                    exit 0
+                    ;;
+                *)
+                    print_error "无效的选项，请输入 0-10"
+                    sleep 2
+                    ;;
+            esac
+        done
+    fi
+ 
+    # 如果有参数，直接执行对应命令
+    local action="$1"
  
     case $action in
         install)
@@ -561,12 +696,6 @@ main() {
             print_info "=========================================="
             print_info "Snell v6 安装完成！"
             print_info "=========================================="
-            print_info "查看连接信息: $0 info"
-            print_info "查看配置: $0 config"
-            print_info "查看服务状态: $0 status"
-            print_info "查看服务日志: $0 log"
-            print_info "重启服务: $0 restart"
-            print_info "检查更新: $0 update"
             ;;
         uninstall)
             check_root
@@ -586,21 +715,53 @@ main() {
             ;;
         restart)
             check_root
+            echo ""
+            print_prompt "确认重启 Snell 服务? (y/n): "
+            read -r confirm
+            if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+                print_info "已取消重启"
+                exit 0
+            fi
             print_info "重启 Snell 服务..."
             systemctl restart snell
             sleep 2
             systemctl status snell --no-pager
             ;;
         status)
+            echo ""
+            print_prompt "查看 Snell 服务状态? (y/n): "
+            read -r confirm
+            if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+                exit 0
+            fi
             systemctl status snell --no-pager -l
             ;;
         log)
+            echo ""
+            print_info "即将进入日志查看模式（按 Ctrl+C 退出）"
+            print_prompt "继续查看实时日志? (y/n): "
+            read -r confirm
+            if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+                exit 0
+            fi
             journalctl -u snell -f
             ;;
         config)
+            echo ""
+            print_prompt "查看 Snell 配置? (y/n): "
+            read -r confirm
+            if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+                exit 0
+            fi
             show_config
             ;;
         info)
+            echo ""
+            print_prompt "查看连接信息? (y/n): "
+            read -r confirm
+            if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+                exit 0
+            fi
             if [ -f "${CONFIG_DIR}/connection-info.txt" ]; then
                 cat "${CONFIG_DIR}/connection-info.txt"
             else
