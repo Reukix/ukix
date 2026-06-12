@@ -1119,11 +1119,11 @@ EOF
 
     chmod 644 "${MULTI_USER_DIR}/${username}-info.txt"
 
-    # 创建 systemd 模板服务（如果不存在）
+    # 创建 systemd 模板服务（强制更新以支持 v5/v6 混合部署）
     local template_service="/etc/systemd/system/snell@.service"
-    if [ ! -f "$template_service" ]; then
-        # 创建启动脚本来解析配置文件中的二进制路径
-        cat > "${INSTALL_DIR}/snell-launcher.sh" <<'LAUNCHER_EOF'
+
+    # 创建启动脚本来解析配置文件中的二进制路径
+    cat > "${INSTALL_DIR}/snell-launcher.sh" <<'LAUNCHER_EOF'
 #!/bin/bash
 # Snell 启动器 - 从配置文件读取正确的二进制路径
 
@@ -1158,10 +1158,11 @@ fi
 exec "$BINARY_PATH" -c "$CONFIG_FILE"
 LAUNCHER_EOF
 
-        chmod +x "${INSTALL_DIR}/snell-launcher.sh"
-        print_info "已创建 Snell 启动器脚本"
+    chmod +x "${INSTALL_DIR}/snell-launcher.sh"
+    print_info "已创建 Snell 启动器脚本"
 
-        cat > "$template_service" <<EOF
+    # 始终重新创建模板服务
+    cat > "$template_service" <<EOF
 [Unit]
 Description=Snell Proxy Service - %i
 After=network.target
@@ -1178,9 +1179,8 @@ RestartSec=5s
 [Install]
 WantedBy=multi-user.target
 EOF
-        systemctl daemon-reload
-        print_info "已创建 systemd 模板服务"
-    fi
+    systemctl daemon-reload
+    print_info "已更新 systemd 模板服务"
 
     # 启动用户服务
     echo ""
