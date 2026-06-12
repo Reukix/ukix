@@ -31,6 +31,7 @@ USER_PSK=""
 USER_IPV6="true"
 USER_DNS_PREF="default"
 USER_DNS=""
+USER_TFO="true"
 CURRENT_USER=""
 SNELL_CHOICE=""  # v5 或 v6
 
@@ -220,10 +221,10 @@ get_user_config() {
     # v5 需要配置 DNS，v6 需要配置 DNS 偏好
     if [ "$SNELL_CHOICE" = "v5" ]; then
         echo ""
-        print_prompt "请输入 DNS 服务器 (默认: 1.1.1.1,8.8.8.8): "
+        print_prompt "请输入 DNS 服务器 (默认: 1.1.1.1,2606:4700:4700::1111,8.8.8.8,2001:4860:4860::8888): "
         read -r input_dns
         if [ -z "$input_dns" ]; then
-            USER_DNS="1.1.1.1,8.8.8.8"
+            USER_DNS="1.1.1.1,2606:4700:4700::1111,8.8.8.8,2001:4860:4860::8888"
         else
             USER_DNS="$input_dns"
         fi
@@ -258,6 +259,18 @@ get_user_config() {
                 ;;
         esac
         print_info "DNS IP 偏好: $USER_DNS_PREF"
+    fi
+
+    # 获取 TFO 配置
+    echo ""
+    print_prompt "是否启用 TCP Fast Open (TFO)? (y/n, 默认: y): "
+    read -r input_tfo
+    if [ -z "$input_tfo" ] || [[ "$input_tfo" =~ ^[Yy]$ ]]; then
+        USER_TFO="true"
+        print_info "TFO: 已启用"
+    else
+        USER_TFO="false"
+        print_info "TFO: 已禁用"
     fi
 
     echo ""
@@ -350,6 +363,7 @@ listen = ::0:${USER_PORT}
 psk = ${USER_PSK}
 ipv6 = ${USER_IPV6}
 dns = ${USER_DNS}
+tfo = ${USER_TFO}
 EOF
     else
         # v6 配置格式
@@ -364,6 +378,7 @@ listen = ${listen_addr}
 psk = ${USER_PSK}
 ipv6 = ${USER_IPV6}
 dns-ip-preference = ${USER_DNS_PREF}
+tfo = ${USER_TFO}
 
 # Snell v6 会自动从 PSK 派生部署级别的协议配置文件
 # 不同的 PSK 会产生不同的流量特征
@@ -415,13 +430,14 @@ Snell v5 连接信息
 密码(PSK): ${USER_PSK}
 IPv6: ${USER_IPV6}
 DNS: ${USER_DNS}
+TFO: ${USER_TFO}
 
-Surge 配置示例 (v4兼容):
+Surge 配置示例:
 ==========================================
 [Proxy]
-Snell = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=4
+Snell = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=5, reuse=true, tfo=${USER_TFO}
 
-注意: Snell v5 使用 version=4 配置以保持兼容性
+注意: Snell v5 稳定版
 EOF
     else
         cat > "${CONFIG_DIR}/connection-info.txt" <<EOF
@@ -433,13 +449,14 @@ $([ "$USER_IPV6" = "true" ] && echo "IPv6 端口: ${USER_PORT_V6}")
 密码(PSK): ${USER_PSK}
 IPv6: ${USER_IPV6}
 DNS IP 偏好: ${USER_DNS_PREF}
+TFO: ${USER_TFO}
 版本: 6
 
 Surge 配置示例:
 ==========================================
 [Proxy]
-Snell-IPv4 = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=6
-$([ "$USER_IPV6" = "true" ] && [ "$USER_PORT_V6" != "$USER_PORT" ] && echo "Snell-IPv6 = snell, ${server_ip}, ${USER_PORT_V6}, psk=${USER_PSK}, version=6")
+Snell-IPv4 = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=6, reuse=true, tfo=${USER_TFO}
+$([ "$USER_IPV6" = "true" ] && [ "$USER_PORT_V6" != "$USER_PORT" ] && echo "Snell-IPv6 = snell, ${server_ip}, ${USER_PORT_V6}, psk=${USER_PSK}, version=6, reuse=true, tfo=${USER_TFO}")
 
 注意: Snell v6 仍在 Beta 测试中，需要使用最新的 Surge Beta 版本
 EOF
@@ -976,6 +993,7 @@ listen = ::0:${USER_PORT}
 psk = ${USER_PSK}
 ipv6 = ${USER_IPV6}
 dns = ${USER_DNS}
+tfo = ${USER_TFO}
 EOF
     else
         # v6 配置格式
@@ -990,6 +1008,7 @@ listen = ${listen_addr}
 psk = ${USER_PSK}
 ipv6 = ${USER_IPV6}
 dns-ip-preference = ${USER_DNS_PREF}
+tfo = ${USER_TFO}
 
 # Snell v6 会自动从 PSK 派生部署级别的协议配置文件
 # 不同的 PSK 会产生不同的流量特征
@@ -1009,11 +1028,12 @@ Snell v5 用户: ${username}
 密码(PSK): ${USER_PSK}
 IPv6: ${USER_IPV6}
 DNS: ${USER_DNS}
+TFO: ${USER_TFO}
 
-Surge 配置示例 (v4兼容):
+Surge 配置示例:
 ==========================================
 [Proxy]
-Snell-${username} = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=4
+Snell-${username} = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=5, reuse=true, tfo=${USER_TFO}
 
 服务管理:
 ==========================================
@@ -1032,13 +1052,14 @@ $([ "$USER_IPV6" = "true" ] && echo "IPv6 端口: ${USER_PORT_V6}")
 密码(PSK): ${USER_PSK}
 IPv6: ${USER_IPV6}
 DNS IP 偏好: ${USER_DNS_PREF}
+TFO: ${USER_TFO}
 版本: 6
 
 Surge 配置示例:
 ==========================================
 [Proxy]
-Snell-${username}-IPv4 = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=6
-$([ "$USER_IPV6" = "true" ] && [ "$USER_PORT_V6" != "$USER_PORT" ] && echo "Snell-${username}-IPv6 = snell, ${server_ip}, ${USER_PORT_V6}, psk=${USER_PSK}, version=6")
+Snell-${username}-IPv4 = snell, ${server_ip}, ${USER_PORT}, psk=${USER_PSK}, version=6, reuse=true, tfo=${USER_TFO}
+$([ "$USER_IPV6" = "true" ] && [ "$USER_PORT_V6" != "$USER_PORT" ] && echo "Snell-${username}-IPv6 = snell, ${server_ip}, ${USER_PORT_V6}, psk=${USER_PSK}, version=6, reuse=true, tfo=${USER_TFO}")
 
 服务管理:
 ==========================================
