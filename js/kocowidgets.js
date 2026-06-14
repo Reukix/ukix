@@ -10,21 +10,21 @@ let $ = new Env(names);
 
 obj.subscriber = {
     non_subscriptions: {},
-    first_seen: "2026-06-14T10:52:05Z",
+    first_seen: "2024-03-08T04:44:30Z",
     original_application_version: appVersion,
     other_purchases: {
         [productType]: {
             price: { amount: 0, currency: "USD" },
             display_name: null,
-            purchase_date: "2026-06-14T10:52:05Z"
+            purchase_date: "2024-03-08T04:44:44Z"
         }
     },
     management_url: null,
     subscriptions: {},
     entitlements: {},
-    original_purchase_date: "2026-06-14T10:52:05Z",
+    original_purchase_date: "2024-03-08T04:44:14Z",
     original_app_user_id: "$RCAnonymousID:0400000000000000000000000000000",
-    last_seen: "2026-06-14T10:52:05Z"
+    last_seen: "2024-03-08T04:44:30Z"
 };
 
 obj.subscriber.non_subscriptions[productType] = [{
@@ -32,15 +32,15 @@ obj.subscriber.non_subscriptions[productType] = [{
     is_sandbox: false,
     price: { amount: 0, currency: "USD" },
     display_name: null,
-    purchase_date: "2026-06-14T10:52:05Z",
-    original_purchase_date: "2026-06-14T10:52:05Z",
+    purchase_date: "2024-03-08T04:44:44Z",
+    original_purchase_date: "2024-03-08T04:44:44Z",
     store: "app_store",
     store_transaction_id: "280000000000000"
 }];
 
 obj.subscriber.entitlements[productName] = {
     grace_period_expires_date: null,
-    purchase_date: "2026-06-14T10:52:05Z",
+    purchase_date: "2024-03-08T04:44:44Z",
     product_identifier: productType,
     expires_date: null
 };
