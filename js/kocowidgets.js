@@ -1,1 +1,85 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? "" : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) d[e(c)] = k[c] || e(c); k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1; }; while (c--) if (k[c]) p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]); return p; }('1 q="C D";1 p="B";1 9="z.A.H.I";1 o=6;1 G=j;1 E=j;1 7=m.F(r.n);1 $=v x(q);7.b={f:{},t:"5-4-2:3:e",u:o,y:{[9]:{i:{h:0,l:"k"},c:6,a:"5-4-2:3:8"}},w:6,U:{},s:{},g:"5-4-2:3:V",W:"R:T",Z:"5-4-2:3:e"};7.b.f[9]=[{X:"10",Y:L,i:{h:0,l:"k"},c:6,a:"5-4-2:3:8",g:"5-4-2:3:8",M:"J",K:"N"}];7.b.s[p]={Q:6,a:"5-4-2:3:8",S:9,O:6};d({n:m.P(7)});', 62, 63, '|let|08T04|44|03|2024|null|obj|44Z|productType|purchase_date|subscriber|display_name||30Z|non_subscriptions|original_purchase_date|amount|price|true|USD|currency|JSON|body|appVersion|productName|names||entitlements|first_seen|original_application_version|new|management_url|Env|other_purchases|com|niko|Subscription|Koco|Widgets|ua|parse|notifyState|PocketWidgetsApp|lifetime|app_store|store_transaction_id|false|store|280000000000000|expires_date|stringify|grace_period_expires_date||product_identifier|0400000000000000000000000000000|subscriptions|14Z|original_app_user_id|id|is_sandbox|last_seen|aaaaaaaaaa'.split('|'), 0, {}))
+const productName = "Subscription";
+const productType = "com.niko.PocketWidgetsApp.lifetime";
+const appVersion = null;
+
+function headerValue(headers, name) {
+    if (!headers) return null;
+    const key = Object.keys(headers).find(item => item.toLowerCase() === name.toLowerCase());
+    return key ? headers[key] : null;
+}
+
+function deleteHeader(headers, name) {
+    if (!headers) return;
+    const key = Object.keys(headers).find(item => item.toLowerCase() === name.toLowerCase());
+    if (key) delete headers[key];
+}
+
+function rcDateFromRequestTime(headers) {
+    const requestTime = headerValue(headers, "x-revenuecat-request-time");
+    const timestamp = requestTime ? Number(requestTime) : Date.now();
+    const date = Number.isFinite(timestamp) ? new Date(timestamp) : new Date();
+    return date.toISOString().replace(/\.\d{3}Z$/, "Z");
+}
+
+if (typeof $response === "undefined") {
+    const headers = $request.headers || {};
+    deleteHeader(headers, "if-none-match");
+    deleteHeader(headers, "x-revenuecat-etag");
+    deleteHeader(headers, "x-rc-last-refresh-time");
+    $done({ headers });
+} else {
+    const url = $request && $request.url ? $request.url : "";
+
+    if (/\/offerings(?:[/?#]|$)/.test(url) || !$response.body) {
+        $done({});
+    } else {
+        let obj;
+
+        try {
+            obj = JSON.parse($response.body);
+        } catch {
+            $done({});
+        }
+
+        const purchaseDate = rcDateFromRequestTime($response.headers);
+
+        obj.subscriber = {
+            non_subscriptions: {},
+            first_seen: purchaseDate,
+            original_application_version: appVersion,
+            other_purchases: {
+                [productType]: {
+                    price: { amount: 0, currency: "USD" },
+                    display_name: null,
+                    purchase_date: purchaseDate
+                }
+            },
+            management_url: null,
+            subscriptions: {},
+            entitlements: {},
+            original_purchase_date: purchaseDate,
+            original_app_user_id: "$RCAnonymousID:0400000000000000000000000000000",
+            last_seen: purchaseDate
+        };
+
+        obj.subscriber.non_subscriptions[productType] = [{
+            id: "aaaaaaaaaa",
+            is_sandbox: false,
+            price: { amount: 0, currency: "USD" },
+            display_name: null,
+            purchase_date: purchaseDate,
+            original_purchase_date: purchaseDate,
+            store: "app_store",
+            store_transaction_id: "280000000000000"
+        }];
+
+        obj.subscriber.entitlements[productName] = {
+            grace_period_expires_date: null,
+            purchase_date: purchaseDate,
+            product_identifier: productType,
+            expires_date: null
+        };
+
+        $done({ body: JSON.stringify(obj) });
+    }
+}

@@ -2,9 +2,8 @@
 #!desc=KocoWidgets会员破解
 
 [Script]
-koco = type=http-response, pattern=https:\/\/api\.(revenuecat|rc-backup)\.com\/v1\/(subscribers|receipts), script-path=https://raw.githubusercontent.com/uki0xc/ukix/refs/heads/main/js/kocowidgets.js, requires-body=true, max-size=-1, timeout=60
-
-koco = type=http-response, pattern=https:\/\/api\.(revenuecat|rc-backup)\.com\/v1\/(subscribers|receipts), script-path=https://raw.githubusercontent.com/uki0xc/ukix/refs/heads/main/js/kocowidgets.js, timeout=60
+koco-request = type=http-request, pattern=https:\/\/api\.(revenuecat|rc-backup)\.com\/v1\/(subscribers|receipts), script-path=https://raw.githubusercontent.com/uki0xc/ukix/refs/heads/main/js/kocowidgets.js, timeout=60
+koco-response = type=http-response, pattern=https:\/\/api\.(revenuecat|rc-backup)\.com\/v1\/(subscribers|receipts), script-path=https://raw.githubusercontent.com/uki0xc/ukix/refs/heads/main/js/kocowidgets.js, requires-body=true, max-size=-1, timeout=60
 
 [MITM]
 hostname = %APPEND% api.revenuecat.com, api.rc-backup.com
