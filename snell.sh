@@ -32,6 +32,7 @@ USER_PSK=""
 USER_IPV6="true"
 USER_DNS_PREF="default"
 USER_DNS=""
+USER_MODE="default"
 USER_TFO="true"
 CURRENT_USER=""
 SNELL_CHOICE=""  # v5 或 v6
@@ -263,6 +264,28 @@ get_user_config() {
                 ;;
         esac
         print_info "DNS IP 偏好: $USER_DNS_PREF"
+
+        # 获取 Snell v6 模式
+        echo ""
+        print_info "Snell v6 模式选项:"
+        print_info "  1) default - 默认模式，启用流量混淆和 AES 加密"
+        print_info "  2) unshaped - 禁用混淆，仅使用 AES 加密"
+        print_info "  3) unsafe-raw - 禁用加密和混淆，仅限安全网络环境"
+        echo ""
+        print_prompt "请选择 Snell v6 模式 (1-3, 默认: 1): "
+        read -r input_mode
+        case "$input_mode" in
+            2|unshaped)
+                USER_MODE="unshaped"
+                ;;
+            3|unsafe-raw)
+                USER_MODE="unsafe-raw"
+                ;;
+            *)
+                USER_MODE="default"
+                ;;
+        esac
+        print_info "Snell 模式: $USER_MODE"
     fi
 
     # 获取 TFO 配置
@@ -296,6 +319,7 @@ get_user_config() {
         print_info "DNS: $USER_DNS"
     else
         print_info "DNS IP 偏好: $USER_DNS_PREF"
+        print_info "Snell 模式: $USER_MODE"
     fi
     print_info "=========================================="
     echo ""
@@ -392,6 +416,7 @@ EOF
 [snell-server]
 listen = ${listen_addr}
 psk = ${USER_PSK}
+mode = ${USER_MODE}
 ipv6 = ${USER_IPV6}
 dns-ip-preference = ${USER_DNS_PREF}
 tfo = ${USER_TFO}
@@ -428,6 +453,7 @@ EOF
         print_info "DNS: ${USER_DNS}"
     else
         print_info "DNS IP 偏好: ${USER_DNS_PREF}"
+        print_info "Snell 模式: ${USER_MODE}"
     fi
 
     print_info "版本: Snell ${SNELL_CHOICE}"
@@ -465,6 +491,7 @@ $([ "$USER_IPV6" = "true" ] && echo "IPv6 端口: ${USER_PORT_V6}")
 密码(PSK): ${USER_PSK}
 IPv6: ${USER_IPV6}
 DNS IP 偏好: ${USER_DNS_PREF}
+Snell 模式: ${USER_MODE}
 TFO: ${USER_TFO}
 版本: 6
 
@@ -722,6 +749,79 @@ download_snell_archive() {
     fi
 }
 
+ensure_v6_mode_in_config() {
+    local config_file="$1"
+
+    if [ ! -f "$config_file" ]; then
+        return 1
+    fi
+
+    if [ "$(infer_choice_from_config "$config_file")" != "v6" ]; then
+        return 1
+    fi
+
+    if grep -q '^[[:space:]]*mode[[:space:]]*=' "$config_file"; then
+        return 1
+    fi
+
+    local temp_file
+    temp_file=$(mktemp)
+
+    if ! awk '
+        {
+            print
+            if (!inserted && $0 ~ /^[[:space:]]*psk[[:space:]]*=/) {
+                print "mode = default"
+                inserted = 1
+            }
+        }
+        END {
+            if (!inserted) {
+                print "mode = default"
+            }
+        }
+    ' "$config_file" > "$temp_file"; then
+        rm -f "$temp_file"
+        print_error "补充 mode 配置失败: $config_file"
+        return 1
+    fi
+
+    if ! cat "$temp_file" > "$config_file"; then
+        rm -f "$temp_file"
+        print_error "写入 mode 配置失败: $config_file"
+        return 1
+    fi
+
+    rm -f "$temp_file"
+    chmod 644 "$config_file"
+    print_info "已为配置补充 Snell v6 模式: $config_file"
+    return 0
+}
+
+ensure_update_mode_configs() {
+    local changed=0
+    local config_file
+
+    for config_file in "${UPDATE_MODE_CONFIG_FILES[@]}"; do
+        if ensure_v6_mode_in_config "$config_file"; then
+            changed=1
+        fi
+    done
+
+    [ "$changed" -eq 1 ]
+}
+
+restart_active_services() {
+    local service_name
+
+    for service_name in "$@"; do
+        if systemctl is-active --quiet "$service_name" 2>/dev/null; then
+            print_info "重启服务以应用配置: $service_name"
+            systemctl restart "$service_name"
+        fi
+    done
+}
+
 update_snell_binary() {
     local binary_path="$1"
     local choice="$2"
@@ -754,6 +854,9 @@ update_snell_binary() {
 
     if [ "$current_version" = "$target_version" ]; then
         print_info "${label} 已是最新版本"
+        if [ "$choice" = "v6" ] && ensure_update_mode_configs; then
+            restart_active_services "${services[@]}"
+        fi
         return 0
     fi
 
@@ -766,6 +869,11 @@ update_snell_binary() {
     fi
 
     print_info "开始更新 ${label}..."
+
+    if [ "$choice" = "v6" ]; then
+        ensure_update_mode_configs || true
+    fi
+
     detect_architecture
 
     local active_services=()
@@ -880,6 +988,11 @@ check_update() {
     SNELL_VERSION=$(get_target_version "$choice")
     SNELL_BINARY="$binary_path"
 
+    local -a UPDATE_MODE_CONFIG_FILES=()
+    if [ "$choice" = "v6" ]; then
+        UPDATE_MODE_CONFIG_FILES=("$CONFIG_FILE")
+    fi
+
     update_snell_binary "$binary_path" "$choice" "Snell 主服务" "snell"
 }
 
@@ -924,6 +1037,8 @@ modify_config() {
     local current_psk=$(grep -oP 'psk = \K.*' "$CONFIG_FILE")
     local current_ipv6=$(grep -oP 'ipv6 = \K.*' "$CONFIG_FILE")
     local current_dns=$(grep -oP 'dns-ip-preference = \K.*' "$CONFIG_FILE")
+    local current_mode=$(grep -oP 'mode[[:space:]]*=[[:space:]]*\K.*' "$CONFIG_FILE" | head -1)
+    current_mode=${current_mode:-default}
 
     print_info "=========================================="
     print_info "当前配置:"
@@ -934,6 +1049,7 @@ modify_config() {
     print_info "PSK: $current_psk"
     print_info "IPv6: $current_ipv6"
     print_info "DNS IP 偏好: $current_dns"
+    print_info "Snell 模式: $current_mode"
     print_info "=========================================="
     echo ""
 
@@ -1042,6 +1158,35 @@ modify_config() {
         esac
     fi
 
+    # 获取 Snell v6 模式
+    echo ""
+    print_info "Snell v6 模式选项:"
+    print_info "  1) default - 默认模式，启用流量混淆和 AES 加密"
+    print_info "  2) unshaped - 禁用混淆，仅使用 AES 加密"
+    print_info "  3) unsafe-raw - 禁用加密和混淆，仅限安全网络环境"
+    echo ""
+    print_prompt "请选择 Snell v6 模式 (回车保持当前: $current_mode): "
+    read -r input_mode
+    if [ -z "$input_mode" ]; then
+        USER_MODE="$current_mode"
+    else
+        case "$input_mode" in
+            1|default)
+                USER_MODE="default"
+                ;;
+            2|unshaped)
+                USER_MODE="unshaped"
+                ;;
+            3|unsafe-raw)
+                USER_MODE="unsafe-raw"
+                ;;
+            *)
+                print_warning "无效选择，保持当前模式: $current_mode"
+                USER_MODE="$current_mode"
+                ;;
+        esac
+    fi
+
     echo ""
     print_info "=========================================="
     print_info "新配置:"
@@ -1052,6 +1197,7 @@ modify_config() {
     print_info "PSK: $USER_PSK"
     print_info "IPv6: $USER_IPV6"
     print_info "DNS IP 偏好: $USER_DNS_PREF"
+    print_info "Snell 模式: $USER_MODE"
     print_info "=========================================="
     echo ""
     print_prompt "确认修改配置? (y/n): "
@@ -1079,6 +1225,7 @@ modify_config() {
 [snell-server]
 listen = ${listen_addr}
 psk = ${USER_PSK}
+mode = ${USER_MODE}
 ipv6 = ${USER_IPV6}
 dns-ip-preference = ${USER_DNS_PREF}
 
@@ -1099,6 +1246,7 @@ $([ "$USER_IPV6" = "true" ] && echo "IPv6 端口: ${USER_PORT_V6}")
 密码(PSK): ${USER_PSK}
 IPv6: ${USER_IPV6}
 DNS IP 偏好: ${USER_DNS_PREF}
+Snell 模式: ${USER_MODE}
 版本: 6
 
 Surge 配置示例:
@@ -1270,6 +1418,7 @@ EOF
 [snell-server]
 listen = ${listen_addr}
 psk = ${USER_PSK}
+mode = ${USER_MODE}
 ipv6 = ${USER_IPV6}
 dns-ip-preference = ${USER_DNS_PREF}
 tfo = ${USER_TFO}
@@ -1316,6 +1465,7 @@ $([ "$USER_IPV6" = "true" ] && echo "IPv6 端口: ${USER_PORT_V6}")
 密码(PSK): ${USER_PSK}
 IPv6: ${USER_IPV6}
 DNS IP 偏好: ${USER_DNS_PREF}
+Snell 模式: ${USER_MODE}
 TFO: ${USER_TFO}
 版本: 6
 
@@ -1577,6 +1727,7 @@ update_multi_user_version() {
         handled_binaries="${handled_binaries} ${binary_path}"
 
         local services=()
+        local -a UPDATE_MODE_CONFIG_FILES=()
         local matched_conf
         for matched_conf in "$MULTI_USER_DIR"/*.conf; do
             if [ ! -f "$matched_conf" ] || [ "$(infer_choice_from_config "$matched_conf")" != "$choice" ]; then
@@ -1593,6 +1744,9 @@ update_multi_user_version() {
                 local username
                 username=$(basename "$matched_conf" .conf)
                 services+=("snell@${username}")
+                if [ "$choice" = "v6" ]; then
+                    UPDATE_MODE_CONFIG_FILES+=("$matched_conf")
+                fi
             fi
         done
 
