@@ -310,14 +310,13 @@ get_user_config() {
 # 下载 Snell 服务器
 download_snell() {
     # 根据选择的版本构建下载链接和二进制文件名
-    local download_url=""
     local binary_name=""
 
     if [ "$SNELL_CHOICE" = "v5" ]; then
-        download_url="https://dl.nssurge.com/snell/snell-server-${SNELL_VERSION_V5}-linux-${ARCH}.zip"
+        SNELL_VERSION="$SNELL_VERSION_V5"
         binary_name="snell-server-v5"
     else
-        download_url="https://dl.nssurge.com/snell/snell-server-${SNELL_VERSION_V6}-linux-${ARCH}.zip"
+        SNELL_VERSION="$SNELL_VERSION_V6"
         binary_name="snell-server-v6"
     fi
 
@@ -332,22 +331,9 @@ download_snell() {
     local zip_file="${temp_dir}/snell-server.zip"
 
     print_info "开始下载 Snell ${SNELL_CHOICE} (${SNELL_VERSION})..."
-    print_info "下载地址: $download_url"
 
-    if command -v wget &> /dev/null; then
-        wget -q --show-progress -O "$zip_file" "$download_url" || {
-            print_error "下载失败"
-            rm -rf "$temp_dir"
-            exit 1
-        }
-    elif command -v curl &> /dev/null; then
-        curl -L -o "$zip_file" "$download_url" || {
-            print_error "下载失败"
-            rm -rf "$temp_dir"
-            exit 1
-        }
-    else
-        print_error "未找到 wget 或 curl，请先安装其中之一"
+    if ! download_snell_archive "$SNELL_CHOICE" "$zip_file"; then
+        print_error "下载失败"
         rm -rf "$temp_dir"
         exit 1
     fi
@@ -582,91 +568,319 @@ uninstall() {
     print_info "Snell 卸载完成"
 }
 
-# 检查更新函数
-check_update() {
-    print_info "检查 Snell 更新..."
+get_target_version() {
+    case "$1" in
+        v5)
+            echo "$SNELL_VERSION_V5"
+            ;;
+        v6)
+            echo "$SNELL_VERSION_V6"
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+}
 
-    if [ ! -f "${INSTALL_DIR}/snell-server" ]; then
-        print_error "Snell 未安装，请先运行安装"
-        exit 1
+get_default_binary() {
+    case "$1" in
+        v5)
+            echo "${INSTALL_DIR}/snell-server-v5"
+            ;;
+        v6)
+            echo "${INSTALL_DIR}/snell-server-v6"
+            ;;
+        *)
+            echo "${INSTALL_DIR}/snell-server"
+            ;;
+    esac
+}
+
+get_snell_version() {
+    local binary_path="$1"
+
+    if [ ! -x "$binary_path" ]; then
+        echo "unknown"
+        return 0
     fi
 
-    local current_version=$("${INSTALL_DIR}/snell-server" --version 2>&1 | grep -oP 'v\d+\.\d+\.\d+\w*' || echo "unknown")
-    print_info "当前版本: $current_version"
-    print_info "最新版本: $SNELL_VERSION"
+    local version
+    version=$("$binary_path" --version 2>&1 | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+[A-Za-z0-9]*' | head -1 || true)
+    if [ -z "$version" ]; then
+        echo "unknown"
+    else
+        echo "$version"
+    fi
+}
 
-    if [ "$current_version" = "$SNELL_VERSION" ]; then
-        print_info "已是最新版本"
+infer_choice_from_version() {
+    case "$1" in
+        v5.*)
+            echo "v5"
+            ;;
+        v6.*)
+            echo "v6"
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+}
+
+infer_choice_from_config() {
+    local config_file="$1"
+
+    if [ ! -f "$config_file" ]; then
+        echo ""
+        return 0
+    fi
+
+    if grep -q '^# Snell Version: v5' "$config_file"; then
+        echo "v5"
+    elif grep -q '^# Snell Version: v6' "$config_file"; then
+        echo "v6"
+    elif grep -q '^dns-ip-preference[[:space:]]*=' "$config_file"; then
+        echo "v6"
+    elif grep -q '^dns[[:space:]]*=' "$config_file"; then
+        echo "v5"
+    else
+        echo ""
+    fi
+}
+
+infer_binary_from_config() {
+    local config_file="$1"
+
+    if [ -f "$config_file" ]; then
+        local configured_binary
+        configured_binary=$(sed -n 's/^# Binary:[[:space:]]*//p' "$config_file" | head -1)
+        if [ -n "$configured_binary" ]; then
+            echo "$configured_binary"
+            return 0
+        fi
+    fi
+
+    echo ""
+}
+
+infer_main_binary() {
+    local binary_path=""
+
+    if [ -f "$SERVICE_FILE" ]; then
+        binary_path=$(sed -n 's/^ExecStart=\([^[:space:]]*\).*$/\1/p' "$SERVICE_FILE" | head -1)
+        if [ -n "$binary_path" ] && [ "$binary_path" != "${INSTALL_DIR}/snell-launcher.sh" ]; then
+            echo "$binary_path"
+            return 0
+        fi
+    fi
+
+    binary_path=$(infer_binary_from_config "$CONFIG_FILE")
+    if [ -n "$binary_path" ]; then
+        echo "$binary_path"
+        return 0
+    fi
+
+    local config_choice
+    config_choice=$(infer_choice_from_config "$CONFIG_FILE")
+    if [ -n "$config_choice" ] && [ -f "$(get_default_binary "$config_choice")" ]; then
+        get_default_binary "$config_choice"
+        return 0
+    fi
+
+    if [ -f "${INSTALL_DIR}/snell-server" ]; then
+        echo "${INSTALL_DIR}/snell-server"
+    elif [ -f "${INSTALL_DIR}/snell-server-v6" ]; then
+        echo "${INSTALL_DIR}/snell-server-v6"
+    elif [ -f "${INSTALL_DIR}/snell-server-v5" ]; then
+        echo "${INSTALL_DIR}/snell-server-v5"
+    else
+        echo ""
+    fi
+}
+
+download_snell_archive() {
+    local choice="$1"
+    local zip_file="$2"
+    local target_version
+    target_version=$(get_target_version "$choice")
+
+    if [ -z "$target_version" ]; then
+        print_error "无法确定 Snell 目标版本"
+        return 1
+    fi
+
+    local download_url="https://dl.nssurge.com/snell/snell-server-${target_version}-linux-${ARCH}.zip"
+    print_info "下载地址: $download_url"
+
+    if command -v wget &> /dev/null; then
+        wget -q --show-progress -O "$zip_file" "$download_url"
+    elif command -v curl &> /dev/null; then
+        curl -fL -o "$zip_file" "$download_url"
+    else
+        print_error "未找到 wget 或 curl，请先安装其中之一"
+        return 1
+    fi
+}
+
+update_snell_binary() {
+    local binary_path="$1"
+    local choice="$2"
+    local label="$3"
+    shift 3
+    local services=("$@")
+    local target_version
+    target_version=$(get_target_version "$choice")
+
+    if [ -z "$binary_path" ]; then
+        print_error "未找到需要更新的 Snell 二进制文件"
+        return 1
+    fi
+
+    if [ -z "$target_version" ]; then
+        print_error "无法确定 ${label} 的目标版本"
+        return 1
+    fi
+
+    if [ ! -f "$binary_path" ]; then
+        print_error "二进制文件不存在: $binary_path"
+        return 1
+    fi
+
+    local current_version
+    current_version=$(get_snell_version "$binary_path")
+    print_info "${label}: $binary_path"
+    print_info "当前版本: $current_version"
+    print_info "最新版本: $target_version"
+
+    if [ "$current_version" = "$target_version" ]; then
+        print_info "${label} 已是最新版本"
         return 0
     fi
 
     echo ""
-    print_prompt "发现新版本，是否更新? (y/n): "
+    print_prompt "发现新版本，是否更新 ${label}? (y/n): "
     read -r confirm
     if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
         print_info "取消更新"
         return 0
     fi
 
-    print_info "开始更新..."
+    print_info "开始更新 ${label}..."
     detect_architecture
 
-    # 停止服务
-    if systemctl is-active --quiet snell; then
-        systemctl stop snell
-        print_info "已停止服务"
-    fi
+    local active_services=()
+    local service_name
+    for service_name in "${services[@]}"; do
+        if systemctl is-active --quiet "$service_name" 2>/dev/null; then
+            active_services+=("$service_name")
+            systemctl stop "$service_name" 2>/dev/null || true
+            print_info "已停止服务: $service_name"
+        fi
+    done
 
-    # 备份旧版本
-    if [ -f "${INSTALL_DIR}/snell-server" ]; then
-        cp "${INSTALL_DIR}/snell-server" "${INSTALL_DIR}/snell-server.backup"
-        print_info "已备份当前版本"
-    fi
+    local backup_file="${binary_path}.backup"
+    cp "$binary_path" "$backup_file"
+    print_info "已备份当前版本"
 
-    # 下载新版本
-    local download_url="https://dl.nssurge.com/snell/snell-server-${SNELL_VERSION}-linux-${ARCH}.zip"
-    local temp_dir=$(mktemp -d)
+    local temp_dir
+    temp_dir=$(mktemp -d)
     local zip_file="${temp_dir}/snell-server.zip"
 
-    print_info "下载地址: $download_url"
-
-    if command -v wget &> /dev/null; then
-        wget -q --show-progress -O "$zip_file" "$download_url" || {
-            print_error "下载失败，恢复备份"
-            [ -f "${INSTALL_DIR}/snell-server.backup" ] && mv "${INSTALL_DIR}/snell-server.backup" "${INSTALL_DIR}/snell-server"
-            rm -rf "$temp_dir"
-            systemctl start snell
-            exit 1
-        }
-    elif command -v curl &> /dev/null; then
-        curl -L -o "$zip_file" "$download_url" || {
-            print_error "下载失败，恢复备份"
-            [ -f "${INSTALL_DIR}/snell-server.backup" ] && mv "${INSTALL_DIR}/snell-server.backup" "${INSTALL_DIR}/snell-server"
-            rm -rf "$temp_dir"
-            systemctl start snell
-            exit 1
-        }
+    if ! download_snell_archive "$choice" "$zip_file"; then
+        print_error "下载失败，恢复备份"
+        mv "$backup_file" "$binary_path"
+        rm -rf "$temp_dir"
+        for service_name in "${active_services[@]}"; do
+            systemctl start "$service_name" 2>/dev/null || true
+        done
+        return 1
     fi
 
-    unzip -q "$zip_file" -d "$temp_dir"
-    mv "${temp_dir}/snell-server" "${INSTALL_DIR}/snell-server"
-    chmod +x "${INSTALL_DIR}/snell-server"
+    if ! unzip -q "$zip_file" -d "$temp_dir"; then
+        print_error "解压失败，恢复备份"
+        mv "$backup_file" "$binary_path"
+        rm -rf "$temp_dir"
+        for service_name in "${active_services[@]}"; do
+            systemctl start "$service_name" 2>/dev/null || true
+        done
+        return 1
+    fi
+
+    if [ ! -f "${temp_dir}/snell-server" ]; then
+        print_error "压缩包中未找到 snell-server，恢复备份"
+        mv "$backup_file" "$binary_path"
+        rm -rf "$temp_dir"
+        for service_name in "${active_services[@]}"; do
+            systemctl start "$service_name" 2>/dev/null || true
+        done
+        return 1
+    fi
+
+    mv "${temp_dir}/snell-server" "$binary_path"
+    chmod +x "$binary_path"
     rm -rf "$temp_dir"
 
-    # 启动服务
-    systemctl start snell
-    sleep 2
+    local failed_service=""
+    for service_name in "${active_services[@]}"; do
+        systemctl start "$service_name" 2>/dev/null || failed_service="$service_name"
+    done
 
-    if systemctl is-active --quiet snell; then
-        print_info "更新成功！"
-        rm -f "${INSTALL_DIR}/snell-server.backup"
-        local new_version=$("${INSTALL_DIR}/snell-server" --version 2>&1 | grep -oP 'v\d+\.\d+\.\d+\w*' || echo "unknown")
-        print_info "新版本: $new_version"
-    else
-        print_error "服务启动失败，恢复备份"
-        [ -f "${INSTALL_DIR}/snell-server.backup" ] && mv "${INSTALL_DIR}/snell-server.backup" "${INSTALL_DIR}/snell-server"
-        systemctl start snell
+    sleep 2
+    for service_name in "${active_services[@]}"; do
+        if ! systemctl is-active --quiet "$service_name" 2>/dev/null; then
+            failed_service="$service_name"
+            break
+        fi
+    done
+
+    if [ -n "$failed_service" ]; then
+        print_error "服务启动失败: $failed_service，恢复备份"
+        mv "$backup_file" "$binary_path"
+        for service_name in "${active_services[@]}"; do
+            systemctl start "$service_name" 2>/dev/null || true
+        done
+        return 1
     fi
+
+    rm -f "$backup_file"
+    local new_version
+    new_version=$(get_snell_version "$binary_path")
+    print_info "更新成功！"
+    print_info "新版本: $new_version"
+}
+
+# 检查更新函数
+check_update() {
+    print_info "检查 Snell 更新..."
+
+    local binary_path
+    binary_path=$(infer_main_binary)
+
+    if [ -z "$binary_path" ] || [ ! -f "$binary_path" ]; then
+        print_error "Snell 未安装，请先运行安装"
+        exit 1
+    fi
+
+    local choice
+    choice=$(infer_choice_from_config "$CONFIG_FILE")
+
+    if [ -z "$choice" ]; then
+        local current_version
+        current_version=$(get_snell_version "$binary_path")
+        choice=$(infer_choice_from_version "$current_version")
+    fi
+
+    if [ -z "$choice" ]; then
+        print_warning "无法自动判断当前 Snell 主服务版本"
+        select_snell_version
+        choice="$SNELL_CHOICE"
+    fi
+
+    SNELL_CHOICE="$choice"
+    SNELL_VERSION=$(get_target_version "$choice")
+    SNELL_BINARY="$binary_path"
+
+    update_snell_binary "$binary_path" "$choice" "Snell 主服务" "snell"
 }
 
 # 查看配置函数
@@ -1316,6 +1530,125 @@ show_user_info() {
     fi
 }
 
+multi_user_has_choice() {
+    local choice="$1"
+    local user_conf
+
+    if [ ! -d "$MULTI_USER_DIR" ]; then
+        return 1
+    fi
+
+    for user_conf in "$MULTI_USER_DIR"/*.conf; do
+        if [ -f "$user_conf" ] && [ "$(infer_choice_from_config "$user_conf")" = "$choice" ]; then
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+update_multi_user_version() {
+    local choice="$1"
+    local target_name="Snell ${choice}"
+
+    if ! multi_user_has_choice "$choice"; then
+        print_warning "未找到 ${target_name} 多用户配置"
+        return 0
+    fi
+
+    local handled_binaries=""
+    local user_conf
+    for user_conf in "$MULTI_USER_DIR"/*.conf; do
+        if [ ! -f "$user_conf" ] || [ "$(infer_choice_from_config "$user_conf")" != "$choice" ]; then
+            continue
+        fi
+
+        local binary_path
+        binary_path=$(infer_binary_from_config "$user_conf")
+        if [ -z "$binary_path" ]; then
+            binary_path=$(get_default_binary "$choice")
+        fi
+
+        case " $handled_binaries " in
+            *" $binary_path "*)
+                continue
+                ;;
+        esac
+        handled_binaries="${handled_binaries} ${binary_path}"
+
+        local services=()
+        local matched_conf
+        for matched_conf in "$MULTI_USER_DIR"/*.conf; do
+            if [ ! -f "$matched_conf" ] || [ "$(infer_choice_from_config "$matched_conf")" != "$choice" ]; then
+                continue
+            fi
+
+            local matched_binary
+            matched_binary=$(infer_binary_from_config "$matched_conf")
+            if [ -z "$matched_binary" ]; then
+                matched_binary=$(get_default_binary "$choice")
+            fi
+
+            if [ "$matched_binary" = "$binary_path" ]; then
+                local username
+                username=$(basename "$matched_conf" .conf)
+                services+=("snell@${username}")
+            fi
+        done
+
+        update_snell_binary "$binary_path" "$choice" "多用户 ${target_name}" "${services[@]}" || return 1
+    done
+}
+
+check_multi_user_update() {
+    echo ""
+    print_info "=========================================="
+    print_info "检查多用户 Snell 更新"
+    print_info "=========================================="
+    echo ""
+
+    if [ ! -d "$MULTI_USER_DIR" ] || [ -z "$(ls -A "$MULTI_USER_DIR"/*.conf 2>/dev/null)" ]; then
+        print_error "没有多用户配置"
+        return 1
+    fi
+
+    print_info "请选择要更新的多用户版本:"
+    echo "  1) Snell v5"
+    echo "  2) Snell v6"
+    echo "  3) 全部"
+    echo ""
+    print_prompt "请输入选项 [1-3]: "
+    read -r choice
+
+    case "$choice" in
+        1)
+            update_multi_user_version "v5"
+            ;;
+        2)
+            update_multi_user_version "v6"
+            ;;
+        3)
+            local updated=0
+            if multi_user_has_choice "v5"; then
+                update_multi_user_version "v5"
+                updated=1
+            fi
+            if multi_user_has_choice "v6"; then
+                update_multi_user_version "v6"
+                updated=1
+            fi
+            if [ "$updated" -eq 0 ]; then
+                print_error "没有可更新的多用户配置"
+                return 1
+            fi
+            ;;
+        *)
+            print_error "无效的选项"
+            return 1
+            ;;
+    esac
+}
+
 # 显示主菜单
 show_menu() {
     clear
@@ -1344,6 +1677,7 @@ show_menu() {
     echo " 13) 添加新用户 (支持 v5/v6)"
     echo " 14) 删除用户"
     echo " 15) 查看用户信息"
+    echo " 16) 检查多用户更新"
     echo ""
     echo "  0) 退出"
     echo ""
@@ -1376,6 +1710,7 @@ Snell v6 一键部署脚本
     adduser     添加新用户
     deluser     删除用户
     userinfo    查看用户信息
+    update-users 检查并更新多用户 Snell
 
 其他命令:
     help        显示此帮助信息
@@ -1396,7 +1731,7 @@ main() {
     if [ $# -eq 0 ]; then
         while true; do
             show_menu
-            print_prompt "请输入选项 [0-15]: "
+            print_prompt "请输入选项 [0-16]: "
             read -r choice
 
             case $choice in
@@ -1529,12 +1864,19 @@ main() {
                     print_prompt "按回车键返回主菜单..."
                     read
                     ;;
+                16)
+                    check_root
+                    check_multi_user_update
+                    echo ""
+                    print_prompt "按回车键返回主菜单..."
+                    read
+                    ;;
                 0)
                     print_info "退出脚本"
                     exit 0
                     ;;
                 *)
-                    print_error "无效的选项，请输入 0-15"
+                    print_error "无效的选项，请输入 0-16"
                     sleep 2
                     ;;
             esac
@@ -1650,6 +1992,10 @@ main() {
             ;;
         userinfo)
             show_user_info
+            ;;
+        update-users|updateusers|updateuser)
+            check_root
+            check_multi_user_update
             ;;
         help|--help|-h)
             show_help
