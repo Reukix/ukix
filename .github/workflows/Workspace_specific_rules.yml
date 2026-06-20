@@ -26,7 +26,7 @@ jobs:
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Copilot/Copilot.list
-            curl -fsSL -A "Loon/894 CFNetwork/3826.600.41 Darwin/24.6.0" https://kelee.one/Tool/Loon/Lsr/AI.lsr || true
+            curl -fsSL http://surge.vki.im/AI.list || true
             printf '\n'
             echo "DOMAIN-KEYWORD,apple-relay"
             echo "DOMAIN-KEYWORD,diabrowser"
