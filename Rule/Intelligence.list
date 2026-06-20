@@ -1,6 +1,5 @@
-# Intelligence Rules - Fetched on 2026-06-20 14:30:30 GMT+8
+# Intelligence Rules - Fetched on 2026-06-20 14:39:30 GMT+8
 
-DOMAIN-KEYWORD,apple-relay
 DOMAIN,ai.google.dev
 DOMAIN,alkalimakersuite-pa.clients6.google.com
 DOMAIN,anthropic-com.ghost.io
@@ -33,6 +32,7 @@ DOMAIN,static.cloudflareinsights.com
 DOMAIN,sydney.bing.com
 DOMAIN,www.bing.com
 DOMAIN,xai.chronosphere.io
+DOMAIN-KEYWORD,apple-relay
 DOMAIN-KEYWORD,colab
 DOMAIN-KEYWORD,datadog
 DOMAIN-KEYWORD,developerprofiles
