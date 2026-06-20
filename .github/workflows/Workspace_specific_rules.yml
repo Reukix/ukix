@@ -26,7 +26,7 @@ jobs:
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Gemini/Gemini.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Copilot/Copilot.list
-            curl -fsSL -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" https://kelee.one/Tool/Loon/Lsr/AI.lsr || true
+            curl -fsSL -A "Loon/894 CFNetwork/3826.600.41 Darwin/24.6.0" https://kelee.one/Tool/Loon/Lsr/AI.lsr || true
             printf '\n'
             echo "DOMAIN-KEYWORD,apple-relay"
             echo "DOMAIN-KEYWORD,diabrowser"
