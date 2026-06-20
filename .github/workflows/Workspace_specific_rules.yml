@@ -27,6 +27,7 @@ jobs:
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Copilot/Copilot.list
             curl -sL https://kelee.one/Tool/Loon/Lsr/AI.lsr
+            printf '\n'
             echo "DOMAIN-KEYWORD,apple-relay"
             echo "DOMAIN-KEYWORD,diabrowser"
             echo "DOMAIN-SUFFIX,cursor-cdn.com"
@@ -72,7 +73,7 @@ jobs:
             echo "IP-CIDR,160.79.104.0/21,no-resolve"
             echo "IP-CIDR6,2607:6bc0::/32,no-resolve"
             echo "IP-ASN,399358,no-resolve"
-          } | grep -v '^#' | sort | uniq >> Rule/Intelligence.list
+          } | grep -v '^#' | grep -E '^(DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR|IP-CIDR6|IP-ASN),' | sort | uniq >> Rule/Intelligence.list
 
       - name: Fetch and Integrate CN Rules
         run: |
