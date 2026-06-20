@@ -1,0 +1,26 @@
+#!name=Spotify Premium
+#!desc=Spotify Premium
+#!date=2026-06-21
+
+[Rule]
+AND,((DOMAIN-SUFFIX, spotify.com), (PROTOCOL, QUIC)),REJECT
+DOMAIN,aet.spotify.com,REJECT
+
+[Header Rewrite]
+http-request ^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/user-customization-service\/v1\/customize$ header-del if-none-match
+
+[URL Rewrite]
+^https:\/\/(spclient\.wg|.*-spclient)\.spotify\.com(:443)?\/pendragon - reject
+^https:\/\/.*-spclient\.spotify\.com(:443)?\/pam-view-service\/ - reject
+^https:\/\/.*37i9dQZF1EYkqdzj48dyYq - reject
+
+[Script]
+spotify-home = type=http-response,pattern=^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/casita\/v.\/home\/default,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/uki0xc/ukix/refs/heads/main/js/Spotify-home.js
+spotify-search = type=http-response,pattern=^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/browsita\/v.\/browse,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/uki0xc/ukix/refs/heads/main/js/Spotify-search.js
+spotify-scroll = type=http-response,pattern=^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/scrollsita\/v.\/scroll\/spotify,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/uki0xc/ukix/refs/heads/main/js/Spotify-scroll.js
+spotify-gabo = type=http-request,pattern=^https:\/\/(.*-spclient\.spotify\.com(:443)?|spclient\.wg\.spotify\.com)\/gabo-receiver-service,requires-body=0,script-path=https://raw.githubusercontent.com/uki0xc/ukix/refs/heads/main/js/Spotify-gabo.js
+spotify-proto = type=http-response,pattern=^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/uki0xc/ukix/refs/heads/main/js/Spotify-proto.js,script-update-interval=0
+
+[MITM]
+hostname = %APPEND% spclient.wg.spotify.com, *spclient.spotify.com
+
