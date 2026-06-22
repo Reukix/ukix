@@ -15,7 +15,7 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # 配置变量
-SNELL_VERSION_V6="v6.0.0b3"
+SNELL_VERSION_V6="v6.0.0b4"
 SNELL_VERSION_V5="v5.0.1"
 SNELL_VERSION=""
 INSTALL_DIR="/usr/local/bin"
