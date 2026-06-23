@@ -1,10 +1,10 @@
-# Author: https://t.me/uki0x
+# Author: https://t.me/Reukix
 # Converted for Loon
 
 [General]
 skip-proxy = 192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,127.0.0.1,localhost,*.local
 bypass-tun = 10.0.0.0/8,100.64.0.0/10,127.0.0.0/8,169.254.0.0/16,172.16.0.0/12,192.0.0.0/24,192.0.2.0/24,192.88.99.0/24,192.168.0.0/16,198.51.100.0/24,203.0.113.0/24,224.0.0.0/4,255.255.255.255/32
-dns-server = system, 223.5.5.5, 119.29.29.29
+dns-server = 223.5.5.5, 119.29.29.29
 allow-wifi-access = false
 wifi-access-http-port = 6789
 wifi-access-socks5-port = 6879
@@ -46,19 +46,19 @@ FINAL,Proxy
 
 [Remote Rule]
 # 去广告
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/FuckAds.list, policy=REJECT, tag=去广告, enabled=true
+https://raw.githubusercontent.com/Reukix/ukix/main/Rule/FuckAds.list, policy=REJECT, tag=去广告, enabled=true
 # 常用分流
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Intelligence.list, policy=Intelligence, tag=Intelligence, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/X.list, policy=Proxy, tag=X, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Github.list, policy=Proxy, tag=Github, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Spotify.list, policy=Spotify, tag=Spotify, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Google.list, policy=Proxy, tag=Google, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Apple.list, policy=Apple, tag=Apple, enabled=true
+https://raw.githubusercontent.com/Reukix/ukix/main/Rule/Intelligence.list, policy=Intelligence, tag=Intelligence, enabled=true
+https://raw.githubusercontent.com/Reukix/ukix/main/Rule/X.list, policy=Proxy, tag=X, enabled=true
+https://raw.githubusercontent.com/Reukix/ukix/main/Rule/Github.list, policy=Proxy, tag=Github, enabled=true
+https://raw.githubusercontent.com/Reukix/ukix/main/Rule/Spotify.list, policy=Spotify, tag=Spotify, enabled=true
+https://raw.githubusercontent.com/Reukix/ukix/main/Rule/Google.list, policy=Proxy, tag=Google, enabled=true
+https://raw.githubusercontent.com/Reukix/ukix/main/Rule/Apple.list, policy=Apple, tag=Apple, enabled=true
 # Telegram 分流
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Telegram.list, policy=Telegram, tag=Telegram, enabled=true
+https://raw.githubusercontent.com/Reukix/ukix/main/Rule/Telegram.list, policy=Telegram, tag=Telegram, enabled=true
 # 兜底分流
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/Proxy.list, policy=Proxy, tag=Proxy, enabled=true
-https://raw.githubusercontent.com/uki0xc/ukix/main/Rule/CN.list, policy=DIRECT, tag=CN, enabled=true
+https://raw.githubusercontent.com/Reukix/ukix/main/Rule/Proxy.list, policy=Proxy, tag=Proxy, enabled=true
+https://raw.githubusercontent.com/Reukix/ukix/main/Rule/CN.list, policy=DIRECT, tag=CN, enabled=true
 
 [Plugin]
 https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/Loon/plugin/Block_HTTPDNS.plugin, enabled=true
