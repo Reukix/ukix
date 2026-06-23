@@ -1,4 +1,4 @@
-# Intelligence Rules - Fetched on 2026-06-23 14:22:03 GMT+8
+# Intelligence Rules - Fetched on 2026-06-24 04:57:30 GMT+8
 
 AND,((DOMAIN-KEYWORD,antigravity-auto-updater-),(DOMAIN-SUFFIX,run.app))
 AND,((DOMAIN-KEYWORD,chatgpt-async-webps-prod-),(DOMAIN-SUFFIX,webpubsub.azure.com))
