@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-06-25 04:26:46 GMT+8
+# Proxy Rules - Fetched on 2026-06-26 04:50:50 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -2261,6 +2261,7 @@ DOMAIN-SUFFIX,geocities.jp
 DOMAIN-SUFFIX,geph.io
 DOMAIN-SUFFIX,gerefoundation.org
 DOMAIN-SUFFIX,get.app
+DOMAIN-SUFFIX,get.dappcdn.com
 DOMAIN-SUFFIX,get.dev
 DOMAIN-SUFFIX,get.how
 DOMAIN-SUFFIX,get.page
