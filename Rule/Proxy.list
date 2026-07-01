@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-07-01 04:50:29 GMT+8
+# Proxy Rules - Fetched on 2026-07-02 04:44:37 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -1808,6 +1808,7 @@ DOMAIN-SUFFIX,expekt.com
 DOMAIN-SUFFIX,experts-univers.com
 DOMAIN-SUFFIX,exploader.net
 DOMAIN-SUFFIX,expofutures.com
+DOMAIN-SUFFIX,expressnews.com
 DOMAIN-SUFFIX,expressvpn.com
 DOMAIN-SUFFIX,exrates.me
 DOMAIN-SUFFIX,extmatrix.com
