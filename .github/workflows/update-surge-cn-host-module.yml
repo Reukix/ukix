@@ -20,7 +20,7 @@ jobs:
       - name: Build Surge module
         env:
           CN_LIST_URL: https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/Rule/CN.list
-          OUTPUT: Module/CN-Host-DNS.sgmodule
+          OUTPUT: Script/CN-Host-DNS.sgmodule
           CN_DNS: 223.5.5.5
         shell: bash
         run: |
