@@ -144,6 +144,7 @@ jobs:
           {
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy_All.list 
             echo "DOMAIN-SUFFIX,browserleaks.com"
+            echo "DOMAIN-SUFFIX,net.coffee"
           } | grep -v '^#' | sort | uniq >> Rule/Proxy.list
 
       - name: Fetch and Format TikTok Rules
