@@ -1,5 +1,6 @@
 // Surge DNS script.
-// CN domains are delegated to CN_DNS. Other domains are resolved with A-only DoH.
+// CN domains and non-CN domains are resolved with A-only DoH.
+// Returning addresses + ttl lets Surge cache results and reduces repeated script executions.
 
 var STORE_META = "cn_dns_split_meta_v1";
 var STORE_BITS = "cn_dns_split_bits_v1";
@@ -275,6 +276,9 @@ function queryAnyA(servers, domain, timeout, ttl, callback) {
 var ARGS = parseArgs(typeof $argument === "undefined" ? "" : $argument);
 var DOMAIN = normalizeDomain(typeof $domain === "undefined" ? "" : $domain);
 var CN_DNS = ARGS.cnDns || "223.5.5.5";
+var CN_DOH = String(ARGS.cnDoh || "https://dns.alidns.com/dns-query")
+    .split(/\s*,\s*/)
+    .filter(function (item) { return /^https?:\/\//.test(item); });
 var TTL = parseInt(ARGS.ttl || "60", 10);
 var TIMEOUT = parseInt(ARGS.timeout || "2", 10);
 var DOH = String(ARGS.doh || "https://1.1.1.1/dns-query,https://8.8.8.8/dns-query")
@@ -284,8 +288,20 @@ var DOH = String(ARGS.doh || "https://1.1.1.1/dns-query,https://8.8.8.8/dns-quer
 try {
     var cnData = loadCnData();
     if (isCnDomain(DOMAIN, cnData)) {
-        log("[CN]", DOMAIN, "->", CN_DNS);
-        $done({ server: CN_DNS });
+        if (CN_DOH.length) {
+            log("[CN A-only DoH]", DOMAIN);
+            queryAnyA(CN_DOH, DOMAIN, TIMEOUT, TTL, function (error, result) {
+                if (error) {
+                    log("CN DoH failed:", error);
+                    $done({ server: CN_DNS });
+                } else {
+                    $done(result);
+                }
+            });
+        } else {
+            log("[CN server]", DOMAIN, "->", CN_DNS);
+            $done({ server: CN_DNS });
+        }
     } else {
         log("[A-only DoH]", DOMAIN);
         queryAnyA(DOH, DOMAIN, TIMEOUT, TTL, function (error, result) {
