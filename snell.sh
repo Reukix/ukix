@@ -24,6 +24,16 @@ CONFIG_FILE="${CONFIG_DIR}/snell-server.conf"
 SERVICE_FILE="/etc/systemd/system/snell.service"
 MULTI_USER_DIR="${CONFIG_DIR}/users"
 SNELL_BINARY=""  # 将根据版本动态设置
+ARCH=""
+OS_CHECKED="false"
+OS_NAME=""
+OS_ID=""
+OS_ID_LIKE=""
+PACKAGE_MANAGER=""
+PACKAGE_MANAGER_CHECKED="false"
+DEPENDENCIES_CHECKED="false"
+SERVICE_USER="nobody"
+SERVICE_GROUP=""
 
 # 用户配置变量
 USER_PORT=""
@@ -54,6 +64,274 @@ print_prompt() {
     echo -e "${CYAN}[INPUT]${NC} $1"
 }
 
+command_exists() {
+    command -v "$1" > /dev/null 2>&1
+}
+
+detect_os() {
+    if [ "$OS_CHECKED" = "true" ]; then
+        return 0
+    fi
+
+    local kernel
+    kernel=$(uname -s 2>/dev/null || echo "unknown")
+    if [ "$kernel" != "Linux" ]; then
+        print_error "当前系统内核为 ${kernel}，本脚本仅支持 Linux 服务器"
+        print_error "Snell 下载包使用 Linux 构建，服务管理依赖 systemd"
+        exit 1
+    fi
+
+    OS_NAME="Linux"
+    OS_ID="unknown"
+    OS_ID_LIKE=""
+    if [ -r /etc/os-release ]; then
+        # shellcheck disable=SC1091
+        . /etc/os-release
+        OS_NAME="${PRETTY_NAME:-${NAME:-Linux}}"
+        OS_ID="${ID:-unknown}"
+        OS_ID_LIKE="${ID_LIKE:-}"
+    fi
+
+    OS_CHECKED="true"
+    print_info "检测到系统: ${OS_NAME}"
+}
+
+detect_package_manager() {
+    if [ "$PACKAGE_MANAGER_CHECKED" = "true" ]; then
+        return 0
+    fi
+
+    PACKAGE_MANAGER=""
+    if command_exists apt-get; then
+        PACKAGE_MANAGER="apt"
+    elif command_exists dnf; then
+        PACKAGE_MANAGER="dnf"
+    elif command_exists yum; then
+        PACKAGE_MANAGER="yum"
+    elif command_exists zypper; then
+        PACKAGE_MANAGER="zypper"
+    elif command_exists pacman; then
+        PACKAGE_MANAGER="pacman"
+    elif command_exists apk; then
+        PACKAGE_MANAGER="apk"
+    fi
+
+    PACKAGE_MANAGER_CHECKED="true"
+    if [ -n "$PACKAGE_MANAGER" ]; then
+        print_info "检测到包管理器: ${PACKAGE_MANAGER}"
+    else
+        print_warning "未检测到支持的包管理器，无法自动安装依赖"
+    fi
+}
+
+install_packages() {
+    if [ $# -eq 0 ]; then
+        return 0
+    fi
+
+    case "$PACKAGE_MANAGER" in
+        apt)
+            apt-get update && apt-get install -y "$@"
+            ;;
+        dnf)
+            dnf install -y "$@"
+            ;;
+        yum)
+            yum install -y "$@"
+            ;;
+        zypper)
+            zypper --non-interactive install "$@"
+            ;;
+        pacman)
+            pacman -Sy --needed --noconfirm "$@"
+            ;;
+        apk)
+            apk add --no-cache "$@"
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+grep_supports_perl_regex() {
+    printf 'snell=ok\n' | grep -oP 'snell=\Kok' > /dev/null 2>&1
+}
+
+ca_certificates_available() {
+    [ -s /etc/ssl/certs/ca-certificates.crt ] ||
+        [ -s /etc/pki/tls/certs/ca-bundle.crt ] ||
+        [ -s /etc/ssl/ca-bundle.pem ] ||
+        [ -d /etc/ssl/certs ]
+}
+
+ensure_dependencies() {
+    if [ "$DEPENDENCIES_CHECKED" = "true" ]; then
+        return 0
+    fi
+
+    detect_os
+    detect_package_manager
+
+    local missing_deps=()
+    local packages=()
+
+    if ! command_exists unzip; then
+        missing_deps+=("unzip")
+        packages+=("unzip")
+    fi
+
+    if ! command_exists curl && ! command_exists wget; then
+        missing_deps+=("curl 或 wget")
+        packages+=("curl")
+    fi
+
+    if ! command_exists grep || ! grep_supports_perl_regex; then
+        missing_deps+=("支持 -P 的 GNU grep")
+        packages+=("grep")
+    fi
+
+    if ! ca_certificates_available; then
+        missing_deps+=("ca-certificates")
+        packages+=("ca-certificates")
+    fi
+
+    if [ "${#missing_deps[@]}" -eq 0 ]; then
+        print_info "基础依赖检查通过"
+        DEPENDENCIES_CHECKED="true"
+        return 0
+    fi
+
+    print_warning "缺少依赖: ${missing_deps[*]}"
+    if [ "$EUID" -ne 0 ]; then
+        print_error "请使用 root 权限运行，或手动安装缺失依赖后重试"
+        exit 1
+    fi
+
+    if [ -z "$PACKAGE_MANAGER" ]; then
+        print_error "无法自动安装依赖，请手动安装: ${missing_deps[*]}"
+        exit 1
+    fi
+
+    print_info "正在使用 ${PACKAGE_MANAGER} 安装依赖: ${packages[*]}"
+    if ! install_packages "${packages[@]}"; then
+        print_error "依赖安装失败，请手动安装后重试: ${missing_deps[*]}"
+        exit 1
+    fi
+
+    if ! command_exists unzip; then
+        print_error "安装后仍未找到 unzip，请检查系统软件源"
+        exit 1
+    fi
+
+    if ! command_exists curl && ! command_exists wget; then
+        print_error "安装后仍未找到 curl 或 wget，请检查系统软件源"
+        exit 1
+    fi
+
+    if ! command_exists grep || ! grep_supports_perl_regex; then
+        print_error "安装后 grep 仍不支持 -P，请安装 GNU grep 后重试"
+        exit 1
+    fi
+
+    if ! ca_certificates_available; then
+        print_error "安装后仍未找到 CA 证书，请检查 ca-certificates 是否可用"
+        exit 1
+    fi
+
+    print_info "依赖安装完成"
+    DEPENDENCIES_CHECKED="true"
+}
+
+systemd_available() {
+    command_exists systemctl && systemctl list-units --type=service --all > /dev/null 2>&1
+}
+
+ensure_systemd() {
+    detect_os
+
+    if ! command_exists systemctl; then
+        print_error "未找到 systemctl"
+        print_error "本脚本目前使用 systemd 管理 Snell 服务，不支持 OpenRC/SysVinit/精简容器环境的自动服务配置"
+        exit 1
+    fi
+
+    if ! systemd_available; then
+        print_error "systemctl 无法连接到运行中的 systemd"
+        print_error "请在已启用 systemd 的 Linux 系统上运行，或手动管理 Snell 进程"
+        exit 1
+    fi
+}
+
+user_exists() {
+    if command_exists id; then
+        id -u "$1" > /dev/null 2>&1
+    else
+        grep -q "^$1:" /etc/passwd 2>/dev/null
+    fi
+}
+
+group_exists() {
+    if command_exists getent; then
+        getent group "$1" > /dev/null 2>&1
+    else
+        grep -q "^$1:" /etc/group 2>/dev/null
+    fi
+}
+
+detect_service_account() {
+    if ! user_exists "$SERVICE_USER"; then
+        print_error "系统中不存在 ${SERVICE_USER} 用户，请先创建该用户或调整脚本的 SERVICE_USER"
+        exit 1
+    fi
+
+    if group_exists nogroup; then
+        SERVICE_GROUP="nogroup"
+    elif group_exists nobody; then
+        SERVICE_GROUP="nobody"
+    else
+        SERVICE_GROUP=""
+        print_warning "未找到 nogroup/nobody 组，将使用 ${SERVICE_USER} 的默认用户组"
+    fi
+
+    if [ -n "$SERVICE_GROUP" ]; then
+        print_info "服务运行账户: ${SERVICE_USER}:${SERVICE_GROUP}"
+    else
+        print_info "服务运行账户: ${SERVICE_USER}"
+    fi
+}
+
+get_service_group_line() {
+    if [ -n "$SERVICE_GROUP" ]; then
+        echo "Group=${SERVICE_GROUP}"
+    fi
+}
+
+get_server_ip() {
+    local server_ip=""
+
+    if command_exists curl; then
+        server_ip=$(curl -s4m5 ip.sb 2>/dev/null || true)
+    fi
+
+    if [ -z "$server_ip" ] && command_exists wget; then
+        server_ip=$(wget -qO- -T 5 https://ip.sb 2>/dev/null || true)
+    fi
+
+    if [ -n "$server_ip" ]; then
+        echo "$server_ip"
+    else
+        echo "YOUR_SERVER_IP"
+    fi
+}
+
+preflight_service_environment() {
+    detect_os
+    ensure_systemd
+    ensure_dependencies
+    detect_service_account
+}
+
 # 检查是否为 root 用户
 check_root() {
     if [ "$EUID" -ne 0 ]; then
@@ -64,6 +342,8 @@ check_root() {
 
 # 检测系统架构
 detect_architecture() {
+    detect_os
+
     local arch=$(uname -m)
     case $arch in
         x86_64)
@@ -333,6 +613,11 @@ get_user_config() {
 
 # 下载 Snell 服务器
 download_snell() {
+    ensure_dependencies
+    if [ -z "$ARCH" ]; then
+        detect_architecture
+    fi
+
     # 根据选择的版本构建下载链接和二进制文件名
     local binary_name=""
 
@@ -388,7 +673,8 @@ create_config() {
     mkdir -p "$CONFIG_DIR"
 
     # 获取服务器 IP
-    local server_ip=$(curl -s4m5 ip.sb 2>/dev/null || echo "YOUR_SERVER_IP")
+    local server_ip
+    server_ip=$(get_server_ip)
 
     # 根据版本创建不同格式的配置文件
     if [ "$SNELL_CHOICE" = "v5" ]; then
@@ -511,6 +797,9 @@ EOF
 
 # 创建 systemd 服务
 create_service() {
+    ensure_systemd
+    detect_service_account
+
     print_info "创建 systemd 服务..."
 
     cat > "$SERVICE_FILE" <<EOF
@@ -520,8 +809,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=nobody
-Group=nogroup
+User=${SERVICE_USER}
+$(get_service_group_line)
 LimitNOFILE=32768
 ExecStart=${SNELL_BINARY} -c ${CONFIG_FILE}
 Restart=on-failure
@@ -537,6 +826,8 @@ EOF
 
 # 启动服务
 start_service() {
+    ensure_systemd
+
     print_info "启动 Snell 服务..."
     systemctl enable snell
     systemctl start snell
@@ -575,15 +866,19 @@ configure_firewall() {
 uninstall() {
     print_info "开始卸载 Snell..."
 
-    # 停止并禁用服务
-    if systemctl is-active --quiet snell; then
-        systemctl stop snell
-        print_info "Snell 服务已停止"
-    fi
+    if systemd_available; then
+        # 停止并禁用服务
+        if systemctl is-active --quiet snell; then
+            systemctl stop snell
+            print_info "Snell 服务已停止"
+        fi
 
-    if systemctl is-enabled --quiet snell 2>/dev/null; then
-        systemctl disable snell
-        print_info "Snell 服务已禁用"
+        if systemctl is-enabled --quiet snell 2>/dev/null; then
+            systemctl disable snell
+            print_info "Snell 服务已禁用"
+        fi
+    else
+        print_warning "未检测到可用的 systemd，跳过服务停止和禁用"
     fi
 
     # 删除文件
@@ -591,7 +886,9 @@ uninstall() {
     [ -f "${INSTALL_DIR}/snell-server" ] && rm -f "${INSTALL_DIR}/snell-server" && print_info "已删除程序文件"
     [ -d "$CONFIG_DIR" ] && rm -rf "$CONFIG_DIR" && print_info "已删除配置目录"
 
-    systemctl daemon-reload
+    if systemd_available; then
+        systemctl daemon-reload
+    fi
     print_info "Snell 卸载完成"
 }
 
@@ -729,6 +1026,12 @@ download_snell_archive() {
     local choice="$1"
     local zip_file="$2"
     local target_version
+
+    ensure_dependencies
+    if [ -z "$ARCH" ]; then
+        detect_architecture
+    fi
+
     target_version=$(get_target_version "$choice")
 
     if [ -z "$target_version" ]; then
@@ -812,6 +1115,8 @@ ensure_update_mode_configs() {
 }
 
 restart_active_services() {
+    ensure_systemd
+
     local service_name
 
     for service_name in "$@"; do
@@ -823,6 +1128,9 @@ restart_active_services() {
 }
 
 update_snell_binary() {
+    ensure_systemd
+    ensure_dependencies
+
     local binary_path="$1"
     local choice="$2"
     local label="$3"
@@ -959,6 +1267,8 @@ update_snell_binary() {
 
 # 检查更新函数
 check_update() {
+    preflight_service_environment
+
     print_info "检查 Snell 更新..."
 
     local binary_path
@@ -1021,6 +1331,8 @@ show_config() {
 
 # 修改配置函数
 modify_config() {
+    preflight_service_environment
+
     if [ ! -f "$CONFIG_FILE" ]; then
         print_error "配置文件不存在，请先安装 Snell"
         return 1
@@ -1208,7 +1520,8 @@ modify_config() {
     fi
 
     # 获取服务器 IP
-    local server_ip=$(curl -s4m5 ip.sb 2>/dev/null || echo "YOUR_SERVER_IP")
+    local server_ip
+    server_ip=$(get_server_ip)
 
     # 构建监听地址
     local listen_addr="0.0.0.0:${USER_PORT}"
@@ -1279,6 +1592,8 @@ EOF
 
 # 启动服务函数
 start_snell() {
+    ensure_systemd
+
     print_info "启动 Snell 服务..."
     systemctl start snell
     sleep 2
@@ -1287,6 +1602,8 @@ start_snell() {
 
 # 停止服务函数
 stop_snell() {
+    ensure_systemd
+
     print_info "停止 Snell 服务..."
     systemctl stop snell
     print_info "Snell 服务已停止"
@@ -1298,6 +1615,8 @@ stop_snell() {
 
 # 列出所有用户
 list_users() {
+    ensure_systemd
+
     echo ""
     print_info "=========================================="
     print_info "Snell 用户列表"
@@ -1333,6 +1652,8 @@ list_users() {
 
 # 添加用户
 add_user() {
+    preflight_service_environment
+
     echo ""
     print_info "=========================================="
     print_info "添加新用户"
@@ -1388,7 +1709,8 @@ add_user() {
     get_user_config
 
     # 获取服务器 IP
-    local server_ip=$(curl -s4m5 ip.sb 2>/dev/null || echo "YOUR_SERVER_IP")
+    local server_ip
+    server_ip=$(get_server_ip)
 
     # 创建用户配置文件
     local user_config="${MULTI_USER_DIR}/${username}.conf"
@@ -1488,6 +1810,8 @@ EOF
 
     # 创建 systemd 模板服务（强制更新以支持 v5/v6 混合部署）
     local template_service="/etc/systemd/system/snell@.service"
+    ensure_systemd
+    detect_service_account
 
     # 创建启动脚本来解析配置文件中的二进制路径
     cat > "${INSTALL_DIR}/snell-launcher.sh" <<'LAUNCHER_EOF'
@@ -1536,8 +1860,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=nobody
-Group=nogroup
+User=${SERVICE_USER}
+$(get_service_group_line)
 LimitNOFILE=32768
 ExecStart=${INSTALL_DIR}/snell-launcher.sh ${MULTI_USER_DIR}/%i.conf
 Restart=on-failure
@@ -1578,6 +1902,8 @@ EOF
 
 # 删除用户
 delete_user() {
+    ensure_systemd
+
     echo ""
     print_info "=========================================="
     print_info "删除用户"
@@ -1842,12 +2168,12 @@ show_menu() {
 # 显示使用帮助
 show_help() {
     cat <<EOF
-Snell v6 一键部署脚本
+Snell v5/v6 一键部署脚本
 
 用法: $0 [命令]
 
 基础命令:
-    install     安装并配置 Snell v6 服务器
+    install     安装并配置 Snell 服务器
     uninstall   卸载 Snell 服务器
     update      检查并更新 Snell 到最新版本
     modify      修改配置
@@ -1892,6 +2218,7 @@ main() {
                 1)
                     check_root
                     print_info "开始安装 Snell..."
+                    preflight_service_environment
                     detect_architecture
                     select_snell_version
                     get_user_config
@@ -1924,6 +2251,7 @@ main() {
                     ;;
                 4)
                     check_root
+                    ensure_systemd
                     echo ""
                     print_prompt "确认重启 Snell 服务? (y/n): "
                     read -r confirm
@@ -1940,12 +2268,14 @@ main() {
                     read
                     ;;
                 5)
+                    ensure_systemd
                     systemctl status snell --no-pager -l
                     echo ""
                     print_prompt "按回车键返回主菜单..."
                     read
                     ;;
                 6)
+                    ensure_systemd
                     echo ""
                     print_info "即将进入日志查看模式（按 Ctrl+C 返回菜单）"
                     print_prompt "继续查看实时日志? (y/n): "
@@ -2044,6 +2374,7 @@ main() {
         install)
             check_root
             print_info "开始安装 Snell..."
+            preflight_service_environment
             detect_architecture
             select_snell_version
             get_user_config
@@ -2079,6 +2410,7 @@ main() {
             ;;
         restart)
             check_root
+            ensure_systemd
             echo ""
             print_prompt "确认重启 Snell 服务? (y/n): "
             read -r confirm
@@ -2092,6 +2424,7 @@ main() {
             systemctl status snell --no-pager
             ;;
         status)
+            ensure_systemd
             echo ""
             print_prompt "查看 Snell 服务状态? (y/n): "
             read -r confirm
@@ -2101,6 +2434,7 @@ main() {
             systemctl status snell --no-pager -l
             ;;
         log)
+            ensure_systemd
             echo ""
             print_info "即将进入日志查看模式（按 Ctrl+C 退出）"
             print_prompt "继续查看实时日志? (y/n): "
