@@ -17,7 +17,7 @@ SYSCTL_FILE="/etc/sysctl.d/99-ss2022.conf"
 
 RANDOM_PORT_MIN="6000"
 RANDOM_PORT_MAX="65535"
-DEFAULT_METHOD="2022-blake3-aes-128-gcm"
+DEFAULT_METHOD="2022-blake3-aes-256-gcm"
 DEFAULT_NODE_NAME="$(hostname 2>/dev/null || echo server)-ss2022"
 GITHUB_API="https://api.github.com/repos/shadowsocks/shadowsocks-rust"
 NETWORK_TIMEOUT="15"

@@ -58,7 +58,7 @@ sudo bash ss2022.sh uninstall
 
 说明：
 
-- 默认使用 `2022-blake3-aes-128-gcm`
+- 默认使用 `2022-blake3-aes-256-gcm`
 - 密钥会按 SS2022 要求生成或校验为合法 base64 key
 - 服务使用 systemd 管理
 - 适用于 Linux VPS，需要 root 权限
