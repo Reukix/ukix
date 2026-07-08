@@ -1,5 +1,4 @@
-# FuckAds Rules - Fetched on 2026-07-08 04:44:02 GMT+8
-
+# FuckAds Rules - Fetched on 2026-07-09 01:05:05 GMT+8
 
 DOMAIN,1500020991.vodplayer.wxamedia.com
 DOMAIN,1500022744.vodplayer.wxamedia.com
@@ -917,4 +916,4 @@ DOMAIN-SUFFIX,vlion.cn
 DOMAIN-SUFFIX,wmlog.meituan.com
 DOMAIN-SUFFIX,yfanads.com
 DOMAIN-SUFFIX,zhangyuyidong.cn
-IP-CIDR,103.37.155.60/32, no-resolve
+IP-CIDR,103.37.155.60/32,no-resolve
