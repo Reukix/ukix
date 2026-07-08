@@ -210,6 +210,52 @@ jobs:
             echo "DOMAIN-SUFFIX,online-metrix.net"
           } | grep -v '^#' | sort | uniq >> Rule/OKX.list
 
+      - name: Ensure IP rules use no-resolve
+        run: |
+          files=(
+            Rule/Intelligence.list
+            Rule/CN.list
+            Rule/Google.list
+            Rule/X.list
+            Rule/Github.list
+            Rule/FuckAds.list
+            Rule/Spotify.list
+            Rule/Telegram.list
+            Rule/Proxy.list
+            Rule/TikTok.list
+            Rule/PayPal.list
+            Rule/XHS.list
+            Rule/Apple.list
+            Rule/Mail.list
+            Rule/Speedtest.list
+            Rule/Binance.list
+            Rule/OKX.list
+          )
+
+          for file in "${files[@]}"; do
+            [ -f "$file" ] || continue
+            tmp="$(mktemp)"
+            awk '
+              /^[[:space:]]*(IP-CIDR|IP-CIDR6|IP-ASN),/ {
+                line = $0
+                sub(/^[[:space:]]+/, "", line)
+                gsub(/,[[:space:]]+/, ",", line)
+                sub(/[[:space:]]+$/, "", line)
+                if (line !~ /(^|,)no-resolve([[:space:]]*(,|$))/) {
+                  line = line ",no-resolve"
+                }
+                if (!seen[line]++) {
+                  print line
+                }
+                next
+              }
+              !seen[$0]++ {
+                print
+              }
+            ' "$file" > "$tmp"
+            mv "$tmp" "$file"
+          done
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
