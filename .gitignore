@@ -1,0 +1,17 @@
+.DS_Store
+
+# Local logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Archives and large local artifacts
+*.7z
+*.dmg
+*.iso
+*.pkg
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+*.zip
