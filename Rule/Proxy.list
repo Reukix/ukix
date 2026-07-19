@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-07-19 03:57:57 GMT+8
+# Proxy Rules - Fetched on 2026-07-20 04:01:35 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -63,6 +63,7 @@ DOMAIN-SUFFIX,17t17p.com
 DOMAIN-SUFFIX,18board.com
 DOMAIN-SUFFIX,18board.info
 DOMAIN-SUFFIX,18comic.org
+DOMAIN-SUFFIX,18comic.vip
 DOMAIN-SUFFIX,18mh.net
 DOMAIN-SUFFIX,18onlygirls.com
 DOMAIN-SUFFIX,18p2p.com
