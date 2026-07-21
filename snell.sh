@@ -658,6 +658,10 @@ download_snell() {
     mv "${temp_dir}/snell-server" "$SNELL_BINARY"
     chmod +x "$SNELL_BINARY"
 
+    if ! record_snell_version "$SNELL_BINARY" "$SNELL_VERSION"; then
+        print_warning "无法记录 Snell 发布版本，后续版本检查可能不准确"
+    fi
+
     rm -rf "$temp_dir"
     print_info "Snell ${SNELL_CHOICE} 服务器安装完成"
 
@@ -920,6 +924,19 @@ get_default_binary() {
     esac
 }
 
+record_snell_version() {
+    local binary_path="$1"
+    local version="$2"
+    local version_file="${binary_path}.version"
+
+    if ! [[ "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+[A-Za-z0-9]*$ ]]; then
+        return 1
+    fi
+
+    printf '%s\n' "$version" > "$version_file"
+    chmod 644 "$version_file"
+}
+
 get_snell_version() {
     local binary_path="$1"
 
@@ -929,6 +946,16 @@ get_snell_version() {
     fi
 
     local version
+    local version_file="${binary_path}.version"
+
+    if [ -f "$version_file" ]; then
+        version=$(head -1 "$version_file" | grep -oE '^v[0-9]+\.[0-9]+\.[0-9]+[A-Za-z0-9]*$' || true)
+        if [ -n "$version" ]; then
+            echo "$version"
+            return 0
+        fi
+    fi
+
     version=$("$binary_path" --version 2>&1 | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+[A-Za-z0-9]*' | head -1 || true)
     if [ -z "$version" ]; then
         echo "unknown"
@@ -1259,6 +1286,9 @@ update_snell_binary() {
     fi
 
     rm -f "$backup_file"
+    if ! record_snell_version "$binary_path" "$target_version"; then
+        print_warning "无法记录 Snell 发布版本，后续版本检查可能不准确"
+    fi
     local new_version
     new_version=$(get_snell_version "$binary_path")
     print_info "更新成功！"
