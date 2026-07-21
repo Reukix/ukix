@@ -25,35 +25,21 @@
 
 `Script/` 和 `js/` 里放的是 Surge 模块和配套脚本，例如 Spotify、URL Redirect、kocowidgets 等。
 
+## Snell 脚本
+
+`snell.sh` 是 Snell v5/v6 交互式部署脚本，支持自动检测系统架构、安装依赖、下载服务端、生成配置、创建 systemd 服务，并带有基础管理和多用户管理菜单。
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/snell.sh)
+```
+
+
 ## SS2022 脚本
 
 `ss2022.sh` 是基于 `shadowsocks-rust` 的 Shadowsocks 2022 交互式管理脚本，支持安装、重装、更新、修改配置、查看连接信息、查看日志和卸载。
 
 ```bash
-sudo bash ss2022.sh
-```
-
-也可以直接进入安装向导：
-
-```bash
-sudo bash ss2022.sh install
-```
-
-查看配置和客户端链接：
-
-```bash
-sudo bash ss2022.sh show
-```
-
-常用命令：
-
-```bash
-sudo bash ss2022.sh start
-sudo bash ss2022.sh stop
-sudo bash ss2022.sh restart
-sudo bash ss2022.sh status
-sudo bash ss2022.sh log
-sudo bash ss2022.sh uninstall
+bash <(curl -fsSL https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/ss2022.sh)
 ```
 
 说明：
@@ -63,29 +49,6 @@ sudo bash ss2022.sh uninstall
 - 服务使用 systemd 管理
 - 适用于 Linux VPS，需要 root 权限
 
-## Snell 脚本
-
-`snell.sh` 是 Snell v5/v6 交互式部署脚本，支持自动检测系统架构、安装依赖、下载服务端、生成配置、创建 systemd 服务，并带有基础管理和多用户管理菜单。
-
-```bash
-sudo bash snell.sh
-```
-
-直接安装：
-
-```bash
-sudo bash snell.sh install
-```
-
-常用命令：
-
-```bash
-sudo bash snell.sh status
-sudo bash snell.sh log
-sudo bash snell.sh config
-sudo bash snell.sh info
-sudo bash snell.sh uninstall
-```
 
 ## 注意
 
