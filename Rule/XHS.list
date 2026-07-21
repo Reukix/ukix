@@ -1,18 +1,6 @@
-# XiaoHongShu Rules - Fetched on 2026-07-21 04:15:17 GMT+8
+# XiaoHongShu Rules - Fetched on 2026-07-22 04:12:57 GMT+8
 
-    <h1>Error 503 first byte timeout</h1>
-    <h3>Error 54113</h3>
-    <hr>
-    <p>Details: cache-chi-kigq8000069-CHI 1784578533 110138218</p>
-    <p>Varnish cache server</p>
-    <p>first byte timeout</p>
-    <title>503 first byte timeout</title>
-  </body>
-  </head>
-  <body>
-  <head>
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-</html>
-<?xml version="1.0" encoding="utf-8"?>
-<html>
+DOMAIN-SUFFIX,fengkongcloud.com
+DOMAIN-SUFFIX,xhscdn.com
+DOMAIN-SUFFIX,xhscdn.net
+DOMAIN-SUFFIX,xiaohongshu.com
