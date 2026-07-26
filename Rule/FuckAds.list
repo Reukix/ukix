@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2026-07-26 04:05:44 GMT+8
+# FuckAds Rules - Fetched on 2026-07-27 04:03:51 GMT+8
 
 DOMAIN,1500020991.vodplayer.wxamedia.com
 DOMAIN,1500022744.vodplayer.wxamedia.com
@@ -76,6 +76,7 @@ DOMAIN,ads-sg.tiktok.com
 DOMAIN,ads-video-al.xhscdn.com
 DOMAIN,ads-video-qc.xhscdn.com
 DOMAIN,ads.95516.com
+DOMAIN,ads.adfunlink.com
 DOMAIN,ads.auctions.yahoo.com
 DOMAIN,ads.cup.com.cn
 DOMAIN,ads.google.cn
@@ -133,6 +134,7 @@ DOMAIN,adstudio.spotify.com
 DOMAIN,adtago.s3.amazonaws.com
 DOMAIN,adtech.yahooinc.com
 DOMAIN,adtrack.quark.cn
+DOMAIN,adtracker.adfunlink.com
 DOMAIN,adtracker.medproad.com
 DOMAIN,adui.tg.meitu.com
 DOMAIN,adv-api.shenshiads.com
@@ -427,7 +429,6 @@ DOMAIN,ii.gdt.qq.com
 DOMAIN,image-ad.sm.cn
 DOMAIN,image.hpplay.cn
 DOMAIN,images.outbrainimg.com
-DOMAIN,images.pinduoduo.com
 DOMAIN,imdns.hpplay.cn
 DOMAIN,img-c.heytapimage.com
 DOMAIN,img-x.jd.com
@@ -882,7 +883,6 @@ DOMAIN,yk-ssp.ad.youku.com
 DOMAIN,ykad-data.cp31.ott.cibntv.net
 DOMAIN,ykad-data.youku.com
 DOMAIN,ykad-gateway.youku.com
-DOMAIN,youku-acs.m.taobao.com
 DOMAIN,ytx-file.110route.cn
 DOMAIN,zeus.ad.xiaomi.com
 DOMAIN,zhihu-web-analytics.zhihu.com
