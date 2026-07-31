@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-07-31 04:10:05 GMT+8
+# Proxy Rules - Fetched on 2026-08-01 04:13:34 GMT+8
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -6072,6 +6072,7 @@ DOMAIN-SUFFIX,uyghurtribunal.com
 DOMAIN-SUFFIX,uygur.org
 DOMAIN-SUFFIX,uymaarip.com
 DOMAIN-SUFFIX,v.gd
+DOMAIN-SUFFIX,v.recipes
 DOMAIN-SUFFIX,v.roucdn
 DOMAIN-SUFFIX,v2.help
 DOMAIN-SUFFIX,v2.hysteria.network
