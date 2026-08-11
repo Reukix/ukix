@@ -1,4 +1,4 @@
-# CN Rules - Fetched on 2026-08-11 03:46:58 GMT+8
+# CN Rules - Fetched on 2026-08-12 03:53:46 GMT+8
 
 DOMAIN,1-fss24-s0.streamhoster.com
 DOMAIN,14033.live.streamtheworld.com
@@ -51881,6 +51881,8 @@ DOMAIN-SUFFIX,iot101.com
 DOMAIN-SUFFIX,iot688.com
 DOMAIN-SUFFIX,iot889.com
 DOMAIN-SUFFIX,iotachem.com
+DOMAIN-SUFFIX,iotaskyt.com
+DOMAIN-SUFFIX,iotaskyty.com
 DOMAIN-SUFFIX,iotbay.com
 DOMAIN-SUFFIX,iotfair.net
 DOMAIN-SUFFIX,iotku.com
@@ -87798,6 +87800,7 @@ DOMAIN-SUFFIX,tbapp.com
 DOMAIN-SUFFIX,tbbbk.com
 DOMAIN-SUFFIX,tbcache.com
 DOMAIN-SUFFIX,tbcdn.com
+DOMAIN-SUFFIX,tbdesk.com
 DOMAIN-SUFFIX,tbh5.com
 DOMAIN-SUFFIX,tbhcc.com
 DOMAIN-SUFFIX,tbhelper.com
