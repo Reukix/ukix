@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2026-08-20 03:17:19 GMT+8
+# FuckAds Rules - Fetched on 2026-08-21 03:22:38 GMT+8
 
 DOMAIN,1500020991.vodplayer.wxamedia.com
 DOMAIN,1500022744.vodplayer.wxamedia.com
@@ -903,7 +903,6 @@ DOMAIN-SUFFIX,analytics.meituan.net
 DOMAIN-SUFFIX,d.meituan.net
 DOMAIN-SUFFIX,data.hicloud.com
 DOMAIN-SUFFIX,dreport.meituan.net
-DOMAIN-SUFFIX,log.aliyuncs.com
 DOMAIN-SUFFIX,mads.meituan.com
 DOMAIN-SUFFIX,meituan.xn
 DOMAIN-SUFFIX,meituan.yoga
