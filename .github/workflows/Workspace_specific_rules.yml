@@ -77,6 +77,7 @@ jobs:
             echo "IP-ASN,399358,no-resolve"
             echo "PROCESS-NAME,/Applications/Claude.app/"
             echo "PROCESS-NAME,/Applications/ChatGPT.app/"
+            echo "PROCESS-NAME,/Applications/ChatGPT Classic.app/"
             echo "PROCESS-NAME,/Applications/Antigravity.app/"
             echo "PROCESS-NAME,/opt/homebrew/bin/codex"
             echo "PROCESS-NAME,/opt/homebrew/bin/claude"
