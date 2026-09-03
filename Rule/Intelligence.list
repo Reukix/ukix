@@ -1,4 +1,4 @@
-# Intelligence Rules - Fetched on 2026-09-03 09:27:18 GMT+8
+# Intelligence Rules - Fetched on 2026-09-03 09:35:02 GMT+8
 
 AND,((DOMAIN-KEYWORD,antigravity-auto-updater-),(DOMAIN-SUFFIX,run.app))
 AND,((DOMAIN-KEYWORD,chatgpt-async-webps-prod-),(DOMAIN-SUFFIX,webpubsub.azure.com))
@@ -191,6 +191,7 @@ IP-CIDR,64.23.132.171/32,no-resolve
 IP-CIDR6,2607:6bc0::/32,no-resolve
 IP-CIDR6,2607:6bc0::/48,no-resolve
 PROCESS-NAME,/Applications/Antigravity.app/
+PROCESS-NAME,/Applications/ChatGPT Classic.app/
 PROCESS-NAME,/Applications/ChatGPT.app/
 PROCESS-NAME,/Applications/Claude.app/
 PROCESS-NAME,/opt/homebrew/bin/claude
