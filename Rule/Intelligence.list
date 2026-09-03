@@ -190,3 +190,8 @@ IP-CIDR,24.199.123.28/32,no-resolve
 IP-CIDR,64.23.132.171/32,no-resolve
 IP-CIDR6,2607:6bc0::/32,no-resolve
 IP-CIDR6,2607:6bc0::/48,no-resolve
+PROCESS-NAME,/Applications/Antigravity.app/
+PROCESS-NAME,/Applications/ChatGPT.app/
+PROCESS-NAME,/Applications/Claude.app/
+PROCESS-NAME,/opt/homebrew/bin/claude
+PROCESS-NAME,/opt/homebrew/bin/codex

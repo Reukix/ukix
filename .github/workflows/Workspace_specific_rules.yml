@@ -75,7 +75,18 @@ jobs:
             echo "IP-CIDR,160.79.104.0/21,no-resolve"
             echo "IP-CIDR6,2607:6bc0::/32,no-resolve"
             echo "IP-ASN,399358,no-resolve"
-          } | sed -E 's/,[[:space:]]+/,/g; s/[[:space:]]+$//' | grep -v '^#' | grep -E '^(AND|DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR|IP-CIDR6|IP-ASN),' | sort | uniq >> Rule/Intelligence.list
+            echo "PROCESS-NAME,/Applications/Claude.app/"
+            echo "PROCESS-NAME,/Applications/ChatGPT.app/"
+            echo "PROCESS-NAME,/Applications/Antigravity.app/"
+            echo "PROCESS-NAME,/opt/homebrew/bin/codex"
+            echo "PROCESS-NAME,/opt/homebrew/bin/claude"
+          } | sed -E 's/,[[:space:]]+/,/g; s/[[:space:]]+$//' | grep -v '^#' | grep -E '^(AND|DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR|IP-CIDR6|IP-ASN|PROCESS-NAME),' | sort | uniq >> Rule/Intelligence.list
+
+      - name: Fetch and Format Discord Rules
+        run: |
+          echo "# Discord Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Discord.list
+          echo "" >> Rule/Discord.list
+          curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Discord/Discord.list | grep -v '^#' | sort | uniq >> Rule/Discord.list
 
       - name: Fetch and Integrate CN Rules
         run: |
@@ -214,6 +225,7 @@ jobs:
         run: |
           files=(
             Rule/Intelligence.list
+            Rule/Discord.list
             Rule/CN.list
             Rule/Google.list
             Rule/X.list
@@ -260,7 +272,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add Rule/Intelligence.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list Rule/Telegram.list Rule/Proxy.list Rule/TikTok.list Rule/PayPal.list Rule/XHS.list Rule/Apple.list Rule/Mail.list Rule/Speedtest.list Rule/Binance.list Rule/OKX.list
+          git add Rule/Intelligence.list Rule/Discord.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list Rule/Telegram.list Rule/Proxy.list Rule/TikTok.list Rule/PayPal.list Rule/XHS.list Rule/Apple.list Rule/Mail.list Rule/Speedtest.list Rule/Binance.list Rule/OKX.list
           if git diff --staged --quiet; then
             echo "No changes to commit for rule lists in Rule/."
           else
