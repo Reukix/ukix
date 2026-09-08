@@ -9,6 +9,7 @@
 ```text
 .
 ├── Rule/          # 分流规则、域名/IP/服务列表
+├── singbox/       # 自动转换的 sing-box 规则（rule/*.json、*.srs）
 ├── Script/        # Surge 模块
 ├── js/            # 脚本文件
 ├── Surge.conf     # Surge 配置
@@ -20,6 +21,8 @@
 ## 规则与配置
 
 `Rule/` 里是自用分流规则，包含 Apple、Google、Telegram、Spotify、TikTok、GitHub、PayPal、OKX、Binance、Bybit、MTeam、Speedtest、广告过滤等常见服务规则。
+
+`singbox/rule/` 提供由 GitHub Actions 自动转换的 sing-box JSON / SRS 规则集。使用方式和转换差异见 [sing-box 说明](singbox/README.md)。
 
 `Surge.conf` 和 `loon.lcf` 是自用客户端配置。直接使用前请按自己的节点、DNS、策略组和本地网络环境修改。
 

@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "domain_keyword": [
+        "konami"
+      ]
+    },
+    {
+      "domain_suffix": [
+        "app-analytics-services.com",
+        "app.adjust.com",
+        "bc.googleusercontent.com",
+        "d1ln4m3c7n87ju.cloudfront.net",
+        "dualstack.awsglobalaccelerator.com",
+        "elb.ap-southeast-5.amazonaws.com",
+        "elb.ap-southeast-7.amazonaws.com",
+        "elb.eu-central-2.amazonaws.com",
+        "elb.eu-south-1.amazonaws.com",
+        "elb.eu-south-2.amazonaws.com",
+        "elb.eu-west-3.amazonaws.com",
+        "elb.il-central-1.amazonaws.com",
+        "elb.me-central-1.amazonaws.com",
+        "elb.me-south-1.amazonaws.com",
+        "konami.com",
+        "konami.net",
+        "nabeshin.people.aws.dev",
+        "nt-www.applilink.jp"
+      ]
+    },
+    {
+      "ip_cidr": [
+        "15.220.152.0/24",
+        "15.220.160.0/24"
+      ]
+    }
+  ]
+}

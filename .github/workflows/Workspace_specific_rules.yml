@@ -1,9 +1,18 @@
-name: Fetch Specific Rules Daily
+name: Update Rules and sing-box
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'Rule/**'
+      - '.github/workflows/Workspace_specific_rules.yml'
   schedule:
     - cron: '0 19 * * *'  # UTC+8 (北京时间凌晨3点)
   workflow_dispatch:
+
+concurrency:
+  group: rule-update-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   fetch-and-integrate-rules:
@@ -13,11 +22,14 @@ jobs:
     steps:
       - name: Checkout current repository
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Create Rule directory
         run: mkdir -p Rule
 
       - name: Fetch and Integrate Intelligence Rules
+        if: github.event_name != 'push'
         run: |
           echo "# Intelligence Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Intelligence.list
           echo "" >> Rule/Intelligence.list
@@ -84,12 +96,14 @@ jobs:
           } | sed -E 's/,[[:space:]]+/,/g; s/[[:space:]]+$//' | grep -v '^#' | grep -E '^(AND|DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR|IP-CIDR6|IP-ASN|PROCESS-NAME),' | sort | uniq >> Rule/Intelligence.list
 
       - name: Fetch and Format Discord Rules
+        if: github.event_name != 'push'
         run: |
           echo "# Discord Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Discord.list
           echo "" >> Rule/Discord.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Discord/Discord.list | grep -v '^#' | sort | uniq >> Rule/Discord.list
 
       - name: Fetch and Integrate CN Rules
+        if: github.event_name != 'push'
         run: |
           echo "# CN Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/CN.list
           echo "" >> Rule/CN.list
@@ -100,24 +114,28 @@ jobs:
           } | grep -v '^#' | sort | uniq >> Rule/CN.list
 
       - name: Fetch and Format Google Rules
+        if: github.event_name != 'push'
         run: |
           echo "# Google Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Google.list
           echo "" >> Rule/Google.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Google/Google.list | grep -v '^#' | sort | uniq >> Rule/Google.list
 
       - name: Fetch and Format X (Twitter) Rules
+        if: github.event_name != 'push'
         run: |
           echo "# X Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/X.list
           echo "" >> Rule/X.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Twitter/Twitter.list | grep -v '^#' | sort | uniq >> Rule/X.list
 
       - name: Fetch and Format Github Rules
+        if: github.event_name != 'push'
         run: |
           echo "# Github Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Github.list
           echo "" >> Rule/Github.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/GitHub/GitHub.list | grep -v '^#' | sort | uniq >> Rule/Github.list
 
       - name: Fetch and Format FuckAds Rules
+        if: github.event_name != 'push'
         run: |
           echo "# FuckAds Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/FuckAds.list
           echo "" >> Rule/FuckAds.list
@@ -138,74 +156,85 @@ jobs:
           } | grep -v '^#' | sort | uniq >> Rule/FuckAds.list
 
       - name: Fetch and Format Spotify Rules
+        if: github.event_name != 'push'
         run: |
           echo "# Spotify Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Spotify.list
           echo "" >> Rule/Spotify.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Spotify/Spotify.list | grep -v '^#' | sort | uniq >> Rule/Spotify.list
 
       - name: Fetch and Format Telegram Rules
+        if: github.event_name != 'push'
         run: |
           echo "# Telegram Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Telegram.list
           echo "" >> Rule/Telegram.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Telegram/Telegram.list | grep -v '^#' | sort | uniq >> Rule/Telegram.list
 
       - name: Fetch and Format Proxy Rules
+        if: github.event_name != 'push'
         run: |
           echo "# Proxy Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Proxy.list
           echo "" >> Rule/Proxy.list
           {
-            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy_All.list 
+            curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy_All.list
             echo "DOMAIN-KEYWORD,browserleaks"
             echo "DOMAIN-SUFFIX,net.coffee"
           } | grep -v '^#' | sort | uniq >> Rule/Proxy.list
 
       - name: Fetch and Format TikTok Rules
+        if: github.event_name != 'push'
         run: |
           echo "# TikTok Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/TikTok.list
           echo "" >> Rule/TikTok.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/TikTok/TikTok.list | grep -v '^#' | sort | uniq >> Rule/TikTok.list
 
       - name: Fetch and Format PayPal Rules
+        if: github.event_name != 'push'
         run: |
           echo "# PayPal Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/PayPal.list
           echo "" >> Rule/PayPal.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/PayPal/PayPal.list | grep -v '^#' | sort | uniq >> Rule/PayPal.list
 
       - name: Fetch and Format XiaoHongShu Rules
+        if: github.event_name != 'push'
         run: |
           echo "# XiaoHongShu Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/XHS.list
           echo "" >> Rule/XHS.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/XiaoHongShu/XiaoHongShu.list | grep -v '^#' | sort | uniq >> Rule/XHS.list
 
       - name: Fetch and Format Apple Rules
+        if: github.event_name != 'push'
         run: |
           echo "# Apple Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Apple.list
           echo "" >> Rule/Apple.list
           curl -sL https://raw.githubusercontent.com/Blankwonder/surge-list/master/apple.list | grep -v '^#' | sort | uniq >> Rule/Apple.list
 
       - name: Fetch and Format Mail Rules
+        if: github.event_name != 'push'
         run: |
           echo "# Mail Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Mail.list
           echo "" >> Rule/Mail.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Mail/Mail.list | grep -v '^#' | sort | uniq >> Rule/Mail.list
 
       - name: Fetch and Format Speedtest Rules
+        if: github.event_name != 'push'
         run: |
           echo "# Speedtest Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Speedtest.list
           echo "" >> Rule/Speedtest.list
           curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Speedtest/Speedtest.list | grep -v '^#' | sort | uniq >> Rule/Speedtest.list
 
       - name: Fetch and Format Binance Rules
+        if: github.event_name != 'push'
         run: |
           echo "# Binance Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Binance.list
           echo "" >> Rule/Binance.list
           {
             curl -sL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Binance/Binance.list
             echo "DOMAIN-SUFFIX,binance.info"
-            echo "DOMAIN-KEYWORD,binance" 
+            echo "DOMAIN-KEYWORD,binance"
           } | grep -v '^#' | sort | uniq >> Rule/Binance.list
 
       - name: Fetch and Format OKX Rules
+        if: github.event_name != 'push'
         run: |
           echo "# OKX Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/OKX.list
           echo "" >> Rule/OKX.list
@@ -223,6 +252,7 @@ jobs:
           } | grep -v '^#' | sort | uniq >> Rule/OKX.list
 
       - name: Ensure IP rules use no-resolve
+        if: github.event_name != 'push'
         run: |
           files=(
             Rule/Intelligence.list
@@ -269,13 +299,375 @@ jobs:
             mv "$tmp" "$file"
           done
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Install pinned sing-box compiler
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          curl -fL --retry 3 --max-time 180 \
+            https://github.com/SagerNet/sing-box/releases/download/v1.14.0/sing-box-1.14.0-linux-amd64.tar.gz \
+            -o "$work/sing-box.tar.gz"
+          echo "2375de6999f4f56ab46b4fc5ddf26a6aba1d3e61a0f4e7ddec2f4690457d5f63  $work/sing-box.tar.gz" | sha256sum --check
+          tar -xzf "$work/sing-box.tar.gz" -C "$work"
+          echo "$work/sing-box-1.14.0-linux-amd64" >> "$GITHUB_PATH"
+
+      - name: Test, convert and compile sing-box rules
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          trap 'rm -rf "$work"' EXIT
+          cat > "$work/convert.mjs" <<'CONVERTER_JS'
+          #!/usr/bin/env node
+          // Convert Rule/*.list using a reproducible ASN snapshot; Node.js built-ins only.
+          import * as fs from 'node:fs';
+          import path from 'node:path';
+          import os from 'node:os';
+          import { isIP } from 'node:net';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          import { fileURLToPath } from 'node:url';
+          import { parseArgs } from 'node:util';
+          import { setTimeout as sleep } from 'node:timers/promises';
+
+          const ROOT = process.env.GITHUB_WORKSPACE || process.cwd();
+          export const PROVIDER = 'https://stat.ripe.net/data/ris-prefixes/data.json';
+          const FIELDS = { DOMAIN: 'domain', 'DOMAIN-SUFFIX': 'domain_suffix', 'DOMAIN-KEYWORD': 'domain_keyword' };
+          const NO_RESOLVE = 'no-resolve is not represented in headless rule sets';
+          const dump = value => JSON.stringify(value, null, 2) + '\n';
+          const sortedUnique = values => [...new Set(values)].sort();
+
+          function splitExpression(text) {
+            const parts = [];
+            let start = 0, depth = 0;
+            for (let i = 0; i < text.length; i++) {
+              if (text[i] === '(') depth++;
+              else if (text[i] === ')') {
+                if (--depth < 0) throw new Error('unbalanced parentheses');
+              } else if (text[i] === ',' && depth === 0) {
+                parts.push(text.slice(start, i).trim());
+                start = i + 1;
+              }
+            }
+            if (depth) throw new Error('unbalanced parentheses');
+            parts.push(text.slice(start).trim());
+            return parts;
+          }
+
+          export function parse(text) {
+            const [kind, value, ...flags] = splitExpression(text);
+            if (kind === 'AND' || kind === 'OR') {
+              if (flags.length || !value?.startsWith('(') || !value.endsWith(')')) throw new Error('invalid logical expression');
+              const children = splitExpression(value.slice(1, -1));
+              if (children.length < 2) throw new Error('logical expression requires at least two children');
+              return [kind, children.map(child => {
+                if (!child.startsWith('(') || !child.endsWith(')')) throw new Error('logical child must be parenthesized');
+                return parse(child.slice(1, -1));
+              })];
+            }
+            if (!value) throw new Error('missing rule value');
+            if (flags.length && !(flags.length === 1 && flags[0] === 'no-resolve' && ['IP-CIDR', 'IP-CIDR6', 'IP-ASN'].includes(kind))) {
+              throw new Error(`unexpected arguments: ${flags}`);
+            }
+            return [kind, value, flags.length > 0];
+          }
+
+          // Validate with node:net, mask host bits, and emit canonical IPv4/IPv6 CIDR.
+          export function normalizeCIDR(value, expectedFamily) {
+            const [address, prefix, ...extra] = value.split('/');
+            const family = isIP(address);
+            const bits = family === 4 ? 32 : 128;
+            const length = prefix === undefined ? bits : Number(prefix);
+            if (!family || address.includes('%') || extra.length || (prefix !== undefined && !/^\d+$/.test(prefix)) ||
+                length < 0 || length > bits || (expectedFamily && expectedFamily !== family)) throw new Error(`invalid CIDR: ${value}`);
+            let groups;
+            if (family === 4) groups = address.split('.').map(Number);
+            else {
+              let expanded = address;
+              if (address.includes('.')) {
+                const i = address.lastIndexOf(':');
+                const octets = address.slice(i + 1).split('.').map(Number);
+                expanded = address.slice(0, i + 1) + ((octets[0] << 8) | octets[1]).toString(16) + ':' + ((octets[2] << 8) | octets[3]).toString(16);
+              }
+              const [left, right] = expanded.split('::');
+              const a = left ? left.split(':') : [];
+              const b = right ? right.split(':') : [];
+              groups = (right === undefined ? a : [...a, ...Array(8 - a.length - b.length).fill('0'), ...b]).map(v => parseInt(v, 16));
+            }
+            const width = family === 4 ? 8n : 16n;
+            let number = groups.reduce((result, group) => (result << width) | BigInt(group), 0n);
+            const hostBits = BigInt(bits - length);
+            number = (number >> hostBits) << hostBits;
+            const masked = Array(family === 4 ? 4 : 8);
+            for (let i = masked.length - 1; i >= 0; i--) {
+              masked[i] = Number(number & ((1n << width) - 1n));
+              number >>= width;
+            }
+            if (family === 4) return masked.join('.') + '/' + length;
+            let bestStart = -1, bestLength = 1;
+            for (let i = 0; i < 8;) {
+              if (masked[i] !== 0) { i++; continue; }
+              const start = i;
+              while (i < 8 && masked[i] === 0) i++;
+              if (i - start > bestLength) { bestStart = start; bestLength = i - start; }
+            }
+            const hex = masked.map(v => v.toString(16));
+            const canonical = bestStart < 0 ? hex.join(':') : hex.slice(0, bestStart).join(':') + '::' + hex.slice(bestStart + bestLength).join(':');
+            return canonical + '/' + length;
+          }
+
+          const networks = values => sortedUnique(values.map(v => normalizeCIDR(v)));
+          function asnKey(value) {
+            if (!/^\d+$/.test(value) || Number(value) < 1 || Number(value) > 4294967295) throw new Error('invalid ASN');
+            return String(Number(value));
+          }
+
+          export function translate(node, asns, warnings, nested = false) {
+            const [kind, value, noResolve] = node;
+            if (kind === 'AND' || kind === 'OR') return { type: 'logical', mode: kind.toLowerCase(), rules: value.map(child => translate(child, asns, warnings, true)) };
+            if (noResolve) warnings.push(NO_RESOLVE);
+            if (Object.hasOwn(FIELDS, kind)) {
+              if (/\s/.test(value)) throw new Error('whitespace in domain value');
+              return { [FIELDS[kind]]: [value] };
+            }
+            if (kind === 'IP-CIDR' || kind === 'IP-CIDR6') return { ip_cidr: [normalizeCIDR(value, kind === 'IP-CIDR' ? 4 : 6)] };
+            if (kind === 'IP-ASN') {
+              const prefixes = networks(asns[asnKey(value)]?.prefixes ?? []);
+              if (!prefixes.length) throw new Error(`missing or empty ASN snapshot: AS${value}`);
+              return { ip_cidr: prefixes };
+            }
+            if (kind === 'PROCESS-NAME') {
+              if (value.startsWith('/')) {
+                if (value.endsWith('.app/')) {
+                  warnings.push('app directory mapped to process_path_regex prefix');
+                  return { process_path_regex: ['^' + value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')] };
+                }
+                return { process_path: [value] };
+              }
+              if (/^[a-z][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*){2,}$/.test(value)) {
+                warnings.push('package-like process mapped to process_name OR package_name');
+                return { type: 'logical', mode: 'or', rules: [{ process_name: [value] }, { package_name: [value] }] };
+              }
+              return { process_name: [value] };
+            }
+            if (kind === 'USER-AGENT') {
+              if (nested) throw new Error('USER-AGENT inside logical expression is unsupported');
+              warnings.push('USER-AGENT omitted: unsupported by sing-box');
+              return null;
+            }
+            throw new Error(`unsupported selector: ${kind}`);
+          }
+
+          export function readSources(source) {
+            const sources = new Map();
+            for (const name of fs.readdirSync(source).filter(name => name.endsWith('.list')).sort()) {
+              const rows = [];
+              fs.readFileSync(path.join(source, name), 'utf8').split(/\r?\n/).forEach((raw, index) => {
+                const line = raw.split(/\s+(?:\/\/|#)/, 1)[0].trim();
+                if (!line || line.startsWith('#') || line.startsWith('//')) return;
+                try { rows.push([index + 1, line, parse(line)]); }
+                catch (error) { throw new Error(`${name}:${index + 1}: ${error.message}`); }
+              });
+              sources.set(name, rows);
+            }
+            if (!sources.size) throw new Error(`no .list files in ${source}`);
+            return sources;
+          }
+
+          function collectAsns(node) {
+            if (node[0] === 'AND' || node[0] === 'OR') return node[1].flatMap(collectAsns);
+            return node[0] === 'IP-ASN' ? [asnKey(node[1])] : [];
+          }
+
+          export async function refreshAsns(required, old, fetcher = fetch) {
+            const entries = {};
+            for (const asn of [...required].sort((a, b) => Number(a) - Number(b))) {
+              for (let attempt = 0; attempt < 3; attempt++) {
+                try {
+                  const response = await fetcher(`${PROVIDER}?resource=AS${asn}&list_prefixes=true&types=o`, { signal: AbortSignal.timeout(45000) });
+                  if (!response.ok) throw new Error(`RIPEstat HTTP ${response.status}`);
+                  const payload = await response.json();
+                  if (payload.status !== 'ok') throw new Error(`RIPEstat failed for AS${asn}`);
+                  const data = payload.data;
+                  const prefixes = networks([...data.prefixes.v4.originating, ...data.prefixes.v6.originating]);
+                  if (!prefixes.length || !data.query_time) throw new Error(`empty or invalid ASN response: AS${asn}`);
+                  const previous = old.asns?.[asn];
+                  entries[asn] = JSON.stringify(previous?.prefixes) === JSON.stringify(prefixes) ? previous : { query_time: data.query_time, prefixes };
+                  console.log(`AS${asn}: ${prefixes.length} prefixes`);
+                  break;
+                } catch (error) {
+                  if (attempt === 2) throw error;
+                  await sleep((attempt + 1) * 1000);
+                }
+              }
+            }
+            return { version: 1, provider: PROVIDER, asns: entries };
+          }
+
+          function canonical(value) {
+            if (Array.isArray(value)) return value.map(canonical);
+            if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])]));
+            return value;
+          }
+
+          export function convert(rows, asns) {
+            const buckets = new Map(), logical = new Map(), warnings = [];
+            let noResolveCount = 0;
+            for (const [number, line, node] of rows) {
+              const notes = [];
+              let rule;
+              try { rule = translate(node, asns, notes); }
+              catch (error) { throw new Error(`line ${number}: ${error.message}`); }
+              noResolveCount += notes.filter(note => note === NO_RESOLVE).length;
+              const otherNotes = sortedUnique(notes.filter(note => note !== NO_RESOLVE));
+              if (otherNotes.length) warnings.push({ line: number, rule: line, notes: otherNotes });
+              if (!rule) continue;
+              if (rule.type) logical.set(JSON.stringify(canonical(rule)), rule);
+              else for (const [key, values] of Object.entries(rule)) {
+                if (!buckets.has(key)) buckets.set(key, new Set());
+                for (const value of values) buckets.get(key).add(value);
+              }
+            }
+            // Separate single-field buckets preserve OR; never combine domain and process fields.
+            const rules = [...buckets.keys()].sort().map(key => ({ [key]: [...buckets.get(key)].sort() }));
+            rules.push(...[...logical.keys()].sort().map(key => logical.get(key)));
+            if (!rules.length) throw new Error('conversion produced an empty rule set');
+            if (noResolveCount) warnings.push({ kind: 'no-resolve', occurrences: noResolveCount, note: 'DNS resolution behavior must be configured by the consumer' });
+            return [{ version: 2, rules }, warnings];
+          }
+
+          async function main() {
+            const { values: args } = parseArgs({ options: { 'refresh-asn': { type: 'boolean', default: false }, 'sing-box': { type: 'string' } } });
+            const sources = readSources(path.join(ROOT, 'Rule'));
+            const lockPath = path.join(ROOT, 'singbox/asn.json');
+            let lock = fs.existsSync(lockPath) ? JSON.parse(fs.readFileSync(lockPath, 'utf8')) : {};
+            const required = new Set([...sources.values()].flatMap(rows => rows.flatMap(row => collectAsns(row[2]))));
+            if (args['refresh-asn']) lock = await refreshAsns(required, lock);
+            if (lock.version !== 1 || lock.provider !== PROVIDER) throw new Error('missing or invalid ASN snapshot; run with --refresh-asn');
+            const report = { source: 'Rule', rule_set_version: 2, asn_snapshot: 'singbox/asn.json', files: {} };
+            const stage = fs.mkdtempSync(path.join(os.tmpdir(), 'ukix-singbox-'));
+            try {
+              for (const [name, rows] of sources) {
+                let result, warnings;
+                try { [result, warnings] = convert(rows, lock.asns); }
+                catch (error) { throw new Error(`Rule/${name}: ${error.message}`); }
+                const output = path.join(stage, name.replace(/\.list$/, '.json'));
+                fs.writeFileSync(output, dump(result));
+                if (args['sing-box']) execFileSync(args['sing-box'], ['rule-set', 'compile', '--output', output.replace(/\.json$/, '.srs'), output], { stdio: 'inherit' });
+                report.files[name] = { source_sha256: createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'Rule', name))).digest('hex'), source_rules: rows.length, output_rules: result.rules.length, warnings };
+              }
+              const dest = path.join(ROOT, 'singbox/rule');
+              fs.mkdirSync(dest, { recursive: true });
+              const expected = new Set(fs.readdirSync(stage));
+              for (const name of expected) fs.copyFileSync(path.join(stage, name), path.join(dest, name));
+              for (const name of fs.readdirSync(dest)) if (/\.(json|srs)$/.test(name) && !expected.has(name)) fs.unlinkSync(path.join(dest, name));
+            } finally { fs.rmSync(stage, { recursive: true, force: true }); }
+            fs.writeFileSync(lockPath, dump(lock));
+            fs.writeFileSync(path.join(ROOT, 'singbox/conversion-report.json'), dump(report));
+            console.log(`Converted ${sources.size} rule sets`);
+          }
+
+          if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
+            main().catch(error => { console.error(error.message); process.exitCode = 1; });
+          }
+          CONVERTER_JS
+          cat > "$work/convert.test.mjs" <<'TEST_JS'
+          import test from 'node:test';
+          import assert from 'node:assert/strict';
+          import * as fs from 'node:fs';
+          import path from 'node:path';
+          import os from 'node:os';
+          import { convert, parse, translate, normalizeCIDR, readSources, refreshAsns, PROVIDER } from './convert.mjs';
+          const leaf = (text, asns = {}) => translate(parse(text), asns, []);
+          const rows = lines => lines.map((line, i) => [i + 1, line, parse(line)]);
+
+          test('domain and process alternatives stay separate and deduplicate', () => {
+            assert.deepEqual(convert(rows(['DOMAIN,a.test', 'PROCESS-NAME,app', 'DOMAIN,a.test']), {})[0].rules,
+              [{ domain: ['a.test'] }, { process_name: ['app'] }]);
+          });
+
+          test('nested Boolean matching preserves AND / OR', () => {
+            const rule = leaf('AND,((DOMAIN-KEYWORD,api-),(OR,((DOMAIN-SUFFIX,a.test),(DOMAIN-SUFFIX,b.test))))');
+            function matches(node, domain) {
+              if (node.type) {
+                const results = node.rules.map(child => matches(child, domain));
+                return node.mode === 'and' ? results.every(Boolean) : results.some(Boolean);
+              }
+              if (node.domain_keyword) return node.domain_keyword.some(v => domain.includes(v));
+              return node.domain_suffix.some(v => domain === v || domain.endsWith('.' + v));
+            }
+            for (const [domain, expected] of [['api-x.a.test', true], ['api-x.b.test', true], ['x.a.test', false], ['api-x.c.test', false]]) assert.equal(matches(rule, domain), expected);
+          });
+
+          test('CIDR normalization masks IPv4 and IPv6 host bits', () => {
+            for (const [input, expected] of [
+              ['192.0.2.127/24', '192.0.2.0/24'], ['255.255.255.255/0', '0.0.0.0/0'],
+              ['2001:DB8::1/32', '2001:db8::/32'], ['::1/0', '::/0'], ['::1', '::1/128'],
+              ['::ffff:192.0.2.1/128', '::ffff:c000:201/128'], ['1:0:0:2:0:0:3:4/128', '1::2:0:0:3:4/128'],
+              ['ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/65', 'ffff:ffff:ffff:ffff:8000::/65'],
+            ]) assert.equal(normalizeCIDR(input), expected);
+            for (const input of ['192.0.2.1/-1', '192.0.2.1/33', '::1/129', '::1/', 'fe80::1%eth0/64', 'invalid', '1.2.3.4/24/1']) assert.throws(() => normalizeCIDR(input));
+          });
+
+          test('ASN expands both families and rejects missing or empty data', () => {
+            assert.deepEqual(leaf('IP-ASN, 59930,no-resolve', { 59930: { prefixes: ['2001:db8::/32', '192.0.2.0/24'] } }),
+              { ip_cidr: ['192.0.2.0/24', '2001:db8::/32'] });
+            assert.throws(() => leaf('IP-ASN,59930'));
+            assert.throws(() => leaf('IP-ASN,59930', { 59930: { prefixes: [] } }));
+          });
+
+          test('process paths, app directories and packages', () => {
+            assert.deepEqual(leaf('PROCESS-NAME,/opt/homebrew/bin/codex'), { process_path: ['/opt/homebrew/bin/codex'] });
+            const regex = new RegExp(leaf('PROCESS-NAME,/Applications/Claude.app/').process_path_regex[0]);
+            assert.ok(regex.test('/Applications/Claude.app/Contents/MacOS/Claude'));
+            assert.ok(!regex.test('/Applications/ClaudeXapp/Contents/MacOS/Claude'));
+            assert.equal(leaf('PROCESS-NAME,com.spotify.music').mode, 'or');
+            assert.deepEqual(leaf('PROCESS-NAME,foo.exe'), { process_name: ['foo.exe'] });
+          });
+
+          test('unsupported rules, malformed expressions and empty sets fail', () => {
+            for (const text of ['GEOIP,CN', 'NOT,((DOMAIN,a.test))', 'DOMAIN,', 'DOMAIN,a.test,unexpected',
+              'AND,((DOMAIN,a.test),(DOMAIN,b.test)', 'AND,((DOMAIN,a.test),(USER-AGENT,App*))',
+              'OR,((USER-AGENT,App*),(DOMAIN,a.test))', 'IP-CIDR,2001:db8::/32', 'IP-CIDR,invalid']) assert.throws(() => leaf(text), text);
+            assert.equal(leaf('USER-AGENT,App*'), null);
+            assert.throws(() => convert(rows(['USER-AGENT,App*']), {}));
+          });
+
+          test('comments and no-resolve reporting', () => {
+            const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ukix-test-'));
+            try {
+              fs.writeFileSync(path.join(tmp, 'test.list'), '# header\nDOMAIN,a.test // comment\nIP-CIDR,192.0.2.0/24, no-resolve\n');
+              const [result, warnings] = convert(readSources(tmp).get('test.list'), {});
+              assert.deepEqual(result.rules[0], { domain: ['a.test'] });
+              assert.equal(warnings[0].occurrences, 1);
+            } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+          });
+
+          test('ASN refresh retains unchanged snapshot time', async () => {
+            const old = { version: 1, provider: PROVIDER, asns: { 59930: { query_time: 'old', prefixes: ['192.0.2.0/24', '2001:db8::/32'] } } };
+            const result = await refreshAsns(new Set(['59930']), old, async url => {
+              assert.ok(url.includes('types=o'));
+              return { ok: true, json: async () => ({ status: 'ok', data: { query_time: 'new', prefixes: { v4: { originating: ['192.0.2.0/24'] }, v6: { originating: ['2001:db8::/32'] } } } }) };
+            });
+            assert.deepEqual(result, old);
+          });
+          TEST_JS
+          node --test "$work/convert.test.mjs"
+          node "$work/convert.mjs" --refresh-asn --sing-box "$(command -v sing-box)"
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add Rule/Intelligence.list Rule/Discord.list Rule/CN.list Rule/Google.list Rule/X.list Rule/Github.list Rule/FuckAds.list Rule/Spotify.list Rule/Telegram.list Rule/Proxy.list Rule/TikTok.list Rule/PayPal.list Rule/XHS.list Rule/Apple.list Rule/Mail.list Rule/Speedtest.list Rule/Binance.list Rule/OKX.list
+          git add singbox/rule singbox/asn.json singbox/conversion-report.json
           if git diff --staged --quiet; then
-            echo "No changes to commit for rule lists in Rule/."
+            echo "No changes to commit for source and sing-box rules."
           else
             COMMIT_TIME=$(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')
             git commit -m "Update rule lists - $COMMIT_TIME"

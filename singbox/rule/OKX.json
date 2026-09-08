@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "domain": [
+        "api.amplitudeexperiment.com",
+        "api.onesignal.com",
+        "www.okx.com.cdn.cloudflare.net"
+      ]
+    },
+    {
+      "domain_keyword": [
+        "d1nil3qbkxfj92",
+        "d1w1p0smpsoh5j",
+        "d2p7qknqur0nu9",
+        "ipyp0a",
+        "okx"
+      ]
+    },
+    {
+      "domain_suffix": [
+        "okex.com",
+        "oklink.com",
+        "okx.com",
+        "online-metrix.net"
+      ]
+    }
+  ]
+}
