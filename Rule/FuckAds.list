@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2026-09-09 05:30:20 GMT+8
+# FuckAds Rules - Fetched on 2026-09-10 05:22:04 GMT+8
 
 DOMAIN,1500020991.vodplayer.wxamedia.com
 DOMAIN,1500022744.vodplayer.wxamedia.com
@@ -41,7 +41,6 @@ DOMAIN,ad.shunchangzhixing.com
 DOMAIN,ad.tencentmusic.com
 DOMAIN,ad.toutiao.com
 DOMAIN,ad.v3mh.com
-DOMAIN,ad.weibo.com
 DOMAIN,ad.winrar.com.cn
 DOMAIN,ad.ximalaya.com
 DOMAIN,ad.xunkids.com
@@ -73,9 +72,11 @@ DOMAIN,adjust.cn
 DOMAIN,adjust.com
 DOMAIN,adks.hpplay.cn
 DOMAIN,adlink-api.huan.tv
+DOMAIN,adlog.vivo.com.cn
 DOMAIN,adm.funshion.com
 DOMAIN,admarketing.yahoo.net
 DOMAIN,admobile.top
+DOMAIN,adreq.vivo.com.cn
 DOMAIN,ads-api-o.api.leiniao.com
 DOMAIN,ads-api.tiktok.com
 DOMAIN,ads-api.twitter.com
@@ -184,7 +185,9 @@ DOMAIN,adx.appsdk.com.cn
 DOMAIN,adx.sogaha.cn
 DOMAIN,adx.tuia.cn
 DOMAIN,adxlog-adnet.vivo.com.cn
+DOMAIN,adxlog.vivo.com.cn
 DOMAIN,adxserver.ad.cmvideo.cn
+DOMAIN,adxstatic.vivo.com.cn
 DOMAIN,aegis.qq.com
 DOMAIN,aem.dentsuchina.cn
 DOMAIN,afs.googlesyndication.com
@@ -285,6 +288,7 @@ DOMAIN,bj-td-menta-01-callback.advlion.com
 DOMAIN,bj.ad.track.66mobi.com
 DOMAIN,books-analytics-events.apple.com
 DOMAIN,bootpreload.uve.weibo.com
+DOMAIN,brandadsstatic.vivo.com.cn
 DOMAIN,browser.events.data.msn.cn
 DOMAIN,browser.events.data.msn.com
 DOMAIN,browsercfg-drcn.cloud.dbankcloud.cn
@@ -360,6 +364,7 @@ DOMAIN,download.changhong.upgrade2.huan.tv
 DOMAIN,downloadxml.changhong.upgrade2.huan.tv
 DOMAIN,dsp-x.jd.com
 DOMAIN,dsp.fcbox.com
+DOMAIN,dsplog-adnet.vivo.com.cn
 DOMAIN,dualstack-logs.amap.com
 DOMAIN,dxp.baidu.com
 DOMAIN,dyp2p-ali.douyucdn.cn
@@ -451,7 +456,6 @@ DOMAIN,iadctest.qwapi.com
 DOMAIN,iadmoo.apple.com
 DOMAIN,iadmusicmat.music.126.net
 DOMAIN,iadsdk.apple.com
-DOMAIN,iadworkbench.apple.com
 DOMAIN,ifacelog.iqiyi.com
 DOMAIN,ifs.tanx.com
 DOMAIN,ii.gdt.qq.com
@@ -698,7 +702,7 @@ DOMAIN,s1.cdn-sg.advlion.com
 DOMAIN,s8t.teads.tv
 DOMAIN,saad.ms.zhangyue.net
 DOMAIN,saas.hpplay.cn
-DOMAIN,safebrowsing.urlsec.gg.com
+DOMAIN,safebrowsing.urlsec.qq.com
 DOMAIN,samsung-com.112.2o7.net
 DOMAIN,samsungads.com
 DOMAIN,saxysec.com
@@ -827,6 +831,7 @@ DOMAIN,track.uc.cn
 DOMAIN,tracker-prd.aldi.com.cn
 DOMAIN,tracker.ai.xiaomi.com
 DOMAIN,tracker.gitee.com
+DOMAIN,tracking-adnet.vivo.com.cn
 DOMAIN,tracking.miui.com
 DOMAIN,tracking.rus.miui.com
 DOMAIN,tuiguang.meitu.com
@@ -936,7 +941,6 @@ DOMAIN-KEYWORD,-ad.sm.cn
 DOMAIN-KEYWORD,-ad.video.yximgs.com
 DOMAIN-KEYWORD,-ad.wtzw.com
 DOMAIN-KEYWORD,-be-pack-sign.pglstatp-toutiao.com
-DOMAIN-KEYWORD,-normal.zijieapi.com
 DOMAIN-SUFFIX,1rtb.com
 DOMAIN-SUFFIX,a.market.xiaomi.com
 DOMAIN-SUFFIX,ad.e.waimai.sankuai.com
