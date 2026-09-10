@@ -4,7 +4,7 @@
   "asn_snapshot": "singbox/asn.json",
   "files": {
     "Apple.list": {
-      "source_sha256": "0982c96b82db841d164ea171fbdec09ba01ffda603b8a5d63555d8647cf4816d",
+      "source_sha256": "4eb13301f118d65a44090a49e282ec5445519b31fe3d6a8f9b9a6dd700fa9639",
       "source_rules": 13,
       "output_rules": 2,
       "warnings": [
@@ -18,7 +18,7 @@
       ]
     },
     "Binance.list": {
-      "source_sha256": "a6c6789077b94536ecfa8d09b606a3a160cf45136c9e5a9281947edfff5d4bf9",
+      "source_sha256": "75702a4dbf454fe3c788efce0bb1edd6f26cc4b9b6d31d90ae662a7d81be9cd0",
       "source_rules": 14,
       "output_rules": 2,
       "warnings": []
@@ -30,7 +30,7 @@
       "warnings": []
     },
     "CN.list": {
-      "source_sha256": "937eb20911efdccc45a0282f8e07f44d388ff17ee2564ef954f80f171909362d",
+      "source_sha256": "56d2841d0a60745395936dab8bc6051f9318811019dd33d32e5b5ff8817e5348",
       "source_rules": 124188,
       "output_rules": 16,
       "warnings": [
@@ -574,7 +574,7 @@
       ]
     },
     "Discord.list": {
-      "source_sha256": "46e2e79fd056ed9d34996c464e9584080def726f7dfeae74d704c7c8156347cb",
+      "source_sha256": "551263adc2faf33b6438d057fd9bdd21eb5ec50c5921ce581909f96ef4a99923",
       "source_rules": 29,
       "output_rules": 1,
       "warnings": []
@@ -586,7 +586,7 @@
       "warnings": []
     },
     "FuckAds.list": {
-      "source_sha256": "266d2753b8e3ef4e143d38eb5061f7cec8b05dac9a01dc37cdda9c7d1b39342e",
+      "source_sha256": "7bc5f405f4c2fb83b8866d1dff7abf5bcbcb1e6ab54c7376de28a3e3e63aeb58",
       "source_rules": 964,
       "output_rules": 4,
       "warnings": [
@@ -598,13 +598,13 @@
       ]
     },
     "Github.list": {
-      "source_sha256": "24fbb10ad271cb16384e8afc6b3abebd81daaa1f3d385ee8722a0ab578e5e91f",
+      "source_sha256": "64837e27514dc430d3a85c264802993ee5478c63e50a227f8264e96bad58bad5",
       "source_rules": 31,
       "output_rules": 2,
       "warnings": []
     },
     "Google.list": {
-      "source_sha256": "cefc1fe147074c2e63ac8795db8d1ebe37c6bd1db33c9edff3a73bd4578734bd",
+      "source_sha256": "e424929cb80a39fd4c05d6d2fb44861c0dc89f0723adb88c67157f769e734633",
       "source_rules": 703,
       "output_rules": 9,
       "warnings": [
@@ -665,7 +665,7 @@
       ]
     },
     "Intelligence.list": {
-      "source_sha256": "d7520f1c51457cffa7513bd6304ee36d5d04ee9d7b6ad2c8ca99c7a8d00b8839",
+      "source_sha256": "65785118fdc474ed3b74df4cd72d92eadd48e3fde5819c889de7e3e4793a3b29",
       "source_rules": 196,
       "output_rules": 9,
       "warnings": [
@@ -711,7 +711,7 @@
       "warnings": []
     },
     "Mail.list": {
-      "source_sha256": "a9551eead81f5a950ad35d2a537d89b340535b061964ee43c1503918547f6bf9",
+      "source_sha256": "66db362da57f0c3e813e3dc6d522d493ebbe667201ff091a44666878f9900b79",
       "source_rules": 12,
       "output_rules": 2,
       "warnings": []
@@ -723,13 +723,13 @@
       "warnings": []
     },
     "OKX.list": {
-      "source_sha256": "e48af3b1c333e9fac2c6bde33986847233ec86dd5b6461803ab48ab7e961af1d",
+      "source_sha256": "5d028dd613d9b168859a91b593a27c3439508ad1be7a80b5de83552593d084f4",
       "source_rules": 12,
       "output_rules": 3,
       "warnings": []
     },
     "PayPal.list": {
-      "source_sha256": "dd4cadb5471ddbef995bc7e6b3ab4f8046b6db0daa6d0d2cdb5b07da3e50644f",
+      "source_sha256": "2ad637ef8802bd3f5c186d0bfbbe6d15da50aff4a94dbafa59053816f8ec1dfc",
       "source_rules": 248,
       "output_rules": 2,
       "warnings": [
@@ -755,7 +755,7 @@
       ]
     },
     "Proxy.list": {
-      "source_sha256": "e1bdab14660e0d6aa1c60913693808f5982e96b441702c920935b374b0e85c84",
+      "source_sha256": "7c7adfd87fcba332546b46dc5bf5b2a2f8fb1aa175e4083695e257f86d226bbf",
       "source_rules": 6925,
       "output_rules": 4,
       "warnings": [
@@ -835,7 +835,7 @@
       ]
     },
     "Speedtest.list": {
-      "source_sha256": "2944d3f08b932dd529786b18666262ce1676b57d461bca5b1b664efa336caea0",
+      "source_sha256": "a37036acf06901be35ca5b5f7f124a39eccbb87a7a87f9bc0ef78e7112220ccf",
       "source_rules": 6,
       "output_rules": 2,
       "warnings": [
@@ -849,7 +849,7 @@
       ]
     },
     "Spotify.list": {
-      "source_sha256": "5074edf9f85e93b1d7190efa6108734ff49d783596389fc9cf026141861ced86",
+      "source_sha256": "9f0a6794fffa29aace8f1697744d129f0e15cb93654926968ce7aee663ece066",
       "source_rules": 31,
       "output_rules": 5,
       "warnings": [
@@ -875,7 +875,7 @@
       ]
     },
     "Telegram.list": {
-      "source_sha256": "8dbf2a8479ea5fe95392ad7bf1cddc19fa49d104228d328417c260652a5ca4ca",
+      "source_sha256": "49cf46d1a28786e038b40dd5fc10add12c7cb5a255714904f4763b213fb8c028",
       "source_rules": 46,
       "output_rules": 9,
       "warnings": [
@@ -944,7 +944,7 @@
       ]
     },
     "TikTok.list": {
-      "source_sha256": "010f05e60f249eec5cce07c248875887845479130daa8cd5ae02ffa407b2f6e0",
+      "source_sha256": "d555fb4653620f234fded9240d1031715075ce9cbefbadc853ad12b699bf36c2",
       "source_rules": 33,
       "output_rules": 4,
       "warnings": [
@@ -971,7 +971,7 @@
       "warnings": []
     },
     "X.list": {
-      "source_sha256": "9e7c1e120f8ec82f3033d6340f625e61cdaab88a5c456f46c6172d3aff1fc25f",
+      "source_sha256": "72dbd4b79a439812226b778c6bd6fcf0aa7ce157466e440ad3873fd9f68496b7",
       "source_rules": 33,
       "output_rules": 3,
       "warnings": [
@@ -983,7 +983,7 @@
       ]
     },
     "XHS.list": {
-      "source_sha256": "03f3dc742ec3fe1db0d6ba24510ecbb31d42ff943927229e1129e4d803e62668",
+      "source_sha256": "341e13c1a404594f00325bcae44fa2014e1b7b51ec5cc7737ae5da7a375fbbfb",
       "source_rules": 4,
       "output_rules": 1,
       "warnings": []
