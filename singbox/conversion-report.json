@@ -4,7 +4,7 @@
   "asn_snapshot": "singbox/asn.json",
   "files": {
     "Apple.list": {
-      "source_sha256": "f9d1d78a5d8453c99686d8e5346437d1d01272ca86dc2218da47ca4f378e8c47",
+      "source_sha256": "c3c6c2f91cbed610d5c6b58922b435fbc066ee637648edfadbc86d6bc9601276",
       "source_rules": 13,
       "output_rules": 2,
       "warnings": [
@@ -18,7 +18,7 @@
       ]
     },
     "Binance.list": {
-      "source_sha256": "a4523d3162487af26d54b5d33eb5c5b210c5f9a94174ac12a1bbe9679d7242f8",
+      "source_sha256": "4662502b60b7b3e632d591a2a54fd51ad71a0f012aabedb8e021fe20874517d3",
       "source_rules": 14,
       "output_rules": 2,
       "warnings": []
@@ -30,7 +30,7 @@
       "warnings": []
     },
     "CN.list": {
-      "source_sha256": "1f24cedd9febf2d048776c7030104a73266281cc88e73f4f65e5086800725fc3",
+      "source_sha256": "ecc407b5a2615aaaaecdac7c97aa8c50788bd58d91fac17fde8a3d2a63352599",
       "source_rules": 124202,
       "output_rules": 16,
       "warnings": [
@@ -574,7 +574,7 @@
       ]
     },
     "Discord.list": {
-      "source_sha256": "b28171685c9ce033a41c243719c96879deb45eefa8871972386ff43e4c7b8de7",
+      "source_sha256": "08fcb6e5c87325e0e2af22dba1a011e3943c2bd2effb867e748f71d1def96769",
       "source_rules": 29,
       "output_rules": 1,
       "warnings": []
@@ -586,7 +586,7 @@
       "warnings": []
     },
     "FuckAds.list": {
-      "source_sha256": "627299aa39992c6153f94eff16298aa0b5813a033292bf5635b8c6695418ee13",
+      "source_sha256": "4746b79811399602c8e90dfb6cee9f220bf3c26df96a26b94d19b6944fe8937f",
       "source_rules": 964,
       "output_rules": 4,
       "warnings": [
@@ -598,13 +598,13 @@
       ]
     },
     "Github.list": {
-      "source_sha256": "41b6eca35d938bdec21b01deadcd2c16e85f36374e4015cbae00250b00ce0600",
+      "source_sha256": "4129be035178bf88b160cf5a5d969d834e62b0ab51e507195bd19acd131e70dc",
       "source_rules": 31,
       "output_rules": 2,
       "warnings": []
     },
     "Google.list": {
-      "source_sha256": "ec4718813fe91ececd58ccf73a6fa01e64601854091a48da791735dc3d11d1df",
+      "source_sha256": "04567c6a583bbab8c96032a6dd0b8f8c99e2bf137a611ce0a2b8effb6aa4a78d",
       "source_rules": 703,
       "output_rules": 9,
       "warnings": [
@@ -665,33 +665,33 @@
       ]
     },
     "Intelligence.list": {
-      "source_sha256": "0d918bb2879498feb1662adcde4e3b0b80613489b1fc2ea3bd7821910ba963d5",
-      "source_rules": 196,
-      "output_rules": 9,
+      "source_sha256": "714edc369ca69fefbad8fd5b4baefe9f761b543b92399c27d7000df9c9b1ea35",
+      "source_rules": 118,
+      "output_rules": 6,
       "warnings": [
         {
-          "line": 193,
+          "line": 115,
           "rule": "PROCESS-NAME,/Applications/Antigravity.app/",
           "notes": [
             "app directory mapped to process_path_regex prefix"
           ]
         },
         {
-          "line": 194,
+          "line": 116,
           "rule": "PROCESS-NAME,/Applications/ChatGPT Classic.app/",
           "notes": [
             "app directory mapped to process_path_regex prefix"
           ]
         },
         {
-          "line": 195,
+          "line": 117,
           "rule": "PROCESS-NAME,/Applications/ChatGPT.app/",
           "notes": [
             "app directory mapped to process_path_regex prefix"
           ]
         },
         {
-          "line": 196,
+          "line": 118,
           "rule": "PROCESS-NAME,/Applications/Claude.app/",
           "notes": [
             "app directory mapped to process_path_regex prefix"
@@ -699,7 +699,7 @@
         },
         {
           "kind": "no-resolve",
-          "occurrences": 9,
+          "occurrences": 7,
           "note": "DNS resolution behavior must be configured by the consumer"
         }
       ]
@@ -711,7 +711,7 @@
       "warnings": []
     },
     "Mail.list": {
-      "source_sha256": "5558ede72cb8b013c325b111058c6c5d8671eaff1185c5934f9081abd3999955",
+      "source_sha256": "66ae1002dcec138a376fe5360015f4fc77957d5731357d744f348445bdfe1e16",
       "source_rules": 12,
       "output_rules": 2,
       "warnings": []
@@ -723,13 +723,13 @@
       "warnings": []
     },
     "OKX.list": {
-      "source_sha256": "087127a1e3563ec5707aa0bc980b0ab387fba4e97a9d43efbe914679794bfa15",
+      "source_sha256": "a281abfbf9f8faff597e3a10b22b83f65bc24f782e7b246b1960e1aec4ebeec7",
       "source_rules": 12,
       "output_rules": 3,
       "warnings": []
     },
     "PayPal.list": {
-      "source_sha256": "ca814ccbc63397caf82107bbccba5667fb6fe0cd0ce81aca2ca486ab45c46a4a",
+      "source_sha256": "672f8f7016ca73a0ca3e9ed661e96b15af249bfd9d8d19bc8b239232ad6210ba",
       "source_rules": 248,
       "output_rules": 2,
       "warnings": [
@@ -755,7 +755,7 @@
       ]
     },
     "Proxy.list": {
-      "source_sha256": "e0180215152af48e799002696e674c747d7f6ce6ca77d2cf4efdd4c43160a768",
+      "source_sha256": "449a40b511e5431816c8d8d4e02236d3478cff8fa1d65961b86bbd2ab935f1e8",
       "source_rules": 6926,
       "output_rules": 4,
       "warnings": [
@@ -835,7 +835,7 @@
       ]
     },
     "Speedtest.list": {
-      "source_sha256": "bfcd27663b885d87850d0ffcb99d1a8816c70acd41cba118d87b216d31ce022a",
+      "source_sha256": "ccbb8cf925006052d5982ccc91ca6f3dc2c2925dba5bc3c33bedeb1916c64966",
       "source_rules": 6,
       "output_rules": 2,
       "warnings": [
@@ -849,7 +849,7 @@
       ]
     },
     "Spotify.list": {
-      "source_sha256": "9c0be840272250c92f0b0a1e11634dfeb8585bbaeb42c2579d963d3064f1017e",
+      "source_sha256": "a2ab7d5a6594615b8a0b44d69d5a4c368ddf63e1dd773af526978f8ac0e19b80",
       "source_rules": 31,
       "output_rules": 5,
       "warnings": [
@@ -875,7 +875,7 @@
       ]
     },
     "Telegram.list": {
-      "source_sha256": "d9d696a3c4bb640a9d71772b0868bd01f69c04dcca08821a5b3531199d61da19",
+      "source_sha256": "b2fd7dbb6f3c073f36fb459678cf2da7df99956e1d29f5faf0260993e69bab94",
       "source_rules": 46,
       "output_rules": 9,
       "warnings": [
@@ -944,7 +944,7 @@
       ]
     },
     "TikTok.list": {
-      "source_sha256": "95ea2d28d12ac3f0e6f7ac86eb81374f3a1ca57008ef64bbf0f225762eaaed9a",
+      "source_sha256": "225a7975e8536b9e6c9665fcda756f6d4dba20f3cc00ea79cad2a05500e3ee1c",
       "source_rules": 33,
       "output_rules": 4,
       "warnings": [
@@ -971,7 +971,7 @@
       "warnings": []
     },
     "X.list": {
-      "source_sha256": "c4a0832dd49ab061d12a8f0c97ca6b98f32d8ad953b71a72cd16f2a064348134",
+      "source_sha256": "149fb6a18eb12a0bb54fab02e329c62e1cfbe7094826ba99acb3baad7b0413ce",
       "source_rules": 33,
       "output_rules": 3,
       "warnings": [
@@ -983,7 +983,7 @@
       ]
     },
     "XHS.list": {
-      "source_sha256": "06e9d492770c9913565347298f094ca5418d148a4990a98a2c8617342d737e92",
+      "source_sha256": "6b6be5b086d42aee5e185c6351e3ed113553ede6006eba03b6620add8c39550b",
       "source_rules": 4,
       "output_rules": 1,
       "warnings": []
