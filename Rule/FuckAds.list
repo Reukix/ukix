@@ -1,4 +1,4 @@
-# FuckAds Rules - Fetched on 2026-09-21 05:06:40 GMT+8
+# FuckAds Rules - Fetched on 2026-09-22 06:22:07 GMT+8
 
 DOMAIN,1500020991.vodplayer.wxamedia.com
 DOMAIN,1500022744.vodplayer.wxamedia.com
@@ -661,6 +661,8 @@ DOMAIN,pcm-img.zhls.qq.com
 DOMAIN,pgdt.gtimg.cn
 DOMAIN,pgdt.ugdtimg.com
 DOMAIN,pglstatp-toutiao.com
+DOMAIN,pica-a-display.diwodiwo.xyz
+DOMAIN,pica-ad-api.diwodiwo.xyz
 DOMAIN,pig.pupuapi.com
 DOMAIN,pin.hpplay.cn
 DOMAIN,pixon.ads-pixiv.net
