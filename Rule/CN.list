@@ -1,4 +1,4 @@
-# CN Rules - Fetched on 2026-10-23 05:58:52 GMT+8
+# CN Rules - Fetched on 2026-10-24 05:44:48 GMT+8
 
 DOMAIN,1-fss24-s0.streamhoster.com
 DOMAIN,14033.live.streamtheworld.com
@@ -86235,6 +86235,8 @@ DOMAIN-SUFFIX,sztxsz.com
 DOMAIN-SUFFIX,szty56.com
 DOMAIN-SUFFIX,sztz.org
 DOMAIN-SUFFIX,sztzzs.com
+DOMAIN-SUFFIX,szu.app
+DOMAIN-SUFFIX,szu.moe
 DOMAIN-SUFFIX,szuavia.org
 DOMAIN-SUFFIX,szudad.com
 DOMAIN-SUFFIX,szunionlab.com
@@ -111829,6 +111831,7 @@ IP-CIDR,103.186.228.0/23,no-resolve
 IP-CIDR,103.186.4.0/23,no-resolve
 IP-CIDR,103.189.140.0/23,no-resolve
 IP-CIDR,103.189.152.0/22,no-resolve
+IP-CIDR,103.189.197.0/24,no-resolve
 IP-CIDR,103.189.92.0/23,no-resolve
 IP-CIDR,103.19.12.0/22,no-resolve
 IP-CIDR,103.19.232.0/22,no-resolve
@@ -115245,8 +115248,7 @@ IP-CIDR,175.24.0.0/14,no-resolve
 IP-CIDR,175.30.0.0/15,no-resolve
 IP-CIDR,175.42.0.0/15,no-resolve
 IP-CIDR,175.44.0.0/16,no-resolve
-IP-CIDR,175.45.176.0/24,no-resolve
-IP-CIDR,175.45.178.0/23,no-resolve
+IP-CIDR,175.45.179.0/24,no-resolve
 IP-CIDR,175.46.0.0/15,no-resolve
 IP-CIDR,175.48.0.0/12,no-resolve
 IP-CIDR,175.64.0.0/11,no-resolve
@@ -115428,7 +115430,6 @@ IP-CIDR,192.163.11.0/24,no-resolve
 IP-CIDR,192.168.10.1/32,no-resolve
 IP-CIDR,192.168.119.253/32,no-resolve
 IP-CIDR,192.171.224.0/21,no-resolve
-IP-CIDR,192.186.4.0/24,no-resolve
 IP-CIDR,192.197.113.0/24,no-resolve
 IP-CIDR,192.23.191.0/24,no-resolve
 IP-CIDR,192.232.34.0/23,no-resolve
@@ -115967,10 +115968,9 @@ IP-CIDR,202.91.176.0/20,no-resolve
 IP-CIDR,202.91.224.0/19,no-resolve
 IP-CIDR,202.91.36.0/22,no-resolve
 IP-CIDR,202.91.96.0/20,no-resolve
-IP-CIDR,202.92.0.0/22,no-resolve
+IP-CIDR,202.92.0.0/20,no-resolve
 IP-CIDR,202.92.252.0/22,no-resolve
 IP-CIDR,202.92.48.0/20,no-resolve
-IP-CIDR,202.92.8.0/21,no-resolve
 IP-CIDR,202.93.0.0/22,no-resolve
 IP-CIDR,202.93.252.0/22,no-resolve
 IP-CIDR,202.94.0.0/19,no-resolve
@@ -118772,6 +118772,7 @@ IP-CIDR,45.117.8.0/22,no-resolve
 IP-CIDR,45.119.104.0/22,no-resolve
 IP-CIDR,45.119.116.0/22,no-resolve
 IP-CIDR,45.119.232.0/22,no-resolve
+IP-CIDR,45.119.42.0/23,no-resolve
 IP-CIDR,45.119.52.0/22,no-resolve
 IP-CIDR,45.119.60.0/22,no-resolve
 IP-CIDR,45.119.64.0/21,no-resolve
@@ -121563,7 +121564,10 @@ IP-CIDR6,2406:840:9ee0::/44,no-resolve
 IP-CIDR6,2406:840:9f00::/40,no-resolve
 IP-CIDR6,2406:840::/48,no-resolve
 IP-CIDR6,2406:840:a000::/35,no-resolve
-IP-CIDR6,2406:840:a00::/44,no-resolve
+IP-CIDR6,2406:840:a01::/48,no-resolve
+IP-CIDR6,2406:840:a02::/47,no-resolve
+IP-CIDR6,2406:840:a04::/46,no-resolve
+IP-CIDR6,2406:840:a08::/45,no-resolve
 IP-CIDR6,2406:840:a12::/47,no-resolve
 IP-CIDR6,2406:840:a14::/46,no-resolve
 IP-CIDR6,2406:840:a18::/45,no-resolve
@@ -122108,8 +122112,6 @@ IP-CIDR6,2610:a1:3078::/46,no-resolve
 IP-CIDR6,2620:171:32::/48,no-resolve
 IP-CIDR6,2620:171:5a:f0::/64,no-resolve
 IP-CIDR6,2620:171:fb::/48,no-resolve
-IP-CIDR6,2620:57:4004::/47,no-resolve
-IP-CIDR6,2804:1e48:9002::/48,no-resolve
 IP-CIDR6,2a00:79e0:200:500::/56,no-resolve
 IP-CIDR6,2a00:79e0:ffe5:3a00::/56,no-resolve
 IP-CIDR6,2a00:79e1:abc:ab00::/56,no-resolve
