@@ -1,0 +1,12 @@
+#!name=Telegram重定向
+#!desc=用于在指定客户端中打开公开或私有群组及频道的Telegram短链。
+#!arguments=app:tg
+#!arguments-desc=指定跳转的客户端 Scheme
+#!arguments-schema={"type":"object","properties":{"app":{"type":"string","title":"客户端","description":"选择唤起的 Telegram 客户端","default":"tg","enum":["tg","sg","turrit","ime","ng","lingo","rg"]}}}
+
+[URL Rewrite]
+^https:\/\/t\.me\/([A-Za-z][A-Za-z0-9_]{3,30}[A-Za-z0-9])\/?$ {app}://resolve?domain=$1 307
+^https:\/\/t\.me\/\+([A-Za-z0-9_-]+)\/?$ {app}://join?invite=$1 307
+
+[MITM]
+hostname = %APPEND% t.me
