@@ -1,11 +1,11 @@
 #!name=Telegram重定向
-#!desc=用于在指定客户端中打开公开或私有群组及频道的Telegram短链。
-#!category=功能
+#!desc=将公开/私有消息、话题、频道、邀请和手机号链接转到指定客户端。请将配套 telegram302.js 放入 Surge 配置目录，并启用脚本及 MITM。
+#!category=工具
 #!arguments=app:tg
-#!arguments-desc=客户端 Scheme，可选值：tg, sg, turrit, ime, ng, lingo, rg
+#!arguments-desc=客户端 Scheme：tg（官方）、sg、turrit、ime、ng、lingo、rg。第三方客户端须支持对应 Telegram 深链动作。
 
 [Script]
-tg-redirect = type=http-request,pattern=^https?:\/\/t\.me\/,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/telegram302.js,requires-body=0,max-size=0,argument={app}
+tg-redirect = type=http-request,pattern=^https?:\/\/(?:t\.me|telegram\.me|telegram\.dog)(?::(?:80|443))?\/,script-path=telegram302.js,requires-body=false,timeout=5,argument={{{app}}}
 
 [MITM]
-hostname = %APPEND% t.me
+hostname = %APPEND% t.me, telegram.me, telegram.dog
