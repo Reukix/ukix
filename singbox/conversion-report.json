@@ -1,0 +1,682 @@
+{
+  "source": "Rule",
+  "rule_set_version": 2,
+  "asn_snapshot": "singbox/asn.json",
+  "files": {
+    "Apple.list": {
+      "source_sha256": "e85f64b1b336c0b39bcb3d012ea492afc8732f08655781f097ec69c4a1291feb",
+      "source_rules": 13,
+      "output_rules": 2,
+      "warnings": [
+        {
+          "line": 15,
+          "rule": "USER-AGENT,com.apple.appstored*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        }
+      ]
+    },
+    "Binance.list": {
+      "source_sha256": "866b2be672a44adcc36335011b000c0945c98e356ed5eb29ae9b2bd6970265d9",
+      "source_rules": 49,
+      "output_rules": 3,
+      "warnings": []
+    },
+    "Bybit.list": {
+      "source_sha256": "d0241abbf320796f9bd9c7a5d4ba8f7a48cfb26f5d2698d146a184627fcab849",
+      "source_rules": 18,
+      "output_rules": 2,
+      "warnings": []
+    },
+    "CN.list": {
+      "source_sha256": "983a02150fbfa966c3f5a71cba7ccbe6dcafb8fed4d8670fd17ae177183b17b9",
+      "source_rules": 24848,
+      "output_rules": 4,
+      "warnings": [
+        {
+          "line": 24821,
+          "rule": "USER-AGENT,%E4%B8%AD%E5%9B%BD%E5%B7%A5%E5%95%86%E9%93%B6%E8%A1%8C*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24822,
+          "rule": "USER-AGENT,%E4%BA%AC%E4%B8%9C%E5%88%B0%E5%AE%B6*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24823,
+          "rule": "USER-AGENT,%E4%BC%98%E9%85%B7*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24824,
+          "rule": "USER-AGENT,%E5%8D%B3%E5%88%BB*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24825,
+          "rule": "USER-AGENT,%E6%89%8B%E6%9C%BA%E6%B7%98%E5%AE%9D*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24826,
+          "rule": "USER-AGENT,%E7%BD%91%E6%98%93%E4%BA%91%E9%9F%B3%E4%B9%90*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24827,
+          "rule": "USER-AGENT,*Vainglory*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24828,
+          "rule": "USER-AGENT,AdBlock*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24829,
+          "rule": "USER-AGENT,Best%20Trace*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24830,
+          "rule": "USER-AGENT,MegaWerewolf*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24831,
+          "rule": "USER-AGENT,MicroMessenger%20Client",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24832,
+          "rule": "USER-AGENT,MicroMessenger*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24833,
+          "rule": "USER-AGENT,MicroMessengerClient*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24834,
+          "rule": "USER-AGENT,Microsoft*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24835,
+          "rule": "USER-AGENT,Moke*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24836,
+          "rule": "USER-AGENT,NeteaseMusic*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24837,
+          "rule": "USER-AGENT,QQ*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24838,
+          "rule": "USER-AGENT,RemotePlay*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24839,
+          "rule": "USER-AGENT,TIM*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24840,
+          "rule": "USER-AGENT,TeamViewer*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24841,
+          "rule": "USER-AGENT,TeslaMap",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24842,
+          "rule": "USER-AGENT,WeChat*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24843,
+          "rule": "USER-AGENT,WebTorrent*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24844,
+          "rule": "USER-AGENT,arrowio*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24845,
+          "rule": "USER-AGENT,balls*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24846,
+          "rule": "USER-AGENT,cmb*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24847,
+          "rule": "USER-AGENT,cmblife*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24848,
+          "rule": "USER-AGENT,eusoft_ting_en_iphone",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24849,
+          "rule": "USER-AGENT,hide*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24850,
+          "rule": "USER-AGENT,ting_en",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "kind": "no-resolve",
+          "occurrences": 18473,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "Discord.list": {
+      "source_sha256": "dfbf3be4cf19f0a692300fd6900ea625bf03a166eb8588cd08840d627e34beea",
+      "source_rules": 31,
+      "output_rules": 2,
+      "warnings": []
+    },
+    "DouYin.list": {
+      "source_sha256": "e7ee68bd97a386194de5e03288f8b1ab4ce68745f7715487109342a5a198cac7",
+      "source_rules": 2,
+      "output_rules": 1,
+      "warnings": []
+    },
+    "FuckAds.list": {
+      "source_sha256": "d53585934ee2b8aecd3435baec5b934bbc36b5c0ae2b2fce212588d0bfaa8707",
+      "source_rules": 988,
+      "output_rules": 4,
+      "warnings": [
+        {
+          "kind": "no-resolve",
+          "occurrences": 1,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "Github.list": {
+      "source_sha256": "15e2973d2df5519813b7224f6813f185e521a291f71898ab15fd800614f4f164",
+      "source_rules": 73,
+      "output_rules": 3,
+      "warnings": []
+    },
+    "Google.list": {
+      "source_sha256": "e78e0820c61b8e67fcacfce7247015cdd89d800609a81dbaa6207153ee909a91",
+      "source_rules": 1188,
+      "output_rules": 9,
+      "warnings": [
+        {
+          "line": 1187,
+          "rule": "PROCESS-NAME,com.android.vending",
+          "notes": [
+            "package-like process mapped to process_name OR package_name"
+          ]
+        },
+        {
+          "line": 1188,
+          "rule": "PROCESS-NAME,com.google.android.gms",
+          "notes": [
+            "package-like process mapped to process_name OR package_name"
+          ]
+        },
+        {
+          "line": 1189,
+          "rule": "PROCESS-NAME,com.google.android.gsf",
+          "notes": [
+            "package-like process mapped to process_name OR package_name"
+          ]
+        },
+        {
+          "line": 1190,
+          "rule": "PROCESS-NAME,com.google.android.play.games",
+          "notes": [
+            "package-like process mapped to process_name OR package_name"
+          ]
+        },
+        {
+          "kind": "no-resolve",
+          "occurrences": 2,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "Intelligence.list": {
+      "source_sha256": "81762fc4b2376d588d8474ef5a85c7d822551c016293d3d6f2bd07592c9208fb",
+      "source_rules": 695,
+      "output_rules": 10,
+      "warnings": [
+        {
+          "line": 668,
+          "rule": "PROCESS-NAME,/Applications/Antigravity.app/",
+          "notes": [
+            "app directory mapped to process_path_regex prefix"
+          ]
+        },
+        {
+          "line": 669,
+          "rule": "PROCESS-NAME,/Applications/ChatGPT Classic.app/",
+          "notes": [
+            "app directory mapped to process_path_regex prefix"
+          ]
+        },
+        {
+          "line": 670,
+          "rule": "PROCESS-NAME,/Applications/ChatGPT.app/",
+          "notes": [
+            "app directory mapped to process_path_regex prefix"
+          ]
+        },
+        {
+          "line": 671,
+          "rule": "PROCESS-NAME,/Applications/Claude.app/",
+          "notes": [
+            "app directory mapped to process_path_regex prefix"
+          ]
+        },
+        {
+          "kind": "no-resolve",
+          "occurrences": 12,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "MTeam.list": {
+      "source_sha256": "b108cc16886d42e19f4341a352443dd0f23d9a584ffaded1a304d247c7397af0",
+      "source_rules": 4,
+      "output_rules": 2,
+      "warnings": []
+    },
+    "MyDomain.list": {
+      "source_sha256": "ab4bc21878d1e2887fe3c69d437415e2198b9fcce83f6bbc155961ccdcc8f2f3",
+      "source_rules": 2,
+      "output_rules": 1,
+      "warnings": []
+    },
+    "OKX.list": {
+      "source_sha256": "2c35b5376346553280727d5f1b036e2f3217bc159bb093f3f0faf17dfa0ae7f7",
+      "source_rules": 19,
+      "output_rules": 3,
+      "warnings": []
+    },
+    "PayPal.list": {
+      "source_sha256": "f42e79061e708ab54c60ff7cdfdcf49716d68156445f738339441cd1c681ddfd",
+      "source_rules": 248,
+      "output_rules": 3,
+      "warnings": [
+        {
+          "line": 250,
+          "rule": "USER-AGENT,PayPal*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        }
+      ]
+    },
+    "Pokemmo.list": {
+      "source_sha256": "139e2c40feb70e854880d0b37867cdb087b3fcaa71cce924964a930106af91e2",
+      "source_rules": 5,
+      "output_rules": 2,
+      "warnings": [
+        {
+          "kind": "no-resolve",
+          "occurrences": 4,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "Proxy.list": {
+      "source_sha256": "48d89b0026ee14d4e2b2fc3efdd93b7061d8014fda3702162ba98b6510958469",
+      "source_rules": 24429,
+      "output_rules": 7,
+      "warnings": [
+        {
+          "line": 24418,
+          "rule": "PROCESS-NAME,com.apple.Maps",
+          "notes": [
+            "package-like process mapped to process_name OR package_name"
+          ]
+        },
+        {
+          "line": 24419,
+          "rule": "PROCESS-NAME,com.apple.geod",
+          "notes": [
+            "package-like process mapped to process_name OR package_name"
+          ]
+        },
+        {
+          "line": 24423,
+          "rule": "USER-AGENT,Duolingo*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24424,
+          "rule": "USER-AGENT,OneDrive*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24425,
+          "rule": "USER-AGENT,PayPal*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24426,
+          "rule": "USER-AGENT,Roam*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24427,
+          "rule": "USER-AGENT,TwDramas",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24428,
+          "rule": "USER-AGENT,WhatsApp*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24429,
+          "rule": "USER-AGENT,battleroyale*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24430,
+          "rule": "USER-AGENT,com.apple.trustd*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "line": 24431,
+          "rule": "USER-AGENT,hearthstone*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "kind": "no-resolve",
+          "occurrences": 84,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "PubgMobile.list": {
+      "source_sha256": "cf7f57df7cb6ec6272a4b38f8f5a6722b47878955ed0c132bd0f4091233e7cd7",
+      "source_rules": 50,
+      "output_rules": 3,
+      "warnings": [
+        {
+          "kind": "no-resolve",
+          "occurrences": 39,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "Speedtest.list": {
+      "source_sha256": "1f4d2b070489f237166e4a0b8b5fcf7b05675a59da672f61fe7825e61ac7dc50",
+      "source_rules": 3477,
+      "output_rules": 3,
+      "warnings": [
+        {
+          "line": 3479,
+          "rule": "USER-AGENT,SpeedTest*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        }
+      ]
+    },
+    "Spotify.list": {
+      "source_sha256": "7bedfb2c11da070a494876fc1788208898a759131b2f2a54535ba862ee1418bf",
+      "source_rules": 40,
+      "output_rules": 5,
+      "warnings": [
+        {
+          "line": 41,
+          "rule": "PROCESS-NAME,com.spotify.music",
+          "notes": [
+            "package-like process mapped to process_name OR package_name"
+          ]
+        },
+        {
+          "line": 42,
+          "rule": "USER-AGENT,Spotify*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        },
+        {
+          "kind": "no-resolve",
+          "occurrences": 1,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "Telegram.list": {
+      "source_sha256": "138c858c5d8f14f48ce22fc99051ff2f3f5fd98d06ed633ce9d668016866b768",
+      "source_rules": 69,
+      "output_rules": 8,
+      "warnings": [
+        {
+          "line": 68,
+          "rule": "PROCESS-NAME,org.telegram.messenger",
+          "notes": [
+            "package-like process mapped to process_name OR package_name"
+          ]
+        },
+        {
+          "line": 70,
+          "rule": "PROCESS-NAME,tw.nekomimi.nekogram",
+          "notes": [
+            "package-like process mapped to process_name OR package_name"
+          ]
+        },
+        {
+          "line": 71,
+          "rule": "PROCESS-NAME,xyz.nextalone.nagram",
+          "notes": [
+            "package-like process mapped to process_name OR package_name"
+          ]
+        },
+        {
+          "kind": "no-resolve",
+          "occurrences": 37,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "TelegramDC1.list": {
+      "source_sha256": "8a05ba68215f77613d23f6aebaecc436bec0405d76041e9735c3db5e9a56909b",
+      "source_rules": 1,
+      "output_rules": 1,
+      "warnings": [
+        {
+          "kind": "no-resolve",
+          "occurrences": 1,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "TelegramDC2-4.list": {
+      "source_sha256": "820c551864c1e1eb6baed2dbe0dcc384c10956a3c0d5e5ff67d13dc39d6237be",
+      "source_rules": 4,
+      "output_rules": 1,
+      "warnings": [
+        {
+          "kind": "no-resolve",
+          "occurrences": 4,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "TelegramDC5.list": {
+      "source_sha256": "d31ec7325d89ed8e29a0b503236b256ba8836cd83567c8d0eabebd76f8c99f00",
+      "source_rules": 2,
+      "output_rules": 1,
+      "warnings": [
+        {
+          "kind": "no-resolve",
+          "occurrences": 2,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "TikTok.list": {
+      "source_sha256": "b3c65155c7996c56a905e12063324bce687f91276d1427acae344777c289a7ff",
+      "source_rules": 64,
+      "output_rules": 4,
+      "warnings": [
+        {
+          "line": 65,
+          "rule": "PROCESS-NAME,com.zhiliaoapp.musically",
+          "notes": [
+            "package-like process mapped to process_name OR package_name"
+          ]
+        },
+        {
+          "line": 66,
+          "rule": "USER-AGENT,TikTok*",
+          "notes": [
+            "USER-AGENT omitted: unsupported by sing-box"
+          ]
+        }
+      ]
+    },
+    "WifiCalling.list": {
+      "source_sha256": "08eebbbfd78b9da768e05a8ce371da6dc39a33e09ebf5418b70ab7fadf10d6f2",
+      "source_rules": 9,
+      "output_rules": 2,
+      "warnings": []
+    },
+    "X.list": {
+      "source_sha256": "79f139fa270882201923174c44aa5530ae9cc3cf9e416075f577b54bb1a4de97",
+      "source_rules": 36,
+      "output_rules": 3,
+      "warnings": [
+        {
+          "kind": "no-resolve",
+          "occurrences": 8,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    },
+    "XHS.list": {
+      "source_sha256": "55ccdaf57fcd998ec538a70c66aa9c5638bcd0331348318acb0552d9ca92ad15",
+      "source_rules": 12,
+      "output_rules": 1,
+      "warnings": []
+    },
+    "antiremove.list": {
+      "source_sha256": "21f99c3967d73485040606e929fc470c764dd01145de98ed93f2f3b8e38485ef",
+      "source_rules": 18,
+      "output_rules": 1,
+      "warnings": []
+    },
+    "efootball.list": {
+      "source_sha256": "5fc5d5f92a636446ae0353a6e7b9d65a9af74c06eea18801c7550fdf6be96095",
+      "source_rules": 21,
+      "output_rules": 3,
+      "warnings": [
+        {
+          "kind": "no-resolve",
+          "occurrences": 2,
+          "note": "DNS resolution behavior must be configured by the consumer"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "domain_keyword": [
+        "bybit"
+      ]
+    },
+    {
+      "domain_suffix": [
+        "byabcde.com",
+        "byapis.com",
+        "byapps.net",
+        "bybdc6.com",
+        "bybit-aws.com",
+        "bybit-exchange.github.io",
+        "bybit-global.com",
+        "bybit.ada.support",
+        "bybit.biz",
+        "bybit.cloud",
+        "bybit.com",
+        "bybitglobal.com",
+        "bycbe.com",
+        "bycsi.com",
+        "byd3c3.com",
+        "bymj.io",
+        "bytick.com"
+      ]
+    }
+  ]
+}

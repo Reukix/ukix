@@ -1,0 +1,11 @@
+#!name=Telegram重定向
+#!desc=将公开/私有消息、话题、频道、邀请和手机号链接转到指定客户端。
+#!category=工具
+#!arguments=app:tg
+#!arguments-desc=客户端 Scheme：tg（官方）、sg、turrit、ime、ng、lingo、rg。第三方客户端须支持对应 Telegram 深链动作。
+
+[Script]
+tg-redirect = type=http-request,pattern=^https?:\/\/(?:t\.me|telegram\.me|telegram\.dog)(?::(?:80|443))?\/,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/telegram302.js,requires-body=false,timeout=5,argument={{{app}}}
+
+[MITM]
+hostname = %APPEND% t.me, telegram.me, telegram.dog

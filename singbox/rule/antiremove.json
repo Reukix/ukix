@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "domain": [
+        "analytics.apple.com",
+        "certs.apple.com",
+        "crl.apple.com",
+        "crl.entrust.net",
+        "crl.sectigo.com",
+        "crl.usertrust.com",
+        "crl3.digicert.com",
+        "crl4.digicert.com",
+        "ocsp.apple.com",
+        "ocsp.digicert.cn",
+        "ocsp.digicert.com",
+        "ocsp.entrust.net",
+        "ocsp.sectigo.com",
+        "ocsp.usertrust.com",
+        "ocsp2.apple.com",
+        "ppq-ext.v.aaplimg.com",
+        "ppq.apple.com",
+        "valid.apple.com"
+      ]
+    }
+  ]
+}
