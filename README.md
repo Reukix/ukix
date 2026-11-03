@@ -63,7 +63,8 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/
 
 感谢以下项目的作者和贡献者提供的规则、插件、数据与工具：
 
-- [MagicRule](https://magicrule.pages.dev/#/c/Surge)：当前主要分流规则来源，包含 GlobalAI 等 Surge 规则。
+- [MagicRule](https://magicrule.pages.dev/#/c/Surge)：当前主要分流规则来源，提供各服务的 Surge 规则。
+- [Loyalsoldier/surge-rules](https://github.com/Loyalsoldier/surge-rules)：完整直连域名列表，用于补充 CN 规则。
 - [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script)：早期分流规则来源与参考。
 - [TG-Twilight/AWAvenue-Ads-Rule](https://github.com/TG-Twilight/AWAvenue-Ads-Rule)：广告过滤规则。
 - [Blankwonder/surge-list](https://github.com/Blankwonder/surge-list)：Apple 分流规则。

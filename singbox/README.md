@@ -32,7 +32,9 @@
 
 - 每日 UTC 19:00（北京时间 / 新加坡时间次日 03:00）调度，先抓取更新 Rule/，再生成 sing-box 规则，一起提交。
 - 从 MagicRule 的 Surge 目录及 manifest 动态查找完整规则，校验规则总数和各类型数量；Apple 和广告规则沿用独立来源。
-- Intelligence 合并 GlobalAI、OpenAI、Gemini、Anthropic、Copilot 和自定义补充，覆盖 Muse、Grok、Perplexity、Manus 等 AI 服务；抓取时沿用可转换规则类型的过滤，GlobalAI 中的 URL-REGEX 不导入。
+- CN 合并 Loyalsoldier 的完整直连域名库及 MagicRule 的 China / ChinaIPs / Baidu / DouYin / MeiTuan / WeChat，覆盖 DeepSeek、豆包、Kimi、通义、智谱、元宝等国内 AI。完整域名库少于 10,000 条或出现无效类型时停止更新，避免意外缩减覆盖。
+- Intelligence 逐个抓取 OpenAI、Gemini、Anthropic、Copilot、Grok、Groq、Perplexity、Cursor、Windsurf、JetBrainsAI、HuggingFace、Poe、ByteDanceAI 的独立规则源，并合并到同一份列表。Copilot 上游分类混入了其他 AI，因此仅保留其自身的服务域名。Muse、Meta AI、Manus、Mistral、Midjourney、Suno、Apple Intelligence 和 Dia 按服务单独补充域名。
+- 路由先匹配 Intelligence 等专用策略，随后匹配 CN 直连和通用 Proxy。国内 AI 由 CN 处理，无需额外的优先直连列表；仓库的 Surge / Loon 配置已采用此顺序。
 - 使用 `RULE_UPDATE_TOKEN` 以 Reukix 账号提交和推送，提交标记 `[skip ci]` 防止重复构建。
 - main 分支的源规则或该 workflow 修改后，直接转换当前 Rule/，避免覆盖手动修改的源文件。
 - 可以在 GitHub Actions 中选择 **Update Rules and sing-box → Run workflow** 手动执行完整抓取与转换。

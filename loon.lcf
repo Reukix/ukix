@@ -57,8 +57,8 @@ https://raw.githubusercontent.com/Reukix/ukix/main/Rule/Apple.list, policy=Apple
 # Telegram 分流
 https://raw.githubusercontent.com/Reukix/ukix/main/Rule/Telegram.list, policy=Telegram, tag=Telegram, enabled=true
 # 兜底分流
-https://raw.githubusercontent.com/Reukix/ukix/main/Rule/Proxy.list, policy=Proxy, tag=Proxy, enabled=true
 https://raw.githubusercontent.com/Reukix/ukix/main/Rule/CN.list, policy=DIRECT, tag=CN, enabled=true
+https://raw.githubusercontent.com/Reukix/ukix/main/Rule/Proxy.list, policy=Proxy, tag=Proxy, enabled=true
 
 [Plugin]
 https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/Loon/plugin/Block_HTTPDNS.plugin, enabled=true

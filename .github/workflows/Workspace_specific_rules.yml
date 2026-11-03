@@ -23,6 +23,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      INTELLIGENCE_SOURCES: >-
+        OpenAI Gemini Anthropic Copilot Grok Groq Perplexity
+        Cursor Windsurf JetBrainsAI HuggingFace Poe ByteDanceAI
     steps:
       - name: Checkout current repository
         uses: actions/checkout@v6
@@ -35,7 +39,7 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Fetch current MagicRule Surge sources
+      - name: Fetch current upstream rule sources
         if: github.event_name != 'push'
         run: |
           node --input-type=module <<'MAGICRULE_JS'
@@ -50,8 +54,9 @@ jobs:
           ], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
           const index = JSON.parse(download(`${root}/data/index/Surge.json`));
           const names = [
-            'GlobalAI', 'OpenAI', 'Gemini', 'Anthropic', 'Copilot', 'Discord', 'China', 'ChinaIPs',
-            'MeiTuan', 'WeChat', 'Google', 'Twitter', 'GitHub', 'Spotify',
+            ...process.env.INTELLIGENCE_SOURCES.trim().split(/\s+/),
+            'Discord', 'China', 'ChinaIPs',
+            'MeiTuan', 'WeChat', 'Baidu', 'DouYin', 'Google', 'Twitter', 'GitHub', 'Spotify',
             'Telegram', 'Global', 'TikTok', 'PayPal', 'XiaoHongShu',
             'Speedtest', 'Binance', 'OKX',
           ];
@@ -79,6 +84,27 @@ jobs:
                 Object.entries(counts).some(([kind, count]) => expected[kind] !== count)) {
               throw new Error(`MagicRule: rule type counts do not match for ${name}`);
             }
+            // The upstream Copilot category also contains unrelated AI services; retain only Copilot endpoints.
+            if (name === 'Copilot') {
+              const domains = [
+                'copilot.microsoft.com', 'copilot.cloud.microsoft', 'copilot.com', 'copilot-stg.com',
+                'githubcopilot.com', 'copilot-proxy.githubusercontent.com',
+                'copilot-telemetry-service.githubusercontent.com', 'copilot-telemetry.githubusercontent.com',
+                'copilot-workspace.githubnext.com', 'copilotprodattachments.blob.core.windows.net',
+                'sydney.bing.com', 'edgeservices.bing.com', 'bing-shopping.microsoft-falcon.io',
+                'gateway.bingviz.microsoft.net', 'gateway.bingviz.microsoftapp.net',
+                'api.msn.com', 'assets.msn.com', 'api.microsoftapp.net', 'location.microsoft.com',
+                'odc.officeapps.live.com', 'self.events.data.microsoft.com', 'in.appcenter.ms',
+              ];
+              lines = lines.filter(line => {
+                const [kind, domain] = line.split(',');
+                return ['DOMAIN', 'DOMAIN-SUFFIX'].includes(kind) &&
+                  domains.some(host => domain === host || domain.endsWith('.' + host));
+              });
+              for (const host of ['copilot.microsoft.com', 'githubcopilot.com']) {
+                if (!lines.includes(`DOMAIN-SUFFIX,${host}`)) throw new Error(`MagicRule: missing Copilot endpoint ${host}`);
+              }
+            }
             // Surge.conf already applies GEOIP,CN; headless sing-box sets cannot embed a GeoIP database.
             if (name === 'China') lines = lines.filter(line => !/^GEOIP,CN(?:,no-resolve)?$/.test(line));
             // Import explicit networks instead of expanding thousands of country-wide ASNs at build time.
@@ -87,6 +113,14 @@ jobs:
             fs.writeFileSync(path.join(directory, `${name}.list`), lines.join('\n') + '\n');
             console.log(`${name}: ${lines.length} rules from ${artifact.url}`);
           }
+          const directUrl = 'https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt';
+          const direct = [...new Set(download(directUrl).split(/\r?\n/).map(line => line.trim())
+            .filter(line => line && !line.startsWith('#') && !line.startsWith('//')))];
+          if (direct.length < 10000 || direct.some(line => !/^(DOMAIN|DOMAIN-SUFFIX),[^,\s]+$/.test(line))) {
+            throw new Error('Loyalsoldier: incomplete or invalid mainland domain rules');
+          }
+          fs.writeFileSync(path.join(directory, 'LoyalsoldierDirect.list'), direct.join('\n') + '\n');
+          console.log(`Loyalsoldier Direct: ${direct.length} rules from ${directUrl}`);
           MAGICRULE_JS
 
       - name: Create Rule directory
@@ -98,28 +132,36 @@ jobs:
           echo "# Intelligence Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/Intelligence.list
           echo "" >> Rule/Intelligence.list
           {
-            cat "$RUNNER_TEMP/magicrule/GlobalAI.list"
-            cat "$RUNNER_TEMP/magicrule/OpenAI.list"
-            cat "$RUNNER_TEMP/magicrule/Gemini.list"
-            cat "$RUNNER_TEMP/magicrule/Anthropic.list"
-            cat "$RUNNER_TEMP/magicrule/Copilot.list"
-            curl -fsSL --connect-timeout 10 --max-time 30 http://surge.vki.im/AI.list || true
-            printf '\n'
-            echo "DOMAIN-KEYWORD,apple-relay"
+            read -r -a intelligence_sources <<< "$INTELLIGENCE_SOURCES"
+            for source in "${intelligence_sources[@]}"; do
+              cat "$RUNNER_TEMP/magicrule/$source.list"
+            done
+            # Dia
             echo "DOMAIN-KEYWORD,diabrowser"
-            echo "DOMAIN-SUFFIX,cursor-cdn.com"
-            echo "DOMAIN-SUFFIX,cursor.com"
-            echo "DOMAIN-SUFFIX,cursor.sh"
-            echo "DOMAIN-SUFFIX,cursorapi.com"
-            echo "DOMAIN-SUFFIX,grok.com"
-            echo "DOMAIN-SUFFIX,x.ai"
+            # Copilot endpoints missing from the current upstream category
+            echo "DOMAIN-SUFFIX,copilot.cloud.microsoft"
+            echo "DOMAIN-SUFFIX,copilot.com"
+            echo "DOMAIN-SUFFIX,copilot-stg.com"
+            # Muse and Meta AI
+            echo "DOMAIN-SUFFIX,muse.ai"
             echo "DOMAIN-SUFFIX,meta.ai"
             echo "DOMAIN-SUFFIX,meta.com"
             echo "DOMAIN-SUFFIX,metademolab.com"
+            # Grok authentication and telemetry
             echo "DOMAIN,api3.siftscience.com"
             echo "DOMAIN,xai.chronosphere.io"
             echo "DOMAIN-KEYWORD,xai"
+            # Perplexity
             echo "DOMAIN-KEYWORD,pplx"
+            # Manus
+            echo "DOMAIN-SUFFIX,manus.im"
+            echo "DOMAIN-SUFFIX,manuscdn.com"
+            # Mistral
+            echo "DOMAIN-SUFFIX,mistral.ai"
+            # Midjourney
+            echo "DOMAIN-SUFFIX,midjourney.com"
+            # Apple Intelligence
+            echo "DOMAIN-KEYWORD,apple-relay"
             echo "DOMAIN-SUFFIX,apple-relay.apple.com"
             echo "DOMAIN-SUFFIX,apple-relay.fastly-edge.com"
             echo "DOMAIN-SUFFIX,apple-relay.cloudflare.com"
@@ -128,17 +170,8 @@ jobs:
             echo "DOMAIN-SUFFIX,cp4.cloudflare.com"
             echo "DOMAIN-SUFFIX,gspe1-ssl.ls.apple.com"
             echo "DOMAIN-SUFFIX,apps.mzstatic.com"
-            echo "DOMAIN-SUFFIX,anthropic.com"
-            echo "DOMAIN-SUFFIX,claude.ai"
-            echo "DOMAIN-SUFFIX,claude.com"
-            echo "DOMAIN-SUFFIX,clau.de"
-            echo "DOMAIN-SUFFIX,claudemcpclient.com"
-            echo "DOMAIN-SUFFIX,claudemcpcontent.com"
-            echo "DOMAIN-SUFFIX,claudeusercontent.com"
-            echo "DOMAIN,servd-anthropic-website.b-cdn.net"
-            echo "DOMAIN,anthropic.com.cdn.cloudflare.net"
+            # OpenAI and Anthropic supplements
             echo "DOMAIN,anthropic.auth0.com"
-            echo "DOMAIN,anthropic-com.ghost.io"
             echo "DOMAIN-SUFFIX,sentry.io"
             echo "DOMAIN-SUFFIX,statsigapi.net"
             echo "DOMAIN,browser-intake-us5-datadoghq.com"
@@ -147,11 +180,13 @@ jobs:
             echo "DOMAIN-SUFFIX,intercom.io"
             echo "DOMAIN-SUFFIX,intercomcdn.com"
             echo "DOMAIN,cdn.usefathom.com"
-            echo "DOMAIN-SUFFIX,suno.ai"
-            echo "DOMAIN-SUFFIX,suno.com"
             echo "IP-CIDR,160.79.104.0/21,no-resolve"
             echo "IP-CIDR6,2607:6bc0::/32,no-resolve"
             echo "IP-ASN,399358,no-resolve"
+            # Suno
+            echo "DOMAIN-SUFFIX,suno.ai"
+            echo "DOMAIN-SUFFIX,suno.com"
+            # Local application paths
             echo "PROCESS-NAME,/Applications/Claude.app/"
             echo "PROCESS-NAME,/Applications/ChatGPT.app/"
             echo "PROCESS-NAME,/Applications/ChatGPT Classic.app/"
@@ -173,10 +208,13 @@ jobs:
           echo "# CN Rules - Fetched on $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S GMT+8')" > Rule/CN.list
           echo "" >> Rule/CN.list
           {
+            cat "$RUNNER_TEMP/magicrule/LoyalsoldierDirect.list"
             cat "$RUNNER_TEMP/magicrule/China.list"
             cat "$RUNNER_TEMP/magicrule/ChinaIPs.list"
             cat "$RUNNER_TEMP/magicrule/MeiTuan.list"
             cat "$RUNNER_TEMP/magicrule/WeChat.list"
+            cat "$RUNNER_TEMP/magicrule/Baidu.list"
+            cat "$RUNNER_TEMP/magicrule/DouYin.list"
           } | grep -v '^#' | sort | uniq >> Rule/CN.list
 
       - name: Fetch and Format Google Rules
@@ -708,6 +746,64 @@ jobs:
               return { ok: true, json: async () => ({ status: 'ok', data: { query_time: 'new', prefixes: { v4: { originating: ['192.0.2.0/24'] }, v6: { originating: ['2001:db8::/32'] } } } }) };
             });
             assert.deepEqual(result, old);
+          });
+
+          test('domestic AI and mainland sites route directly before generic proxies', () => {
+            const root = process.env.GITHUB_WORKSPACE || process.cwd();
+            const sources = readSources(path.join(root, 'Rule'));
+            const matches = ([kind, value], host) => {
+              if (kind === 'AND') return value.every(child => matches(child, host));
+              if (kind === 'OR') return value.some(child => matches(child, host));
+              if (kind === 'DOMAIN') return host === value;
+              if (kind === 'DOMAIN-SUFFIX') return host === value || host.endsWith('.' + value);
+              if (kind === 'DOMAIN-KEYWORD') return host.includes(value);
+              return false;
+            };
+            const cases = [
+              ...[
+                'chat.deepseek.com', 'api.deepseek.com', 'files.deepseeksvc.com',
+                'www.doubao.com', 'www.kimi.com', 'api.moonshot.cn', 'qianwen.com',
+                'chatglm.cn', 'yuanbao.tencent.com', 'ernie.baidu.com',
+                'dashscope.aliyuncs.com', 'api.minimaxi.com',
+                'coze.cn', 'siliconflow.cn', 'modelscope.cn', 'zhipuai.cn',
+                'qwen.ai', 'api.z.ai', 'api.minimax.io', 'api.moonshot.ai',
+                'api.kimi.ai', 'dashscope-intl.aliyuncs.com',
+                'www.baidu.com', 'pan.baidu.com', 'bceimg.com', 'aicdn.work',
+                'bfe-networks.com', 'www.douyin.com', 'video.douyinvod.com',
+                'video.douyincdn.com', 'www.taobao.com', 'pay.alipay.com',
+              ].map(host => [host, 'DIRECT']),
+              ...[
+                'chatgpt.com', 'claude.ai', 'gemini.google.com', 'grok.com', 'muse.ai',
+                'copilot.microsoft.com', 'api.githubcopilot.com', 'copilot.cloud.microsoft',
+                'api.groq.com', 'perplexity.ai', 'pplx.ai', 'grok.x.com',
+                'api.cursor.com', 'codeium.com', 'windsurf.com', 'grazie.ai',
+                'huggingface.co', 'hf.co', 'poe.com', 'coze.com', 'trae.ai',
+                'manus.im', 'static.manuscdn.com', 'api.mistral.ai', 'midjourney.com',
+                'suno.com', 'meta.ai', 'guzzoni.apple.com',
+              ].map(host => [host, 'Intelligence']),
+              ...[
+                'www.facebook.com', 'www.instagram.com', 'www.youtube.com',
+                'www.netflix.com', 'www.reddit.com', 'notdeepseek.com',
+                'deepseek.com.attacker.example',
+              ].map(host => [host, 'Proxy']),
+            ];
+            for (const [file, pattern] of [
+              ['Surge.conf', /^RULE-SET,http:\/\/river\/([^,]+),([^,]+)/],
+              ['loon.lcf', /^https:\/\/raw\.githubusercontent\.com\/Reukix\/ukix\/main\/Rule\/([^,]+)\.list,\s*policy=([^,]+)/],
+            ]) {
+              const routes = fs.readFileSync(path.join(root, file), 'utf8').split(/\r?\n/)
+                .map(line => line.trim().match(pattern)).filter(Boolean)
+                .map(([, name, policy]) => [name + '.list', policy]);
+              assert.ok(routes.length, `no rule sets found in ${file}`);
+              for (const [host, expected] of cases) {
+                const match = routes.find(([name]) => {
+                  const rows = sources.get(name);
+                  assert.ok(rows, `missing ${name} referenced by ${file}`);
+                  return rows.some(row => matches(row[2], host));
+                });
+                assert.equal(match?.[1] ?? 'Proxy', expected, `${file}: ${host}`);
+              }
+            }
           });
           TEST_JS
           node --test "$work/convert.test.mjs"
