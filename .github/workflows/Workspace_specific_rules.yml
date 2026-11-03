@@ -58,7 +58,7 @@ jobs:
             'Discord', 'China', 'ChinaIPs',
             'MeiTuan', 'WeChat', 'Baidu', 'DouYin', 'Google', 'Twitter', 'GitHub', 'Spotify',
             'Telegram', 'Global', 'TikTok', 'PayPal', 'XiaoHongShu',
-            'Speedtest', 'Binance', 'OKX',
+            'Speedtest', 'Binance', 'OKX', 'Cloudflare',
           ];
           const directory = path.join(process.env.RUNNER_TEMP, 'magicrule');
           fs.mkdirSync(directory, { recursive: true });
@@ -280,6 +280,7 @@ jobs:
           echo "" >> Rule/Proxy.list
           {
             cat "$RUNNER_TEMP/magicrule/Global.list"
+            cat "$RUNNER_TEMP/magicrule/Cloudflare.list"
             echo "DOMAIN-KEYWORD,browserleaks"
             echo "DOMAIN-SUFFIX,net.coffee"
           } | grep -v '^#' | sort | uniq >> Rule/Proxy.list
@@ -784,7 +785,9 @@ jobs:
               ...[
                 'www.facebook.com', 'www.instagram.com', 'www.youtube.com',
                 'www.netflix.com', 'www.reddit.com', 'notdeepseek.com',
-                'deepseek.com.attacker.example',
+                'deepseek.com.attacker.example', 'dash.cloudflare.com',
+                'developers.cloudflare.com', 'demo.workers.dev', 'demo.pages.dev',
+                'static.r2.dev', 'cloudflare-dns.com',
               ].map(host => [host, 'Proxy']),
             ];
             for (const [file, pattern] of [

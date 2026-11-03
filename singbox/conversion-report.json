@@ -406,82 +406,82 @@
       ]
     },
     "Proxy.list": {
-      "source_sha256": "7ac7030602aedbd6dca8fda57a6995c7ddde33c97fdcd91c3dfb9c7eada4e8ae",
-      "source_rules": 24429,
+      "source_sha256": "44345dcdd67ffe49585cf647d7496f634b5ed2b6c3dcb3a10687c6c3ead2533c",
+      "source_rules": 24474,
       "output_rules": 7,
       "warnings": [
         {
-          "line": 24418,
+          "line": 24463,
           "rule": "PROCESS-NAME,com.apple.Maps",
           "notes": [
             "package-like process mapped to process_name OR package_name"
           ]
         },
         {
-          "line": 24419,
+          "line": 24464,
           "rule": "PROCESS-NAME,com.apple.geod",
           "notes": [
             "package-like process mapped to process_name OR package_name"
           ]
         },
         {
-          "line": 24423,
+          "line": 24468,
           "rule": "USER-AGENT,Duolingo*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24424,
+          "line": 24469,
           "rule": "USER-AGENT,OneDrive*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24425,
+          "line": 24470,
           "rule": "USER-AGENT,PayPal*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24426,
+          "line": 24471,
           "rule": "USER-AGENT,Roam*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24427,
+          "line": 24472,
           "rule": "USER-AGENT,TwDramas",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24428,
+          "line": 24473,
           "rule": "USER-AGENT,WhatsApp*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24429,
+          "line": 24474,
           "rule": "USER-AGENT,battleroyale*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24430,
+          "line": 24475,
           "rule": "USER-AGENT,com.apple.trustd*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24431,
+          "line": 24476,
           "rule": "USER-AGENT,hearthstone*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
@@ -489,7 +489,7 @@
         },
         {
           "kind": "no-resolve",
-          "occurrences": 84,
+          "occurrences": 106,
           "note": "DNS resolution behavior must be configured by the consumer"
         }
       ]
