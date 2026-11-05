@@ -1,4 +1,4 @@
-# TikTok Rules - Fetched on 2026-11-04 07:52:04 GMT+8
+# TikTok Rules - Fetched on 2026-11-05 08:10:08 GMT+8
 
 DOMAIN,lf16-effectcdn.byteeffecttos-g.com
 DOMAIN,lf16-pkgcdn.pitaya-clientai.com
@@ -49,11 +49,14 @@ DOMAIN-SUFFIX,tiktokglobalshopv.com
 DOMAIN-SUFFIX,tiktokminis.us
 DOMAIN-SUFFIX,tiktokmusic.app
 DOMAIN-SUFFIX,tiktokrow-cdn.com
+DOMAIN-SUFFIX,tiktokshop.com
+DOMAIN-SUFFIX,tiktokstaticb.com
 DOMAIN-SUFFIX,tiktokv.com
 DOMAIN-SUFFIX,tiktokv.com.edgekey.net
 DOMAIN-SUFFIX,tiktokv.com.edgesuite.net
 DOMAIN-SUFFIX,tiktokv.eu
 DOMAIN-SUFFIX,tiktokv.us
+DOMAIN-SUFFIX,tiktokvapp.com
 DOMAIN-SUFFIX,tiktokw.eu
 DOMAIN-SUFFIX,tiktokw.us
 DOMAIN-SUFFIX,trae.ai
