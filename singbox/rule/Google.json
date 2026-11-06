@@ -1201,11 +1201,6 @@
       ]
     },
     {
-      "process_name": [
-        "GoogleDriveFS.exe"
-      ]
-    },
-    {
       "type": "logical",
       "mode": "or",
       "rules": [

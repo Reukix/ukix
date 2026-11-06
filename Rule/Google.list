@@ -1,4 +1,4 @@
-# Google Rules - Fetched on 2026-11-06 07:57:06 GMT+8
+# Google Rules - Fetched on 2026-11-07 07:39:49 GMT+8
 
 DOMAIN,2mdn-cn.net
 DOMAIN,2mdn.net
@@ -1183,7 +1183,6 @@ DOMAIN-SUFFIX,zukunftswerkstatt.de
 DOMAIN-SUFFIX,zynamics.com
 IP-CIDR,173.194.0.0/16,no-resolve
 IP-CIDR,74.125.0.0/16,no-resolve
-PROCESS-NAME,GoogleDriveFS.exe
 PROCESS-NAME,com.android.vending
 PROCESS-NAME,com.google.android.gms
 PROCESS-NAME,com.google.android.gsf

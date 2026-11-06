@@ -251,17 +251,11 @@
     {
       "process_name": [
         "ChatGPT",
-        "ChatGPT.exe",
         "Claude",
-        "Claude.exe",
         "Codex",
-        "Codex.exe",
         "chatgpt",
         "claude",
-        "claude.exe",
-        "codex",
-        "codex.exe",
-        "cowork-svc.exe"
+        "codex"
       ]
     },
     {

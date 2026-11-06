@@ -1,4 +1,4 @@
-# Intelligence Rules - Fetched on 2026-11-06 07:57:06 GMT+8
+# Intelligence Rules - Fetched on 2026-11-07 07:39:49 GMT+8
 
 DOMAIN,ai.google.dev
 DOMAIN,alkalicore-pa.clients6.google.com
@@ -237,14 +237,8 @@ PROCESS-NAME,/Applications/Claude.app/
 PROCESS-NAME,/opt/homebrew/bin/claude
 PROCESS-NAME,/opt/homebrew/bin/codex
 PROCESS-NAME,ChatGPT
-PROCESS-NAME,ChatGPT.exe
 PROCESS-NAME,Claude
-PROCESS-NAME,Claude.exe
 PROCESS-NAME,Codex
-PROCESS-NAME,Codex.exe
 PROCESS-NAME,chatgpt
 PROCESS-NAME,claude
-PROCESS-NAME,claude.exe
 PROCESS-NAME,codex
-PROCESS-NAME,codex.exe
-PROCESS-NAME,cowork-svc.exe
