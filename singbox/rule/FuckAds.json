@@ -975,6 +975,11 @@
       ]
     },
     {
+      "domain_regex": [
+        "(?i)^pcdn\\.biliapi\\.net$"
+      ]
+    },
+    {
       "domain_suffix": [
         "1rtb.com",
         "a.market.xiaomi.com",
@@ -988,10 +993,14 @@
         "data.hicloud.com",
         "dreport.meituan.net",
         "mads.meituan.com",
+        "mcdn.bilivideo.cn",
+        "mcdn.bilivideo.com",
         "meituan.xn",
         "meituan.yoga",
         "meituangov.cn",
+        "mountaintoys.cn",
         "report.meituan.com",
+        "szbdyd.com",
         "ubixioe.com",
         "unityads.unity3d.com",
         "vlion.cn",

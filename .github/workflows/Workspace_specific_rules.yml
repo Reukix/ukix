@@ -256,6 +256,11 @@ jobs:
             echo "DOMAIN-SUFFIX,mads.meituan.com"
             echo "DOMAIN-SUFFIX,dreport.meituan.net"
             echo "DOMAIN,flowplus.meituan.net"
+            echo "DOMAIN-WILDCARD,pcdn.biliapi.net"
+            echo "DOMAIN-SUFFIX,mcdn.bilivideo.cn"
+            echo "DOMAIN-SUFFIX,mcdn.bilivideo.com"
+            echo "DOMAIN-SUFFIX,szbdyd.com"
+            echo "DOMAIN-SUFFIX,mountaintoys.cn"
             echo "IP-CIDR,103.37.155.60/32, no-resolve"
           } | grep -v '^#' | sort | uniq >> Rule/FuckAds.list
 
@@ -527,6 +532,12 @@ jobs:
               if (/\s/.test(value)) throw new Error('whitespace in domain value');
               return { [FIELDS[kind]]: [value] };
             }
+            if (kind === 'DOMAIN-WILDCARD') {
+              if (/\s/.test(value)) throw new Error('whitespace in domain wildcard');
+              if (/[\[\]\\]/.test(value)) throw new Error('domain wildcard character classes and escapes are unsupported');
+              const pattern = value.replace(/[.*+?^${}()|[\]\\]/g, char => char === '*' ? '.*' : char === '?' ? '.' : '\\' + char);
+              return { domain_regex: ['(?i)^' + pattern + '$'] };
+            }
             if (kind === 'IP-CIDR' || kind === 'IP-CIDR6') return { ip_cidr: [normalizeCIDR(value, kind === 'IP-CIDR' ? 4 : 6)] };
             if (kind === 'IP-ASN') {
               const prefixes = networks(asns[asnKey(value)]?.prefixes ?? []);
@@ -576,9 +587,12 @@ jobs:
             return node[0] === 'IP-ASN' ? [asnKey(node[1])] : [];
           }
 
-          export async function refreshAsns(required, old, fetcher = fetch) {
+          export async function refreshAsns(required, old, fetcher = fetch, pause = sleep) {
             const entries = {};
             for (const asn of [...required].sort((a, b) => Number(a) - Number(b))) {
+              const saved = old.version === 1 && old.provider === PROVIDER ? old.asns?.[asn] : null;
+              const previous = typeof saved?.query_time === 'string' && saved.query_time &&
+                Array.isArray(saved.prefixes) && saved.prefixes.length ? saved : null;
               for (let attempt = 0; attempt < 3; attempt++) {
                 try {
                   const response = await fetcher(`${PROVIDER}?resource=AS${asn}&list_prefixes=true&types=o`, { signal: AbortSignal.timeout(45000) });
@@ -588,13 +602,20 @@ jobs:
                   const data = payload.data;
                   const prefixes = networks([...data.prefixes.v4.originating, ...data.prefixes.v6.originating]);
                   if (!prefixes.length || !data.query_time) throw new Error(`empty or invalid ASN response: AS${asn}`);
-                  const previous = old.asns?.[asn];
                   entries[asn] = JSON.stringify(previous?.prefixes) === JSON.stringify(prefixes) ? previous : { query_time: data.query_time, prefixes };
                   console.log(`AS${asn}: ${prefixes.length} prefixes`);
                   break;
                 } catch (error) {
-                  if (attempt === 2) throw error;
-                  await sleep((attempt + 1) * 1000);
+                  if (attempt === 2) {
+                    if (!previous) throw new Error(`AS${asn}: ${error.message}; no usable saved ASN snapshot`);
+                    let prefixes;
+                    try { prefixes = networks(previous.prefixes); }
+                    catch (snapshotError) { throw new Error(`AS${asn}: ${error.message}; invalid saved ASN snapshot: ${snapshotError.message}`); }
+                    entries[asn] = { ...previous, prefixes };
+                    console.warn(`AS${asn}: refresh failed (${error.message}); using saved snapshot from ${previous.query_time} (${prefixes.length} prefixes)`);
+                    break;
+                  }
+                  await pause((attempt + 1) * 1000);
                 }
               }
             }
@@ -683,6 +704,29 @@ jobs:
               [{ domain: ['a.test'] }, { process_name: ['app'] }]);
           });
 
+          test('domain wildcards preserve exact boundaries, star and question mark matching', () => {
+            const matches = (pattern, host) => {
+              const regex = leaf('DOMAIN-WILDCARD,' + pattern).domain_regex[0];
+              assert.ok(regex.startsWith('(?i)'));
+              return new RegExp(regex.slice(4), 'i').test(host);
+            };
+            for (const [host, expected] of [
+              ['pcdn.biliapi.net', true], ['PCDN.BILIAPI.NET', true],
+              ['x.pcdn.biliapi.net', false], ['pcdn.biliapi.net.evil.test', false],
+              ['pcdnXbiliapiXnet', false],
+            ]) assert.equal(matches('pcdn.biliapi.net', host), expected, host);
+            for (const [host, expected] of [
+              ['cdn1.a.example.com', true], ['cdn1.a.b.example.com', true],
+              ['cdn1..example.com', true], ['cdn.a.example.com', false],
+              ['cdn12.a.example.com', false], ['cdn1.a.example.com.evil.test', false],
+            ]) assert.equal(matches('cdn?.*.example.com', host), expected, host);
+            assert.ok(matches('cdn+.example.com', 'cdn+.example.com'));
+            assert.ok(!matches('cdn+.example.com', 'cdnn.example.com'));
+            for (const pattern of ['cdn[12].example.com', 'cdn\\?.example.com', 'cdn .example.com']) {
+              assert.throws(() => leaf('DOMAIN-WILDCARD,' + pattern));
+            }
+          });
+
           test('nested Boolean matching preserves AND / OR', () => {
             const rule = leaf('AND,((DOMAIN-KEYWORD,api-),(OR,((DOMAIN-SUFFIX,a.test),(DOMAIN-SUFFIX,b.test))))');
             function matches(node, domain) {
@@ -747,6 +791,80 @@ jobs:
               return { ok: true, json: async () => ({ status: 'ok', data: { query_time: 'new', prefixes: { v4: { originating: ['192.0.2.0/24'] }, v6: { originating: ['2001:db8::/32'] } } } }) };
             });
             assert.deepEqual(result, old);
+          });
+
+          test('ASN refresh retries HTTP errors and preserves the saved snapshot', async t => {
+            const old = { version: 1, provider: PROVIDER, asns: { 59930: { query_time: 'old', prefixes: ['192.0.2.0/24', '2001:db8::/32'] } } };
+            const original = structuredClone(old);
+            const warnings = t.mock.method(console, 'warn', () => {});
+            const delays = [];
+            let attempts = 0;
+            const result = await refreshAsns(new Set(['59930']), old, async () => {
+              attempts++;
+              return { ok: false, status: 500 };
+            }, async delay => { delays.push(delay); });
+            assert.equal(attempts, 3);
+            assert.deepEqual(delays, [1000, 2000]);
+            assert.deepEqual(result, old);
+            assert.deepEqual(old, original);
+            assert.equal(warnings.mock.callCount(), 1);
+            assert.match(warnings.mock.calls[0].arguments[0], /AS59930:.*HTTP 500.*using saved snapshot from old/);
+          });
+
+          test('ASN refresh falls back on timeouts, invalid JSON and invalid upstream data', async t => {
+            const old = { version: 1, provider: PROVIDER, asns: { 59930: { query_time: 'old', prefixes: ['192.0.2.0/24'] } } };
+            const warnings = t.mock.method(console, 'warn', () => {});
+            const responses = [
+              async () => { throw new DOMException('request timed out', 'TimeoutError'); },
+              async () => ({ ok: true, json: async () => { throw new SyntaxError('invalid JSON'); } }),
+              async () => ({ ok: true, json: async () => ({ status: 'error' }) }),
+              async () => ({ ok: true, json: async () => ({ status: 'ok', data: {} }) }),
+              async () => ({ ok: true, json: async () => ({ status: 'ok', data: { query_time: 'new', prefixes: { v4: { originating: [] }, v6: { originating: [] } } } }) }),
+              async () => ({ ok: true, json: async () => ({ status: 'ok', data: { query_time: 'new', prefixes: { v4: { originating: ['invalid'] }, v6: { originating: [] } } } }) }),
+            ];
+            for (const fetcher of responses) {
+              const result = await refreshAsns(new Set(['59930']), old, fetcher, async () => {});
+              assert.deepEqual(result, old);
+            }
+            assert.equal(warnings.mock.callCount(), responses.length);
+          });
+
+          test('ASN refresh continues refreshing other ASNs after a fallback', async t => {
+            const old = { version: 1, provider: PROVIDER, asns: {
+              44907: { query_time: 'old-failed', prefixes: ['192.0.2.0/24'] },
+              59930: { query_time: 'old-healthy', prefixes: ['198.51.100.0/24'] },
+            } };
+            t.mock.method(console, 'warn', () => {});
+            const requests = [];
+            const result = await refreshAsns(new Set(['59930', '44907']), old, async url => {
+              const asn = new URL(url).searchParams.get('resource');
+              requests.push(asn);
+              if (asn === 'AS44907') return { ok: false, status: 503 };
+              return { ok: true, json: async () => ({ status: 'ok', data: { query_time: 'new', prefixes: { v4: { originating: ['203.0.113.0/24'] }, v6: { originating: [] } } } }) };
+            }, async () => {});
+            assert.deepEqual(requests, ['AS44907', 'AS44907', 'AS44907', 'AS59930']);
+            assert.deepEqual(result.asns['44907'], old.asns['44907']);
+            assert.deepEqual(result.asns['59930'], { query_time: 'new', prefixes: ['203.0.113.0/24'] });
+          });
+
+          test('ASN refresh fails if no valid saved snapshot is available', async () => {
+            const entry = { query_time: 'old', prefixes: ['192.0.2.0/24'] };
+            const snapshots = [
+              {},
+              { version: 2, provider: PROVIDER, asns: { 59930: entry } },
+              { version: 1, provider: 'https://invalid.test', asns: { 59930: entry } },
+              { version: 1, provider: PROVIDER, asns: {} },
+              ...[
+                { prefixes: entry.prefixes },
+                { query_time: 123, prefixes: entry.prefixes },
+                { query_time: 'old', prefixes: [] },
+                { query_time: 'old', prefixes: ['invalid'] },
+              ].map(saved => ({ version: 1, provider: PROVIDER, asns: { 59930: saved } })),
+            ];
+            for (const old of snapshots) {
+              await assert.rejects(refreshAsns(new Set(['59930']), old, async () => ({ ok: false, status: 500 }), async () => {}),
+                /AS59930:.*HTTP 500; (?:no usable|invalid) saved ASN snapshot/);
+            }
           });
 
           test('domestic AI and mainland sites route directly before generic proxies', () => {

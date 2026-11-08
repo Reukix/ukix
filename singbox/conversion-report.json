@@ -264,9 +264,9 @@
       "warnings": []
     },
     "FuckAds.list": {
-      "source_sha256": "8a076426a1b0293b1c72fea3526bec23893ebd0003e8c76ff80c7a390bf2f31f",
-      "source_rules": 988,
-      "output_rules": 4,
+      "source_sha256": "4f61293032eb26d9e77e94b9f9fd7ef6601aa5bab71596ea8319ef3ccb9ec456",
+      "source_rules": 993,
+      "output_rules": 5,
       "warnings": [
         {
           "kind": "no-resolve",
