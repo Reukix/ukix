@@ -1,4 +1,4 @@
-# Intelligence Rules - Fetched on 2026-11-10 09:54:19 GMT+8
+# Intelligence Rules - Fetched on 2026-11-11 07:54:39 GMT+8
 
 DOMAIN,ai.google.dev
 DOMAIN,alkalicore-pa.clients6.google.com
@@ -30,11 +30,13 @@ DOMAIN,gateway.bingviz.microsoft.net
 DOMAIN,gateway.bingviz.microsoftapp.net
 DOMAIN,geminiweb-pa.clients.google.com
 DOMAIN,geminiweb-pa.clients6.google.com
+DOMAIN,http-intake.logs.us5.datadoghq.com
 DOMAIN,in.appcenter.ms
 DOMAIN,location.microsoft.com
 DOMAIN,makersuite.google.com
 DOMAIN,notebooklm-pa.googleapis.com
 DOMAIN,notebooklm.googleapis.com
+DOMAIN,o1158394.ingest.us.sentry.io
 DOMAIN,o33249.ingest.sentry.io
 DOMAIN,o33249.ingest.us.sentry.io
 DOMAIN,odc.officeapps.live.com
