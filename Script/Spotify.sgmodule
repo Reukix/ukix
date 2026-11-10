@@ -1,5 +1,6 @@
 #!name=Spotify Premium
 #!desc=适配 Spotify 9.1.98 的 Nebula / Remote Config 接口，兼容旧版配置接口
+#!category=去广告
 #!date=2026-11-10
 
 [Rule]

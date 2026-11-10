@@ -1,0 +1,21 @@
+#!name=京东去广告
+#!desc=兼容 URL 参数与 POST 路由、明文和 base64 响应，过滤开屏配置和推广楼层；正常业务响应原样放行。
+#!category=去广告
+#!date=2026-11-10
+
+[Rule]
+URL-REGEX,"^http:\/\/\w{32}\.jddebug\.com\/diagnose\?",REJECT,extended-matching
+
+[Body Rewrite]
+http-response-jq (?i)^https:\/\/api\.m\.jd\.com\/client\.action\?(?:[^#?&]+&)*functionId=basicConfig 'if ((getpath(["data","JDMessage","socketmonitor"]) // {}) | has("isSocketEstablishedAhead")) then (setpath(["data","JDMessage","socketmonitor","isSocketEstablishedAhead"]; 0)) else . end'
+http-response-jq (?i)^https:\/\/api\.m\.jd\.com\/client\.action\?(?:[^#?&]+&)*functionId=basicConfig 'if ((getpath(["data","JDMessage","socketmonitor"]) // {}) | has("isSocketReport")) then (setpath(["data","JDMessage","socketmonitor","isSocketReport"]; 0)) else . end'
+http-response-jq (?i)^https:\/\/api\.m\.jd\.com\/client\.action\?(?:[^#?&]+&)*functionId=basicConfig 'if ((getpath(["data","JDHttpToolKit","httpdns"]) // {}) | has("httpdns")) then (setpath(["data","JDHttpToolKit","httpdns","httpdns"]; 0)) else . end'
+
+[Map Local]
+(?i)^https:\/\/api\.m\.jd\.com\/client\.action\?(?:[^#?&]+&)*functionId=(searchBoxWord|stationPullService|uniformRecommend[06]) data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+[Script]
+jd-adblock = type=http-response, pattern=(?i)^https:\/\/api\.m\.jd\.com(?::443)?\/client\.action(?:\?|$), script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/jd.js?v=a8c2ac0c50f1, requires-body=true, max-size=2097152
+
+[MITM]
+hostname = %APPEND% api.m.jd.com
