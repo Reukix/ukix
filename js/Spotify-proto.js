@@ -16504,73 +16504,93 @@ const blacklist = [
     },
   },
 ];
-const resStatus = $response.status ? $response.status : $response.statusCode;
+const resStatus = Number($response.status || $response.statusCode);
 if (resStatus !== 200) {
-  console.log(`$response.status不为200:${resStatus}`);
+  console.log(`spotify-proto: response status ${resStatus}, passthrough`);
   $done({});
 } else {
-  const url = $request.url;
-  const method = $request.method;
-  const postMethod = "POST";
-  const isQuanX = typeof $task !== "undefined";
-  const binaryBody = isQuanX
-    ? new Uint8Array($response.bodyBytes)
-    : $response.body;
-  let accountAttributesMapObj;
-  let assignedValuesMapObj;
-  let body;
-  if (url.includes("bootstrap/v1/bootstrap") && method === postMethod) {
-    let bootstrapResponseType =
-      protobuf.Root.fromJSON(spotifyJson).lookupType("BootstrapResponse");
-    let bootstrapResponseObj = bootstrapResponseType.decode(binaryBody);
-    accountAttributesMapObj =
-      bootstrapResponseObj.ucsResponseV0.success.customization.success
-        .accountAttributesSuccess.accountAttributes;
-    assignedValuesMapObj =
-      bootstrapResponseObj.ucsResponseV0.success.customization.success
-        .resolveSuccess.configuration.assignedValues;
-    if (bootstrapResponseObj.trialsFacadeResponseV1) {
-      console.log("删除 trialsFacadeResponseV1");
-      delete bootstrapResponseObj.trialsFacadeResponseV1;
-    }
-    processMapObj(accountAttributesMapObj, assignedValuesMapObj);
-    body = bootstrapResponseType.encode(bootstrapResponseObj).finish();
-    console.log("bootstrap");
-  } else if (
-    url.includes("user-customization-service/v1/customize") &&
-    method === postMethod
-  ) {
-    let ucsResponseWrapperType =
-      protobuf.Root.fromJSON(spotifyJson).lookupType("UcsResponseWrapper");
-    let ucsResponseWrapperMessage = ucsResponseWrapperType.decode(binaryBody);
-    accountAttributesMapObj =
-      ucsResponseWrapperMessage.success.accountAttributesSuccess
-        .accountAttributes;
-    assignedValuesMapObj =
-      ucsResponseWrapperMessage.success.resolveSuccess.configuration
-        .assignedValues;
-    processMapObj(accountAttributesMapObj, assignedValuesMapObj);
-    body = ucsResponseWrapperType.encode(ucsResponseWrapperMessage).finish();
-    console.log("customize");
-  } else {
-    $notification.post(
-      "spotify解锁premium",
-      "路径/请求方法匹配错误:",
-      method + "," + url,
+  try {
+    const isQuanX = typeof $task !== "undefined";
+    const binaryBody = isQuanX
+      ? new Uint8Array($response.bodyBytes)
+      : $response.body;
+    const body = patchSpotifyConfiguration(
+      $request.url,
+      $request.method,
+      binaryBody,
     );
+    if (!body) {
+      $done({});
+    } else if (isQuanX) {
+      $done({
+        bodyBytes: body.buffer.slice(
+          body.byteOffset,
+          body.byteOffset + body.byteLength,
+        ),
+      });
+    } else {
+      $done({ body });
+    }
+  } catch (error) {
+    console.log(`spotify-proto: ${error.message || error}, passthrough`);
+    $done({});
   }
-  // console.log(`${body.byteLength}---${body.buffer.byteLength}`);
-  if (isQuanX) {
-    $done({
-      bodyBytes: body.buffer.slice(
-        body.byteOffset,
-        body.byteLength + body.byteOffset,
-      ),
-    });
+}
+
+function patchSpotifyConfiguration(url, method, binaryBody) {
+  const path = url
+    .replace(/^https?:\/\/[^/]+/i, "")
+    .split(/[?#]/)[0]
+    .replace(/\/+$/, "");
+  const root = protobuf.Root.fromJSON(spotifyJson);
+  let type;
+  let message;
+
+  if (path === "/nebula/v1/configuration/attributes" && method === "GET") {
+    type = root.lookupType("AccountAttributesResponse");
+    message = type.decode(binaryBody);
+    if (!Object.keys(message.accountAttributes).length) {
+      throw new Error("nebula response has no account attributes");
+    }
+    modifyAttributes(message.accountAttributes);
+    console.log("spotify-proto 2026.11.10: nebula account attributes patched");
+  } else if (
+    path === "/remote-config-resolver/v3/configuration" && method === "POST"
+  ) {
+    type = root.lookupType("ResolveResponse");
+    message = type.decode(binaryBody);
+    const values = message.configuration?.assignedValues;
+    if (!values?.length) {
+      throw new Error("resolver response has no assigned values");
+    }
+    // New clients ship flags unknown to this script. Keep those server values.
+    overrideAssignedValues(values, true);
+    console.log("spotify-proto 2026.11.10: resolver configuration patched");
+  } else if (path === "/bootstrap/v1/bootstrap" && method === "POST") {
+    type = root.lookupType("BootstrapResponse");
+    message = type.decode(binaryBody);
+    const customization = message.ucsResponseV0.success.customization.success;
+    processMapObj(
+      customization.accountAttributesSuccess.accountAttributes,
+      customization.resolveSuccess.configuration.assignedValues,
+    );
+    delete message.trialsFacadeResponseV1;
+    console.log("spotify-proto 2026.11.10: bootstrap patched");
+  } else if (
+    path === "/user-customization-service/v1/customize" && method === "POST"
+  ) {
+    type = root.lookupType("UcsResponseWrapper");
+    message = type.decode(binaryBody);
+    processMapObj(
+      message.success.accountAttributesSuccess.accountAttributes,
+      message.success.resolveSuccess.configuration.assignedValues,
+    );
+    console.log("spotify-proto 2026.11.10: customize patched");
   } else {
-    console.log(`eevee-spot-done`);
-    $done({ body });
+    console.log(`spotify-proto: unsupported request ${method} ${path}`);
+    return;
   }
+  return type.encode(message).finish();
 }
 
 function modifyAssignedValues(values) {
@@ -16692,7 +16712,7 @@ function modifyAttributes(attributes) {
 //   console.log(`成功覆盖${num}个字段`);
 // }
 
-function overrideAssignedValues(target) {
+function overrideAssignedValues(target, preserveUnspecified = false) {
   console.log("正在进行合并覆盖......");
 
   let numAdded = 0;
@@ -16732,11 +16752,11 @@ function overrideAssignedValues(target) {
       n++;
       continue;
     } // blacklist 过滤
-    // if (!map.has(key)) {
-    //   result.push(item);
-    //   map.set(key, true);
-    //   numAdded++;
-    // }
+    if (preserveUnspecified && !map.has(key)) {
+      result.push(item);
+      map.set(key, true);
+      numAdded++;
+    }
   }
 
   // ③ 覆盖回 target
