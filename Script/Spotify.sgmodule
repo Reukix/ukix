@@ -15,11 +15,13 @@ http-request ^https:\/\/(?:[A-Za-z0-9-]+-)?spclient(?:\.wg)?\.spotify\.com(?::44
 ^https:\/\/.*-spclient\.spotify\.com(:443)?\/pam-view-service\/ - reject
 ^https:\/\/.*37i9dQZF1EYkqdzj48dyYq - reject
 
+[Map Local]
+^https:\/\/(.*-spclient\.spotify\.com(:443)?|spclient\.wg\.spotify\.com)\/gabo-receiver-service data-type=text data="" status-code=200 header="Cache-Control:no-cache|Content-Length:0"
+
 [Script]
 spotify-home = type=http-response,pattern=^https:\/\/(?:[A-Za-z0-9-]+-)?spclient(?:\.wg)?\.spotify\.com(?::443)?\/casita\/v1\/home\/default\/?(?:\?[^#]*)?$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-home.js?v=0e4692c6dc47
 spotify-search = type=http-response,pattern=^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/browsita\/v.\/browse,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-search.js
 spotify-scroll = type=http-response,pattern=^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/scrollsita\/v.\/scroll\/spotify,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-scroll.js
-spotify-gabo = type=http-request,pattern=^https:\/\/(.*-spclient\.spotify\.com(:443)?|spclient\.wg\.spotify\.com)\/gabo-receiver-service,requires-body=0,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-gabo.js
 spotify-proto = type=http-response,pattern=^https:\/\/(?:[A-Za-z0-9-]+-)?spclient(?:\.wg)?\.spotify\.com(?::443)?\/(?:bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize|nebula\/v1\/configuration\/attributes|remote-config-resolver\/v3\/configuration)\/?(?:\?[^#]*)?$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-proto.js,script-update-interval=0
 
 [MITM]
