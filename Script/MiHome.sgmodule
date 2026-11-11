@@ -1,0 +1,12 @@
+#!name=米家去广告
+#!desc=移除米家开屏、我的页面轮播推广及底栏活动图标
+#!category=去广告
+#!date=2026-11-11
+
+[Body Rewrite]
+http-response-jq ^https:\/\/home\.mi\.com(?::443)?\/cgi-op\/api\/v1\/recommendation\/openingBanner\/?(?:\?[^#]*)?$ 'if (try (.code == 0 and (.data.list | type) == "array") catch false) then .data.list = [] else . end'
+http-response-jq ^https:\/\/home\.mi\.com(?::443)?\/cgi-op\/api\/v1\/recommendation\/myTab\/?(?:\?[^#]*)?$ 'if (try (.code == 0 and (.data.banners | type) == "array") catch false) then .data.banners = [] else . end'
+http-response-jq ^https:\/\/home\.mi\.com(?::443)?\/cgi-op\/api\/v1\/recommendation\/mihome\/bottom\/tab\/?(?:\?[^#]*)?$ 'if (try (.code == 0 and (.data.list | type) == "array") catch false) then .data.list = [] else . end'
+
+[MITM]
+hostname = %APPEND% home.mi.com
