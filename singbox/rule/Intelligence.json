@@ -162,6 +162,7 @@
         "grazie.aws.intellij.net",
         "grok.com",
         "grok.x.com",
+        "grokbot.com",
         "grokipedia.com",
         "groq.com",
         "gspe1-ssl.ls.apple.com",
@@ -247,6 +248,8 @@
         "2607:6bc0:11::/48",
         "2607:6bc0::/32",
         "2607:6bc0::/48",
+        "48.101.196.0/24",
+        "48.101.197.0/24",
         "64.23.132.171/32"
       ]
     },

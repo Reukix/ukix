@@ -1,4 +1,4 @@
-# Intelligence Rules - Fetched on 2026-11-13 07:58:18 GMT+8
+# Intelligence Rules - Fetched on 2026-11-14 08:11:06 GMT+8
 
 DOMAIN,ai.google.dev
 DOMAIN,alkalicore-pa.clients6.google.com
@@ -151,6 +151,7 @@ DOMAIN-SUFFIX,grazie.ai
 DOMAIN-SUFFIX,grazie.aws.intellij.net
 DOMAIN-SUFFIX,grok.com
 DOMAIN-SUFFIX,grok.x.com
+DOMAIN-SUFFIX,grokbot.com
 DOMAIN-SUFFIX,grokipedia.com
 DOMAIN-SUFFIX,groq.com
 DOMAIN-SUFFIX,gspe1-ssl.ls.apple.com

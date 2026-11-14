@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-11-13 07:58:19 GMT+8
+# Proxy Rules - Fetched on 2026-11-14 08:11:07 GMT+8
 
 DOMAIN,3dna.nationbuilder.com
 DOMAIN,a-tiles.locationiq.com
@@ -1387,6 +1387,7 @@ DOMAIN,public-us-pingsx.api.clonoth.com
 DOMAIN,public.hare200.com
 DOMAIN,public.komiic.com
 DOMAIN,public.mocortech.com
+DOMAIN,public.popclip.app
 DOMAIN,public.zoorix.com
 DOMAIN,q676790b.pmhcjk.com
 DOMAIN,qualcomm.sc.omtrdc.net
