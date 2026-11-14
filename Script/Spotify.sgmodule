@@ -1,7 +1,9 @@
 #!name=Spotify Premium
-#!desc=适配 Spotify 9.1.98 的 Nebula / Remote Config 接口及 Casita 首页去广告，兼容旧版接口
+#!desc=会员配置、首页与播放页去广告，集成歌词补全和双语翻译
 #!category=去广告
-#!date=2026-11-11
+#!date=2026-11-14
+#!arguments=Lyrics:"true",Translate:"true",TargetLanguage:"zh-CN"
+#!arguments-desc=Lyrics：启用歌词补全。Translate：启用歌词翻译。TargetLanguage：翻译目标语言，默认 zh-CN。已有官方歌词优先保留；外部歌词按歌名、歌手和时长匹配。更新后请停用其他 Spotify 歌词模块，避免重复处理同一接口。
 
 [Rule]
 AND,((DOMAIN-SUFFIX, spotify.com), (PROTOCOL, QUIC)),REJECT
@@ -21,7 +23,10 @@ http-request ^https:\/\/(?:[A-Za-z0-9-]+-)?spclient(?:\.wg)?\.spotify\.com(?::44
 [Script]
 spotify-home = type=http-response,pattern=^https:\/\/(?:[A-Za-z0-9-]+-)?spclient(?:\.wg)?\.spotify\.com(?::443)?\/casita\/v1\/home\/default\/?(?:\?[^#]*)?$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-home.js?v=0e4692c6dc47
 spotify-search = type=http-response,pattern=^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/browsita\/v.\/browse,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-search.js
-spotify-scroll = type=http-response,pattern=^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/scrollsita\/v.\/scroll\/spotify,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-scroll.js
+spotify-scroll=type=http-response,pattern=^https:\/\/(?:[A-Za-z0-9-]+-)?spclient(?:\.wg)?\.spotify\.com(?::443)?\/scrollsita\/v[0-9]+\/scroll\/spotify:[^?#]+(?:\?[^#]*)?$,requires-body=true,binary-body-mode=true,max-size=2097152,timeout=8,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-lyrics.js?v=caf13ded9c7b,argument=Lyrics={{{Lyrics}}}&Translate={{{Translate}}}&TargetLanguage={{{TargetLanguage}}}
+spotify-lyrics=type=http-response,pattern=^https:\/\/(?:[A-Za-z0-9-]+-)?spclient(?:\.wg)?\.spotify\.com(?::443)?\/color-lyrics\/v2\/track\/[A-Za-z0-9]{22}(?:\/image\/[^/?#]+)?\/?(?:\?[^#]*)?$,requires-body=true,binary-body-mode=true,max-size=2097152,timeout=20,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-lyrics.js?v=caf13ded9c7b,argument=Lyrics={{{Lyrics}}}&Translate={{{Translate}}}&TargetLanguage={{{TargetLanguage}}}
+spotify-lyrics-metadata=type=http-response,pattern=^https:\/\/(?:[A-Za-z0-9-]+-)?spclient(?:\.wg)?\.spotify\.com(?::443)?\/(?:extended-metadata\/v0\/extended-metadata|metadata\/4\/track\/[a-fA-F0-9]{32})(?:\?[^#]*)?$,requires-body=true,binary-body-mode=true,max-size=2097152,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-lyrics.js?v=caf13ded9c7b,argument=Lyrics={{{Lyrics}}}&Translate={{{Translate}}}&TargetLanguage={{{TargetLanguage}}}
+spotify-lyrics-playback=type=http-response,pattern=^https:\/\/(?:[A-Za-z0-9-]+-)?spclient(?:\.wg)?\.spotify\.com(?::443)?\/connect-state\/v1\/devices\/[^/?#]+\/?(?:\?[^#]*)?$,requires-body=true,binary-body-mode=true,max-size=2097152,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-lyrics.js?v=caf13ded9c7b,argument=Lyrics={{{Lyrics}}}&Translate={{{Translate}}}&TargetLanguage={{{TargetLanguage}}}
 spotify-proto = type=http-response,pattern=^https:\/\/(?:[A-Za-z0-9-]+-)?spclient(?:\.wg)?\.spotify\.com(?::443)?\/(?:bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize|nebula\/v1\/configuration\/attributes|remote-config-resolver\/v3\/configuration)\/?(?:\?[^#]*)?$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/Spotify-proto.js,script-update-interval=0
 
 [MITM]

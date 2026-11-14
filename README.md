@@ -28,6 +28,10 @@
 
 `Script/` 和 `js/` 里放的是 Surge 模块和配套脚本，例如 Spotify、URL Redirect、kocowidgets 等。
 
+`Script/Spotify.sgmodule` 已集成独立歌词脚本，默认保留官方歌词，缺失时按歌名、歌手和时长查找网易云／LRCLIB，并支持逐字歌词与双语翻译。参数 `Lyrics` 控制歌词功能，`Translate` 控制翻译，`TargetLanguage` 默认为 `zh-CN`。使用时请停用其他 Spotify 歌词模块，避免同一接口被优先拦截。
+
+歌词接口返回成功不代表客户端一定显示卡片；部分曲目的入口仍可能受 Spotify 本地元数据影响，需要以手机界面结果为准。
+
 ## Snell 脚本
 
 `snell.sh` 是 Snell v5/v6 交互式部署脚本，支持自动检测系统架构、安装依赖、下载服务端、生成配置、创建 systemd 服务，并带有基础管理和多用户管理菜单。
