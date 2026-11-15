@@ -1,4 +1,4 @@
-# CN Rules - Fetched on 2026-11-15 06:52:28 GMT+8
+# CN Rules - Fetched on 2026-11-16 07:19:10 GMT+8
 
 DOMAIN,2mdn-cn.net
 DOMAIN,2mdn.net
@@ -115,6 +115,7 @@ DOMAIN,communities.apple.com
 DOMAIN,config.ubnt.com
 DOMAIN,configuration.apple.com
 DOMAIN,configuration.apple.com.akadns.net
+DOMAIN,configuration.ls.apple.com
 DOMAIN,connectivitycheck.gstatic.com
 DOMAIN,crashlyticsreports-pa.googleapis.com
 DOMAIN,crl-lb.apple.com.akadns.net
@@ -337,10 +338,12 @@ DOMAIN,msdn.download.prss.microsoft.com
 DOMAIN,msdprod-ad.download.prss.microsoft.com
 DOMAIN,msproduct.download.prss.microsoft.com
 DOMAIN,music.apple.com
+DOMAIN,musicstatus.itunes.apple.com
 DOMAIN,musicstatus.music.apple.com
 DOMAIN,mvod.itunes.apple.com
 DOMAIN,myapp.itunes.apple.com
 DOMAIN,myvs.download.prss.microsoft.com
+DOMAIN,mzstorekit.itunes.apple.com
 DOMAIN,np-edge.itunes.apple.com
 DOMAIN,ntp.aliyun.com
 DOMAIN,ntp.tencent.com
@@ -18691,6 +18694,7 @@ DOMAIN-SUFFIX,caps-china.org
 DOMAIN-SUFFIX,capsuleshanghai.com
 DOMAIN-SUFFIX,captain-cro.com
 DOMAIN-SUFFIX,captainbi.com
+DOMAIN-SUFFIX,captive.apple.com
 DOMAIN-SUFFIX,capturetheflag.fun
 DOMAIN-SUFFIX,capvision.com
 DOMAIN-SUFFIX,capwhale.com
@@ -111683,7 +111687,6 @@ IP-CIDR,103.131.138.0/23,no-resolve
 IP-CIDR,103.131.152.0/22,no-resolve
 IP-CIDR,103.131.168.0/22,no-resolve
 IP-CIDR,103.131.176.0/22,no-resolve
-IP-CIDR,103.131.194.0/23,no-resolve
 IP-CIDR,103.131.20.0/22,no-resolve
 IP-CIDR,103.131.224.0/21,no-resolve
 IP-CIDR,103.131.240.0/22,no-resolve
@@ -114973,7 +114976,6 @@ IP-CIDR,112.73.0.0/19,no-resolve
 IP-CIDR,112.73.128.0/17,no-resolve
 IP-CIDR,112.73.222.0/24,no-resolve
 IP-CIDR,112.73.64.0/18,no-resolve
-IP-CIDR,112.73.96.0/19,no-resolve
 IP-CIDR,112.74.0.0/15,no-resolve
 IP-CIDR,112.74.0.0/16,no-resolve
 IP-CIDR,112.8.0.0/13,no-resolve
@@ -118451,7 +118453,6 @@ IP-CIDR,192.23.191.0/24,no-resolve
 IP-CIDR,192.232.34.0/23,no-resolve
 IP-CIDR,192.232.44.0/22,no-resolve
 IP-CIDR,192.232.97.0/24,no-resolve
-IP-CIDR,192.41.192.0/24,no-resolve
 IP-CIDR,192.51.172.0/23,no-resolve
 IP-CIDR,192.51.188.0/24,no-resolve
 IP-CIDR,192.55.46.0/23,no-resolve
@@ -118579,7 +118580,6 @@ IP-CIDR,202.12.17.0/24,no-resolve
 IP-CIDR,202.12.18.0/23,no-resolve
 IP-CIDR,202.12.18.0/24,no-resolve
 IP-CIDR,202.12.2.0/24,no-resolve
-IP-CIDR,202.12.30.0/24,no-resolve
 IP-CIDR,202.12.72.0/24,no-resolve
 IP-CIDR,202.12.84.0/23,no-resolve
 IP-CIDR,202.12.96.0/24,no-resolve
@@ -120648,7 +120648,6 @@ IP-CIDR,211.102.240.0/21,no-resolve
 IP-CIDR,211.102.248.0/24,no-resolve
 IP-CIDR,211.102.80.0/20,no-resolve
 IP-CIDR,211.103.0.0/16,no-resolve
-IP-CIDR,211.120.240.0/21,no-resolve
 IP-CIDR,211.136.0.0/13,no-resolve
 IP-CIDR,211.144.0.0/12,no-resolve
 IP-CIDR,211.144.0.0/13,no-resolve
@@ -122266,6 +122265,7 @@ IP-CIDR,43.240.204.0/22,no-resolve
 IP-CIDR,43.240.220.0/22,no-resolve
 IP-CIDR,43.240.240.0/20,no-resolve
 IP-CIDR,43.240.56.0/21,no-resolve
+IP-CIDR,43.240.60.0/22,no-resolve
 IP-CIDR,43.240.68.0/22,no-resolve
 IP-CIDR,43.240.72.0/21,no-resolve
 IP-CIDR,43.240.72.0/22,no-resolve
