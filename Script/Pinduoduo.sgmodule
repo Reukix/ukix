@@ -2,7 +2,7 @@
 #!desc=移除开屏广告。
 #!category=去广告
 #!date=2026-11-16
-#!version=2026.11.16.1
+#!version=2026.11.16.2
 
 [Rule]
 AND,((URL-REGEX,"^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/d(\d)?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
@@ -23,13 +23,13 @@ DOMAIN,meta.pinduoduo.com,REJECT,extended-matching,pre-matching
 DOMAIN,apm-a.pinduoduo.com,REJECT,extended-matching,pre-matching
 
 [Body Rewrite]
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/api\/alexa\/homepage\/hub\/?(?:\?[^#]*)?$ '(. as $original | try (delpaths([["result","dy_module","irregular_banner_dy"]])) catch $original) | (. as $original | try (delpaths([["result","icon_set"]])) catch $original) | (. as $original | try (delpaths([["result","search_bar_hot_query"]])) catch $original) | (. as $original | try (if (.result.bottom_tabs | type) == "array" then .result.bottom_tabs |= map(select(.link | IN("index.html", "chat_list.html", "personal.html"))) else . end | if (.result.buffer_bottom_tabs | type) == "array" then .result.buffer_bottom_tabs |= map(select(.link | IN("index.html", "chat_list.html", "personal.html"))) else . end | if (.result.all_top_opts | type) == "array" then .result.all_top_opts |= map(if type == "object" then del(.selected_image,.image,.height,.width) else . end) else . end) catch $original)'
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/api\/alexa\/homepage\/hub\/?(?:\?[^#]*)?$ '(. as $original | try (delpaths([["result","dy_module","irregular_banner_dy"]])) catch $original) | (. as $original | try (delpaths([["result","icon_set"]])) catch $original) | (. as $original | try (delpaths([["result","search_bar_hot_query"]])) catch $original) | (. as $original | try (if (.result.bottom_tabs | type) == "array" then .result.bottom_tabs |= map(. as $item | try (select(.link | IN("index.html", "chat_list.html", "personal.html"))) catch $item) else . end | if (.result.buffer_bottom_tabs | type) == "array" then .result.buffer_bottom_tabs |= map(. as $item | try (select(.link | IN("index.html", "chat_list.html", "personal.html"))) catch $item) else . end | if (.result.all_top_opts | type) == "array" then .result.all_top_opts |= map(if type == "object" then del(.selected_image,.image,.height,.width) else . end) else . end) catch $original)'
 http-response-jq (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/search\/?(?:\?[^#]*)?$ '(. as $original | try (delpaths([["expansion"]])) catch $original)'
 http-response-jq (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/api\/philo\/personal\/hub\/?(?:\?[^#]*)?$ '(. as $original | try (delpaths([["monthly_card_entrance"]])) catch $original) | (. as $original | try (delpaths([["personal_center_style_v2_vo"]])) catch $original) | (. as $original | try (delpaths([["icon_set","icons"]])) catch $original) | (. as $original | try (delpaths([["icon_set","top_personal_icons"]])) catch $original) | (. as $original | try (delpaths([["personal_banner"]])) catch $original)'
 http-response-jq (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/api\/oak\/integration\/render\/?(?:\?[^#]*)?$ '(. as $original | try (delpaths([["bottom_section_list"]])) catch $original) | (. as $original | try (delpaths([["ui","bottom_section"]])) catch $original) | (. as $original | try (delpaths([["ui","live_section","float_info"]])) catch $original)'
 http-response-jq (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/api\/caterham\/v3\/query\/order_detail_group\/?(?:\?[^#]*)?$ '(. as $original | try (delpaths([["data","goods_list"]])) catch $original)'
 http-response-jq (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/order\/ '(. as $original | try (delpaths([["marketing_banner_vo"]])) catch $original) | (. as $original | try (delpaths([["shipping","banner_above_recommend"]])) catch $original)'
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/api\/aristotle\/order_list_v4\/?(?:\?[^#]*)?$ '(. as $original | try (.orders |= map(.order_buttons |= map(del(.order_growth_tip)))) catch $original)'
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/api\/aristotle\/order_list_v4\/?(?:\?[^#]*)?$ '(. as $original | try (if (.orders | type) == "array" then .orders |= map(. as $order | try (if (.order_buttons | type) == "array" then .order_buttons |= map(if type == "object" then del(.order_growth_tip) else . end) else . end) catch $order) else . end) catch $original)'
 
 [Map Local]
 (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/api\/aristotle\/unrated_order_for_unreceived_tab\/?(?:\?[^#]*)?$ data-type=text data="{}" status-code=200 header="Content-Type:application/json"
@@ -73,7 +73,7 @@ http-response-jq (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/api\/aristotle\/or
 (?i)^https:\/\/api\.pinduoduo\.com(?::443)?\/api\/caterham\/v2\/query\/goods_detail_with_tags\/?(?:\?[^#]*)?$ data-type=text data="{}" status-code=200 header="Content-Type:application/json"
 
 [Script]
-移除扫码取件页面商品推荐及弹窗 = type=http-response, pattern=(?i)^https:\/\/m\.pinduoduo\.net(?::443)?\/mdkd\/package\/?\?(?:[^#?&]+&)*from_app_scan(?:=[^&#]*)?(?:&[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/pinduoduo.js?v=caf9144e5680, requires-body=true,max-size=2097152,timeout=5
+移除扫码取件页面商品推荐及弹窗 = type=http-response, pattern=(?i)^https:\/\/m\.pinduoduo\.net(?::443)?\/mdkd\/package\/?\?(?:[^#?&]+&)*from_app_scan(?:=[^&#]*)?(?:&[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/pinduoduo.js?v=a12d8c81199d, requires-body=true,max-size=2097152,timeout=5
 
 [MITM]
 hostname = %APPEND% api.pinduoduo.com, m.pinduoduo.net

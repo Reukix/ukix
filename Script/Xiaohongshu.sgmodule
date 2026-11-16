@@ -2,13 +2,13 @@
 #!desc=过滤信息流推广，移除图片及视频水印
 #!category=去广告
 #!date=2026-11-16
-#!version=2026.11.16.1
+#!version=2026.11.16.2
 
 [Rule]
 AND,((PROTOCOL,QUIC),(DOMAIN-SUFFIX,xiaohongshu.com)),REJECT
 
 [Body Rewrite]
-http-response-jq (?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v1\/search\/banner_list(?:\?[^#]*)?$ '(. as $original | try (if (.data | type) == "object" then .data = {} else . end) catch $original)'
+http-response-jq (?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v1\/search\/banner_list(?:\?[^#]*)?$ '(. as $original | try (if (.data | type) == "object" or (.data | type) == "array" then .data = {} else . end) catch $original)'
 http-response-jq (?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v1\/search\/hot_list(?:\?[^#]*)?$ '(. as $original | try (if ((getpath(["data"]) // {}) | has("items")) then (setpath(["data","items"]; [])) else . end) catch $original)'
 http-response-jq (?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v4\/search\/hint '(. as $original | try (if ((getpath(["data"]) // {}) | has("hint_words")) then (setpath(["data","hint_words"]; [])) else . end) catch $original)'
 http-response-jq (?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v4\/search\/trending\/?(?:\?[^#]*)?$ '(. as $original | try (if ((getpath(["data"]) // {}) | has("queries")) then (setpath(["data","queries"]; [])) else . end) catch $original) | (. as $original | try (if ((getpath(["data"]) // {}) | has("hint_word")) then (setpath(["data","hint_word"]; {})) else . end) catch $original)'
@@ -25,29 +25,29 @@ http-response-jq (?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v4\/
 (?i)^https:\/\/www\.xiaohongshu\.com(?::443)?\/api\/sns\/(?:v1\/ads\/resource|v2\/hey\/\w+\/hey_gallery) data-type=text data="{}" status-code=200 header="Content-Type:application/json"
 
 [Script]
-移除图片和实况照片水印 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v1\/note\/(?:imagefeed|live_photo\/save)\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除图片和实况照片水印 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v1\/note\/(?:imagefeed|live_photo\/save)\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
-移除整体配置 ui = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v1\/system\/service\/ui\/config\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除整体配置 ui = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v1\/system\/service\/ui\/config\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
-移除开屏广告 config = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v1\/system_service\/config\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除开屏广告 config = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v1\/system_service\/config\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
-移除开屏广告 splash_config = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v2\/system_service\/splash_config\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除开屏广告 splash_config = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v2\/system_service\/splash_config\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
-移除详情页小部件、关注页感兴趣的人 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v2\/(?:note\/widgets|user\/followings\/followfeed)\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除详情页小部件、关注页感兴趣的人 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v2\/(?:note\/widgets|user\/followings\/followfeed)\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
-移除信息流广告 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v4\/followfeed\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除信息流广告 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v4\/followfeed\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
-移除详情页感兴趣的人 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v5\/recommend\/user\/follow_recommend\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除详情页感兴趣的人 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/v5\/recommend\/user\/follow_recommend\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
-移除评论区实况照片水印 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/(?:v1\/interaction\/comment\/video\/download|v5\/note\/comment\/list)\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除评论区实况照片水印 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/(?:v1\/interaction\/comment\/video\/download|v5\/note\/comment\/list)\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
-移除图片和视频水印 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/(?:v2\/note\/feed|v3\/note\/videofeed)\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除图片和视频水印 = type=http-response, pattern=(?i)^https:\/\/edith\.xiaohongshu\.com(?::443)?\/api\/sns\/(?:v2\/note\/feed|v3\/note\/videofeed)\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
-移除信息流广告 2 = type=http-response, pattern=(?i)^https:\/\/(?:edith|rec)\.xiaohongshu\.com(?::443)?\/api\/sns\/v6\/homefeed\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除信息流广告 2 = type=http-response, pattern=(?i)^https:\/\/(?:edith|rec)\.xiaohongshu\.com(?::443)?\/api\/sns\/v6\/homefeed\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
-移除搜索页广告 = type=http-response, pattern=(?i)^https:\/\/(?:edith|so)\.xiaohongshu\.com(?::443)?\/api\/sns\/v10\/search\/notes\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除搜索页广告 = type=http-response, pattern=(?i)^https:\/\/(?:edith|so)\.xiaohongshu\.com(?::443)?\/api\/sns\/v10\/search\/notes\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
-移除视频水印 = type=http-response, pattern=(?i)^https:\/\/(?:edith|rec|www)\.xiaohongshu\.com(?::443)?\/api\/sns\/(?:v4\/note\/videofeed|v10\/note\/video\/save)\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=1dfb066c8fd1, requires-body=true,max-size=2097152,timeout=5
+移除视频水印 = type=http-response, pattern=(?i)^https:\/\/(?:edith|rec|www)\.xiaohongshu\.com(?::443)?\/api\/sns\/(?:v4\/note\/videofeed|v10\/note\/video\/save)\/?(?:\?[^#]*)?$, script-path=https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/js/adblock/xiaohongshu.js?v=e85d9c40da43, requires-body=true,max-size=2097152,timeout=5
 
 [MITM]
 hostname = %APPEND% ci.xiaohongshu.com, edith.xiaohongshu.com, rec.xiaohongshu.com, so.xiaohongshu.com, www.xiaohongshu.com

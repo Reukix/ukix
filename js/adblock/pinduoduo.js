@@ -39,7 +39,7 @@
     for (const [from, to] of ranges.reverse()) body = body.slice(0, from) + body.slice(to);
     // Prefix selectors survive CSS-module hash changes and cover hydration.
     // Reuse an existing nonce where available; keep the site's CSP unchanged.
-    if (recognized && !/\bid=["']ukix-pickup-adblock["']/i.test(body)) {
+    if ((recognized || /<(?:html|head|body)\b/i.test(body)) && !/\bid=["']ukix-pickup-adblock["']/i.test(body)) {
       const nonce = /<style\b[^>]*\bnonce=["']([A-Za-z0-9+/_=-]{1,256})["']/i.exec(body)?.[1]
         || /<script\b[^>]*\bnonce=["']([A-Za-z0-9+/_=-]{1,256})["']/i.exec(body)?.[1];
       const selectors = ["index_gif-container", "index_goods-list-big-container"].flatMap(name => ['[class~="' + name + '"]', '[class^="' + name + '__"]', '[class*=" ' + name + '__"]']).join(",");

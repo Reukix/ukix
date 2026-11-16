@@ -41,7 +41,7 @@
       let newDatas = [];
       if (obj?.data?.[0]?.note_list?.length > 0) {
         for (let item of obj.data[0].note_list) {
-          if (item?.function_switch?.length > 0) {
+          if (Array.isArray(item?.function_switch)) {
             // 新的保存按钮配置
             for (let i of item.function_switch) {
               if (i?.enable === false) {
@@ -56,7 +56,7 @@
             item.media_save_config.disable_watermark = true;
             item.media_save_config.disable_weibo_cover = true;
           }
-          if (item?.share_info?.function_entries?.length > 0) {
+          if (Array.isArray(item?.share_info?.function_entries) && item.share_info.function_entries.length > 0) {
             // 视频下载限制
             const additem = { type: "video_download" };
             // 检查是否存在 video_download 并获取其索引
@@ -137,12 +137,14 @@
       }
     } else if (url.includes("/v2/system_service/splash_config")) {
       // 开屏广告
-      if (obj?.data?.ads_groups?.length > 0) {
+      if (Array.isArray(obj?.data?.ads_groups)) {
         for (let i of obj.data.ads_groups) {
+          if (!i || typeof i !== "object" || Array.isArray(i)) continue;
           i.start_time = 3818332800; // Unix 时间戳 2090-12-31 00:00:00
           i.end_time = 3818419199; // Unix 时间戳 2090-12-31 23:59:59
-          if (i?.ads?.length > 0) {
+          if (Array.isArray(i.ads)) {
             for (let ii of i.ads) {
+              if (!ii || typeof ii !== "object" || Array.isArray(ii)) continue;
               ii.start_time = 3818332800; // Unix 时间戳 2090-12-31 00:00:00
               ii.end_time = 3818419199; // Unix 时间戳 2090-12-31 23:59:59
             }
@@ -165,7 +167,7 @@
             item.media_save_config.disable_watermark = true;
             item.media_save_config.disable_weibo_cover = true;
           }
-          if (item?.share_info?.function_entries?.length > 0) {
+          if (Array.isArray(item?.share_info?.function_entries) && item.share_info.function_entries.length > 0) {
             // 视频下载限制
             const additem = { type: "video_download" };
             // 检查是否存在 video_download 并获取其索引
@@ -194,7 +196,7 @@
       let unlockDatas = [];
       if (obj?.data?.length > 0) {
         for (let item of obj.data) {
-          if (item?.function_switch?.length > 0) {
+          if (Array.isArray(item?.function_switch)) {
             // 新的保存按钮配置
             for (let i of item.function_switch) {
               if (i?.enable === false) {
@@ -211,7 +213,7 @@
               };
               newDatas.push(myData);
             }
-            if (item?.share_info?.function_entries?.length > 0) {
+            if (Array.isArray(item?.share_info?.function_entries) && item.share_info.function_entries.length > 0) {
               // 视频下载限制
               const additem = { type: "video_download" };
               // 检查是否存在 video_download 并获取其索引

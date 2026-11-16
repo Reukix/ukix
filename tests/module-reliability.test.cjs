@@ -26,6 +26,13 @@ function scriptPattern(file, needle) {
   assert.ok(line, needle);
   return regexp(line.split("pattern=")[1].split(/,\s*script-path=/)[0]);
 }
+function runJq(file, needle, input) {
+  const line = read(file).split("\n").find(line => line.startsWith("http-response-jq ") && line.includes(needle));
+  assert.ok(line, needle);
+  const result = spawnSync("jq", [line.split(" '")[1].slice(0, -1)], { input: JSON.stringify(input), encoding: "utf8" });
+  assert.equal(result.status, 0, result.stderr);
+  return JSON.parse(result.stdout);
+}
 
 test("HTTPDNS leaves the reported Bilibili resolver and normal IP traffic alone", () => {
   const module = read("Script/HTTPDNS.sgmodule");
@@ -90,6 +97,20 @@ test("Taobao handles explicit ports and keeps primitive types in splash configur
   assert.equal(ad.waitTime, "0"); assert.equal(ad.hotStart, false); assert.equal(ad.coldStart, "false"); assert.equal(ad.imgUrl, "");
 });
 
+test("Taobao retains its video timestamp override and fills missing splash suppression fields", () => {
+  const url = "https://guide-acs.m.taobao.com/gw/mtop.taobao.cloudvideo.video.query/1.0";
+  for (const timestamp of ["1760000000000", 1760000000000]) {
+    const result = JSON.parse(run("js/adblock/taobao.js", { url, body: JSON.stringify({ data: { duration: "8", respTimeInMs: timestamp, resources: ["ad"], normal: "keep" } }) }).body);
+    assert.equal(result.data.respTimeInMs, typeof timestamp === "string" ? "3818332800000" : 3818332800000);
+    assert.equal(result.data.normal, "keep");
+  }
+  const fixture = { data: { containers: { splash_home_base: { base: { sections: [{ bizData: { "taobao-splash": { data: [{ imgUrl: "ad.jpg" }] } } }] } } } } };
+  const result = JSON.parse(run("js/adblock/taobao.js", { url: url.replace("cloudvideo.video.query", "wireless.home.splash.awesome.get"), body: JSON.stringify(fixture) }).body);
+  const ad = result.data.containers.splash_home_base.base.sections[0].bizData["taobao-splash"].data[0];
+  assert.equal(ad.hotStart, "false"); assert.equal(ad.coldStart, "false");
+  assert.equal(ad.waitTime, "0"); assert.equal(ad.gmtStartMs, "3818332800000");
+});
+
 test("Taobao unknown paths, unchanged data and parse failures finish once without rewriting", () => {
   const url = "https://guide-acs.m.taobao.com/gw/mtop.taobao.cloudvideo.video.query/1.0";
   for (const body of ["", "<html>error</html>", "null", "[]", '{ "data": { "normal": 1 } }']) unchanged(run("js/adblock/taobao.js", { url, body }));
@@ -145,6 +166,55 @@ test("pickup page keeps current bundles and business data across build hashes", 
   unchanged(run("js/adblock/pinduoduo.js", { url: url.replace("from_app_scan", "not_from_app_scan"), body }));
 });
 
+test("pickup page suppresses promotions loaded after an initially ad-free HTML shell", () => {
+  const url = "https://m.pinduoduo.net/mdkd/package?from_app_scan=1";
+  const body = '<html><head><script nonce="fixtureNonce" src="/current-bundle.js"></script></head><body><div id="business">parcel</div></body></html>';
+  const result = run("js/adblock/pinduoduo.js", { url, body });
+  assert.match(result.body, /<style id="ukix-pickup-adblock" nonce="fixtureNonce">/);
+  assert.ok(result.body.includes('index_goods-list-big-container__'));
+  assert.ok(result.body.includes('/current-bundle.js'));
+  assert.ok(result.body.includes('<div id="business">parcel</div>'));
+  unchanged(run("js/adblock/pinduoduo.js", { url, body: result.body }));
+  unchanged(run("js/adblock/pinduoduo.js", { url, body: '{"message":"keep"}' }));
+});
+
+test("Xiaohongshu search banners clear array responses and splash filtering tolerates null entries", () => {
+  assert.deepEqual(runJq("Script/Xiaohongshu.sgmodule", "banner_list", { data: ["ad"], success: true }), { data: {}, success: true });
+  const input = { data: { ads_groups: [null, { start_time: 1760000000, end_time: 1760000010, ads: [null, { start_time: 1760000000, end_time: 1760000010 }] }] } };
+  const result = JSON.parse(run("js/adblock/xiaohongshu.js", { url: "https://edith.xiaohongshu.com/api/sns/v2/system_service/splash_config", body: JSON.stringify(input) }).body);
+  assert.equal(result.data.ads_groups[0], null);
+  assert.equal(result.data.ads_groups[1].start_time, 3818332800);
+  assert.equal(result.data.ads_groups[1].ads[1].start_time, 3818332800);
+});
+
+test("FleaMarket filters feed ads when top configuration is absent or an unrelated item is malformed", () => {
+  const item = (id, cardType) => ({ id, template: { name: "idlefish_home_new_commodity_card" }, data: { clickParam: { args: { cardType } } } });
+  const input = { data: { sections: ["unknown", item("keep", "normal"), item("ad", "mamaAD")], normal: "keep" } };
+  const result = runJq("Script/FleaMarket.sgmodule", "nextfresh", input);
+  assert.deepEqual(result.data.sections, input.data.sections.slice(0, 2));
+  assert.equal(result.data.normal, "keep");
+  assert.equal(Object.hasOwn(result.data, "homeTopList"), false);
+  const circle = { data: { circleList: [{ showInfo: { titleImage: "ad.jpg", text: "keep" } }] } };
+  assert.deepEqual(runJq("Script/FleaMarket.sgmodule", "circle", circle), { data: { circleList: [{ showInfo: { text: "keep" } }] } });
+  const personal = { data: { container: { sections: [{ template: { name: "my_fy1_header" }, item: {} }, { template: { name: "my_fy1_banner" } }, { template: { name: "my_fy1_tools" }, sectionBizCode: "entry2025", item: { tool: { exContent: { tools: null } } } }] }, ability: "ad" } };
+  const cleaned = runJq("Script/FleaMarket.sgmodule", "adapter", personal);
+  assert.deepEqual(cleaned.data.container.sections, [personal.data.container.sections[0], personal.data.container.sections[2]]);
+  assert.equal(cleaned.data.ability, undefined);
+});
+
+test("Pinduoduo cleans independent sections despite missing or malformed neighboring data", () => {
+  const input = { orders: [{ id: "first" }, { id: "second", order_buttons: [{ text: "查看物流", order_growth_tip: "ad" }] }] };
+  assert.deepEqual(runJq("Script/Pinduoduo.sgmodule", "order_list_v4", input), { orders: [{ id: "first" }, { id: "second", order_buttons: [{ text: "查看物流" }] }] });
+  const home = { result: { bottom_tabs: ["unknown", { link: "index.html" }, { link: "promotion.html" }], buffer_bottom_tabs: [{ link: "chat_list.html" }, { link: "promotion.html" }], all_top_opts: [{ name: "keep", image: "ad.jpg" }] } };
+  assert.deepEqual(runJq("Script/Pinduoduo.sgmodule", "homepage", home), { result: { bottom_tabs: ["unknown", { link: "index.html" }], buffer_bottom_tabs: [{ link: "chat_list.html" }], all_top_opts: [{ name: "keep" }] } });
+});
+
+test("Xiaohongshu video ads are removed despite an unrelated malformed share configuration", () => {
+  const input = { data: [{ id: "keep", model_type: "note", share_info: { function_entries: "unknown" } }, { id: "ad", model_type: "note", ad: { id: "fixture" } }] };
+  const result = JSON.parse(run("js/adblock/xiaohongshu.js", { url: "https://edith.xiaohongshu.com/api/sns/v4/note/videofeed", body: JSON.stringify(input) }).body);
+  assert.deepEqual(result.data, [input.data[0]]);
+});
+
 test("updated module patterns accept query order and explicit HTTPS ports without prefix collisions", () => {
   const pdd = scriptPattern("Script/Pinduoduo.sgmodule", "type=http-response");
   for (const query of ["from_app_scan=1", "foo=1&from_app_scan=1&bar=2", "from_app_scan"]) assert.ok(pdd.test("https://m.pinduoduo.net:443/mdkd/package?" + query));
@@ -156,15 +226,40 @@ test("updated module patterns accept query order and explicit HTTPS ports withou
   for (const suffix of ["", "?fixture=1"]) assert.ok(xhs.test("https://edith.xiaohongshu.com:443/api/sns/v1/system/service/ui/config" + suffix));
 });
 
-test("image mocks have image responses and scripts have bounded response sizes", () => {
+test("Meituan preserves legacy splash URL coverage and mock response behavior", () => {
+  const rules = read("Script/meituan.sgmodule").split("\n").filter(line => line.includes(" data-type="));
+  const expected = 'data-type=text data="{}" status-code=200 header="Content-Type:application/json"';
+  const urls = [
+    "http://wmapi.meituan.com/api/v7/loadInfo",
+    "http://wmapi.meituan.com/api/v7/openscreen",
+    "http://wmapi.meituan.com/api/v7/startpicture",
+    "http://wmapi.meituan.com/api/v7/startpicture.json",
+    "https://flowplus.meituan.net/v1/mss_fixture/linglong/123.jpg",
+    "https://img.meituan.net/bizad/bizad_brandCpt_123.jpg",
+    "https://s3plus.meituan.net/ocean-blk-index/index/blk_conf_123.json",
+    "https://s3plus.meituan.net/v1/mss_fixture/brandcpt-vedio/fixture.zip",
+    "https://s3plus.meituan.net/v1/mss_fixture/waimai-alita/fixture.zip",
+  ];
+  for (const original of urls) {
+    const explicitPort = original.replace(/(\.com|\.net)(?=\/)/, original.startsWith("https:") ? "$1:443" : "$1:80");
+    for (const url of [original, original + "?fixture=1", explicitPort, explicitPort + "?fixture=1"]) {
+      const matches = rules.filter(line => regexp(line.split(" data-type=")[0]).test(url));
+      assert.equal(matches.length, 1, url);
+      assert.equal(matches[0].slice(matches[0].indexOf(" data-type=") + 1), expected, url);
+    }
+  }
+  for (const url of ["https://s3plus.meituan.net/v1/mss_fixture/orders/fixture.zip", "https://img.meituan.net/order/123.jpg"]) {
+    assert.equal(rules.some(line => regexp(line.split(" data-type=")[0]).test(url)), false, url);
+  }
+});
+
+test("Taobao retains the legacy splash image mock and scripts have bounded response sizes", () => {
   for (const [name, url] of [
     ["Taobao", "https://gw.alicdn.com:443/imgextra/i1/123/abc-1-tps-1080-1920.jpg_1000x1000q90"],
-    ["meituan", "https://flowplus.meituan.net:443/v1/mss_fixture/linglong/123.jpg?fixture=1"],
-    ["meituan", "https://img.meituan.net:443/bizad/bizad_brandCpt_123.jpg"],
   ]) {
     const matches = read("Script/" + name + ".sgmodule").split("\n").filter(line => line.includes(" data-type=") && regexp(line.split(" data-type=")[0]).test(url));
     assert.equal(matches.length, 1, url);
-    assert.ok(matches[0].includes("data-type=tiny-gif"));
+    assert.ok(matches[0].includes('data-type=text data="{}" status-code=200 header="Content-Type:application/json"'));
   }
   for (const file of fs.readdirSync(path.join(root, "Script"))) {
     for (const line of read("Script/" + file).split("\n")) if (line.includes("type=http-response")) {
