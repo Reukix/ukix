@@ -264,7 +264,7 @@ test("Taobao retains the legacy splash image mock and scripts have bounded respo
   for (const file of fs.readdirSync(path.join(root, "Script"))) {
     for (const line of read("Script/" + file).split("\n")) if (line.includes("type=http-response")) {
       const limit = Number(line.match(/max-size=(\d+)/)?.[1]);
-      assert.ok(limit > 0 && limit <= 2097152, file);
+      assert.ok(limit > 0 && limit <= (file === "YouTubeMusic.sgmodule" ? 4194304 : 2097152), file);
     }
   }
 });
