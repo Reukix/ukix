@@ -78,7 +78,7 @@ declare -a CurlARG=()
 declare UA_Browser
 declare country_data='[]'
 declare dependency_dir=''
-declare terminal_page=0
+declare interactive_report=0
 declare -a terminal_reports=()
 declare -A sprogress
 
@@ -124,8 +124,7 @@ case "$YY" in
 sprogress=([title]="Reukix IP Check" [deps]="Checking dependencies" [temp]="Preparing temporary tools"
     [index]="Refreshing package lists" [unpack]="Unpacking temporary tools" [egress]="Finding public IP"
     [country]="Loading country data" [db]="IP databases" [media]="Streaming and AI"
-    [mail]="Email" [dnsbl]="DNS blocklists" [report]="Preparing report"
-    [pages]="Space / b to turn pages, q to exit" [close]="Press any key to return")
+    [mail]="Email" [dnsbl]="DNS blocklists" [report]="Preparing report")
 swarn[2]="ERROR: IP address format error!"
 swarn[3]="ERROR: Installing packages requires root or sudo."
 swarn[4]="ERROR: Parameter -4 conflicts with -6!"
@@ -240,8 +239,7 @@ smail[blacklisted]="$Font_Suffix${Font_Red}Blacklisted $Font_B"
 sprogress=([title]="Reukix IP 检测" [deps]="正在检查依赖" [temp]="正在准备临时工具"
     [index]="正在刷新软件包索引" [unpack]="正在解包临时工具" [egress]="正在获取出口 IP"
     [country]="正在读取国家和地区数据" [db]="IP 数据库" [media]="流媒体与 AI"
-    [mail]="邮件连通性" [dnsbl]="DNS 黑名单" [report]="正在生成报告"
-    [pages]="空格下一页，b 上一页，q 返回" [close]="按任意键返回命令行")
+    [mail]="邮件连通性" [dnsbl]="DNS 黑名单" [report]="正在生成报告")
 swarn[2]="错误：IP地址格式错误！"
 swarn[3]="错误：安装依赖需要 root 或 sudo。"
 swarn[4]="错误：参数 -4 与 -6 冲突！"
@@ -362,14 +360,16 @@ missing_dependencies() {
     done
 }
 
-open_terminal_page() {
-    [[ -t 0 && -t 1 && -t 2 && ${TERM:-} != dumb && $mode_json == 0 ]] || return 0
-    terminal_page=1
-    printf '\033[?1049h\033[2J\033[H%s\n\n' "${sprogress[title]}" >&2
+clear_report_screen() {
+    local sequence
+    sequence=$(clear 2>/dev/null) || sequence=''
+    # Some implementations of clear also emit CSI 3 J to erase scrollback.
+    sequence=${sequence//$'\033[3J'/}
+    printf '%s' "${sequence:-$'\033[H\033[2J'}"
 }
 
 progress() {
-    if (( terminal_page )); then
+    if (( interactive_report )); then
         printf '\r\033[K%s' "${1-}" >&2
     fi
 }
@@ -380,41 +380,7 @@ run_probe() {
     "$@"
 }
 
-view_terminal_reports() {
-    printf '\033[2J\033[H' >&2
-    if command -v less >/dev/null 2>&1; then
-        printf '%s\n\n' "${terminal_reports[@]}" |
-            LESS= LESSHISTFILE=- less -RX -P"${sprogress[pages]}" && return 0
-    fi
-
-    local -a lines
-    local rows cols per_page pages page=0 key
-    mapfile -t lines < <(printf '%s\n\n' "${terminal_reports[@]}")
-    while :; do
-        read -r rows cols < <(stty size)
-        (( rows > 2 )) || rows=24
-        (( cols > 0 )) || cols=80
-        per_page=$(( (rows - 2) / ((80 + cols - 1) / cols) ))
-        (( per_page > 0 )) || per_page=1
-        pages=$(( (${#lines[@]} + per_page - 1) / per_page ))
-        (( page < pages )) || page=$((pages - 1))
-        printf '\033[2J\033[H' >&2
-        printf '%s\n' "${lines[@]:page*per_page:per_page}" >&2
-        printf '\n[%d/%d]  %s' "$((page + 1))" "$pages" "${sprogress[pages]}" >&2
-        IFS= read -rsn1 key || break
-        case $key in
-            q|Q) break ;;
-            b|B) (( page > 0 )) && ((page-=1)) ;;
-            ''|' ') (( page + 1 < pages )) && ((page+=1)) ;;
-        esac
-    done
-    return 0
-}
-
 cleanup_run() {
-    if (( terminal_page )); then
-        printf '\033[?1049l' >&2
-    fi
     if [[ -n $dependency_dir ]]; then
         rm -rf -- "$dependency_dir"
     fi
@@ -2728,7 +2694,7 @@ save_json || return
 fi
 if [[ $mode_json -eq 1 ]];then
 printf '%s\n' "$ipjson"
-elif (( terminal_page )); then
+elif (( interactive_report )); then
 terminal_reports+=("$ip_report")
 else
 printf '%s\n\n' "$ip_report"
@@ -2770,7 +2736,11 @@ main() {
         print_help
         return 0
     fi
-    open_terminal_page
+    if [[ -t 0 && -t 1 && -t 2 && ${TERM:-} != dumb && $mode_json == 0 ]]; then
+        interactive_report=1
+        clear_report_screen >&2
+        printf '%s\n\n' "${sprogress[title]}" >&2
+    fi
     if (( mode_no == 0 )); then
         progress "${sprogress[deps]}"
         install_dependencies >&2 || return
@@ -2811,21 +2781,16 @@ main() {
     if (( IPV6work )); then
         check_IP "$IPV6" 6 || return
     fi
-    if (( terminal_page )); then
-        view_terminal_reports
+    if (( interactive_report )); then
+        clear_report_screen
+        printf '%s\n\n' "${terminal_reports[@]}"
     fi
 }
 
 if [[ ${BASH_SOURCE[0]:-$0} == "$0" ]]; then
     trap cleanup_run EXIT
     trap 'exit 129' HUP
-    trap 'exit 130' INT
-    trap 'exit 143' TERM
+    trap 'progress; exit 130' INT
+    trap 'progress; exit 143' TERM
     main "$@"
-    result=$?
-    if (( result != 0 && terminal_page )); then
-        printf '\n%s' "${sprogress[close]}" >&2
-        IFS= read -rsn1 _ || :
-    fi
-    exit "$result"
 fi
