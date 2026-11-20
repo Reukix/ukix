@@ -42,6 +42,8 @@ HTTPDNS 模块仅拦截列明的解析服务及已列明 IP 的解析路径，�
 bash <(curl -fsSL https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/ip.sh)
 ```
 
+在 SSH 终端运行时，检测进度和最终报告会在独立的终端页面显示。按空格翻到下一页，按 `b` 返回上一页，按 `q` 回到命令行。Debian 和 Ubuntu 缺少依赖时会自动在临时目录准备工具，退出后清理。使用 `-j` 可直接输出 JSON。
+
 ## Snell 脚本
 
 `snell.sh` 是 Snell v5/v6 交互式部署脚本，支持自动检测系统架构、安装依赖、下载服务端、生成配置、创建 systemd 服务，并带有基础管理和多用户管理菜单。

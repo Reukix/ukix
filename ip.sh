@@ -77,6 +77,10 @@ declare iface=""
 declare -a CurlARG=()
 declare UA_Browser
 declare country_data='[]'
+declare dependency_dir=''
+declare terminal_page=0
+declare -a terminal_reports=()
+declare -A sprogress
 
 print_help() {
     if [[ $YY == cn ]]; then
@@ -93,7 +97,7 @@ English help  bash ip.sh -Eh
   -l 语言       选择地名语言（cn/en/jp/es/de/fr/ru/pt），默认 cn
   -E            使用英文报告（同 -l en）
   -n            跳过依赖检查
-  -y            自动安装缺少的依赖
+  -y            将缺少的依赖安装到系统（Debian/Ubuntu 默认使用临时目录）
   -h            显示帮助
 HELP
     else
@@ -109,7 +113,7 @@ Usage  bash ip.sh [options]
   -l language   Select the language for place names (cn/en/jp/es/de/fr/ru/pt, default cn)
   -E            Use English for the report (same as -l en)
   -n            Skip the dependency check
-  -y            Install missing dependencies automatically
+  -y            Install missing tools system-wide (Debian/Ubuntu use temporary tools by default)
   -h            Show help
 HELP
     fi
@@ -117,6 +121,11 @@ HELP
 set_language(){
 case "$YY" in
 "en"|"jp"|"es"|"de"|"fr"|"ru"|"pt")swarn[1]="ERROR: Unsupported parameters!"
+sprogress=([title]="Reukix IP Check" [deps]="Checking dependencies" [temp]="Preparing temporary tools"
+    [index]="Refreshing package lists" [unpack]="Unpacking temporary tools" [egress]="Finding public IP"
+    [country]="Loading country data" [db]="IP databases" [media]="Streaming and AI"
+    [mail]="Email" [dnsbl]="DNS blocklists" [report]="Preparing report"
+    [pages]="Space / b to turn pages, q to exit" [close]="Press any key to return")
 swarn[2]="ERROR: IP address format error!"
 swarn[3]="ERROR: Installing packages requires root or sudo."
 swarn[4]="ERROR: Parameter -4 conflicts with -6!"
@@ -228,6 +237,11 @@ smail[marked]="$Font_Suffix${Font_Yellow}Marked $Font_B"
 smail[blacklisted]="$Font_Suffix${Font_Red}Blacklisted $Font_B"
 ;;
 "cn")swarn[1]="错误：不支持的参数！"
+sprogress=([title]="Reukix IP 检测" [deps]="正在检查依赖" [temp]="正在准备临时工具"
+    [index]="正在刷新软件包索引" [unpack]="正在解包临时工具" [egress]="正在获取出口 IP"
+    [country]="正在读取国家和地区数据" [db]="IP 数据库" [media]="流媒体与 AI"
+    [mail]="邮件连通性" [dnsbl]="DNS 黑名单" [report]="正在生成报告"
+    [pages]="空格下一页，b 上一页，q 返回" [close]="按任意键返回命令行")
 swarn[2]="错误：IP地址格式错误！"
 swarn[3]="错误：安装依赖需要 root 或 sudo。"
 swarn[4]="错误：参数 -4 与 -6 冲突！"
@@ -347,11 +361,174 @@ missing_dependencies() {
         command -v "$dependency" >/dev/null 2>&1 || printf ' %s' "$dependency"
     done
 }
+
+open_terminal_page() {
+    [[ -t 0 && -t 1 && -t 2 && ${TERM:-} != dumb && $mode_json == 0 ]] || return 0
+    terminal_page=1
+    printf '\033[?1049h\033[2J\033[H%s\n\n' "${sprogress[title]}" >&2
+}
+
+progress() {
+    if (( terminal_page )); then
+        printf '\r\033[K%s' "${1-}" >&2
+    fi
+}
+
+run_probe() {
+    progress "$1"
+    shift
+    "$@"
+}
+
+view_terminal_reports() {
+    printf '\033[2J\033[H' >&2
+    if command -v less >/dev/null 2>&1; then
+        printf '%s\n\n' "${terminal_reports[@]}" |
+            LESS= LESSHISTFILE=- less -RX -P"${sprogress[pages]}" && return 0
+    fi
+
+    local -a lines
+    local rows cols per_page pages page=0 key
+    mapfile -t lines < <(printf '%s\n\n' "${terminal_reports[@]}")
+    while :; do
+        read -r rows cols < <(stty size)
+        (( rows > 2 )) || rows=24
+        (( cols > 0 )) || cols=80
+        per_page=$(( (rows - 2) / ((80 + cols - 1) / cols) ))
+        (( per_page > 0 )) || per_page=1
+        pages=$(( (${#lines[@]} + per_page - 1) / per_page ))
+        (( page < pages )) || page=$((pages - 1))
+        printf '\033[2J\033[H' >&2
+        printf '%s\n' "${lines[@]:page*per_page:per_page}" >&2
+        printf '\n[%d/%d]  %s' "$((page + 1))" "$pages" "${sprogress[pages]}" >&2
+        IFS= read -rsn1 key || break
+        case $key in
+            q|Q) break ;;
+            b|B) (( page > 0 )) && ((page-=1)) ;;
+            ''|' ') (( page + 1 < pages )) && ((page+=1)) ;;
+        esac
+    done
+    return 0
+}
+
+cleanup_run() {
+    if (( terminal_page )); then
+        printf '\033[?1049l' >&2
+    fi
+    if [[ -n $dependency_dir ]]; then
+        rm -rf -- "$dependency_dir"
+    fi
+}
+
+prepare_deb_tools() {
+    local tool pkg binary candidate dir libpath='' loader='' dns=0 archive probe version
+    local -a packages=()
+    for tool in "$@"; do
+        case $tool in
+            dig|nslookup) dns=1 ;;
+            nc) packages+=(netcat-openbsd) ;;
+            *) packages+=("$tool") ;;
+        esac
+    done
+    if (( dns )); then
+        # On recent releases dnsutils can be an empty transitional package.
+        if [[ $(dpkg-query -W -f='${Status}' bind9-dnsutils 2>/dev/null) == 'install ok installed' ]]; then
+            packages+=(bind9-dnsutils)
+        else
+            packages+=(dnsutils)
+        fi
+    fi
+    dependency_dir=$(mktemp -d "${TMPDIR:-/tmp}/reukix-ip.XXXXXXXX") || return 1
+    local root="$dependency_dir/root" cache="$dependency_dir/cache" log="$dependency_dir/apt.log"
+    mkdir -p "$root" "$dependency_dir/bin" "$cache/archives/partial" \
+        "$dependency_dir/state/lists/partial" "$dependency_dir/log" || return 1
+
+    # Keep apt's package state and update hooks out of the host system.
+    cat > "$dependency_dir/apt.conf" <<'APT' || return 1
+#clear APT::Update::Pre-Invoke;
+#clear APT::Update::Post-Invoke;
+#clear APT::Update::Post-Invoke-Success;
+#clear DPkg::Pre-Invoke;
+#clear DPkg::Post-Invoke;
+#clear DPkg::Pre-Install-Pkgs;
+APT
+    local -a apt=(apt-get -c "$dependency_dir/apt.conf" -o Debug::NoLocking=1
+        -o "Dir::State=$dependency_dir/state" -o Dir::State::status=/var/lib/dpkg/status
+        -o "Dir::Cache=$cache" -o "Dir::Cache::archives=$cache/archives"
+        -o "Dir::Log=$dependency_dir/log" -o Acquire::Languages=none
+        -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20)
+    local -a download=(--download-only --no-install-recommends --reinstall -y install "${packages[@]}")
+
+    progress "${sprogress[temp]} · $*"
+    if ! compgen -G '/var/lib/apt/lists/*_Packages*' >/dev/null ||
+        ! "${apt[@]}" -o Dir::State::lists=/var/lib/apt/lists "${download[@]}" >"$log" 2>&1; then
+        progress "${sprogress[index]}"
+        "${apt[@]}" update >"$log" 2>&1 || { tail -n 6 "$log" >&2; return 1; }
+        progress "${sprogress[temp]} · $*"
+        "${apt[@]}" "${download[@]}" >"$log" 2>&1 || { tail -n 6 "$log" >&2; return 1; }
+    fi
+    progress "${sprogress[unpack]} · $*"
+    for archive in "$cache"/archives/*.deb; do
+        [[ -f $archive ]] && dpkg-deb -x "$archive" "$root" || return 1
+    done
+    for dir in "$root"/{usr/lib,lib}/*-linux-* "$root/usr/lib" "$root/lib"; do
+        [[ -d $dir ]] || continue
+        libpath+=${libpath:+:}$dir
+        for candidate in "$dir"/ld-linux*.so.* "$dir"/ld.so.1; do
+            [[ ! -f $candidate ]] || loader=$candidate
+        done
+    done
+
+    # Only the downloaded tools see these libraries. System commands keep their own loader.
+    for tool in "$@"; do
+        pkg=$tool
+        [[ $tool != nc ]] || pkg=nc.openbsd
+        for binary in "$root/usr/bin/$pkg" "$root/bin/$pkg"; do
+            [[ ! -x $binary ]] || break
+        done
+        [[ -x $binary ]] || { printf 'Missing executable in package: %s\n' "$pkg" >&2; return 1; }
+        {
+            printf '#!/bin/bash\n'
+            if [[ -n $libpath ]]; then
+                printf 'export LD_LIBRARY_PATH=%q${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\n' "$libpath"
+            fi
+            printf 'exec '
+            [[ -z $loader ]] || printf '%q ' "$loader"
+            printf '%q "$@"\n' "$binary"
+        } > "$dependency_dir/bin/$tool" || return 1
+        chmod 700 "$dependency_dir/bin/$tool" || return 1
+        case $tool in
+            nc)
+                version=$(LC_ALL=C "$dependency_dir/bin/nc" -h 2>&1)
+                [[ $version == *'OpenBSD netcat'* ]] || return 1
+                ;;
+            *)
+                case $tool in dig) probe=-v ;; nslookup) probe=-version ;; *) probe=--version ;; esac
+                "$dependency_dir/bin/$tool" "$probe" >/dev/null || return 1
+                ;;
+        esac
+    done
+    export PATH="$dependency_dir/bin:$PATH"
+}
+
 install_dependencies(){
 local missing
 missing=$(missing_dependencies)
 [[ -z $missing ]] && return 0
 if [[ $mode_yes -eq 0 ]];then
+if [[ -r /etc/debian_version ]] && command -v apt-get >/dev/null && command -v dpkg-deb >/dev/null; then
+    local -a tools
+    read -r -a tools <<< "$missing"
+    if prepare_deb_tools "${tools[@]}" && [[ -z $(missing_dependencies) ]]; then
+        return 0
+    fi
+    if [[ $YY == cn ]]; then
+        printf '\n临时依赖准备失败，请检查软件源与临时目录。\n' >&2
+    else
+        printf '\nCould not prepare temporary tools. Check the package sources and temporary directory.\n' >&2
+    fi
+    return 3
+fi
 if [[ $YY == cn ]];then
 printf '缺少依赖：%s。手动安装或使用 -y 自动安装。\n' "$missing"
 else
@@ -1725,6 +1902,8 @@ smtp_port_in_use() {
     fi
 }
 check_mail(){
+local label=$1 index=0
+progress "$label · SMTP 25"
 smail[local]=0
 if smtp_port_in_use;then
 smail[local]=2
@@ -1736,7 +1915,8 @@ fi
 smail[remote]=0
 services=("Gmail" "Outlook" "Yahoo" "Apple" "QQ" "MailRU" "AOL" "GMX" "MailCOM" "163" "Sohu" "Sina")
 for service in "${services[@]}";do
-check_email_service "$service"
+((++index))
+run_probe "$label · $service ($index/${#services[@]})" check_email_service "$service"
 done
 }
 # Bundle the DNSBL zones for standalone use.
@@ -1845,6 +2025,11 @@ dnsbl_zones=(
 check_dnsbl_parallel(){
 local ip_to_check=$1
 local parallel_jobs=$2
+local label=$3
+local -a zones
+mapfile -t zones < <(printf '%s\n' "${dnsbl_zones[@]}" | sort -u)
+local zone_count=${#zones[@]}
+progress "$label · 0/$zone_count"
 smail[t]=0
 smail[c]=0
 smail[m]=0
@@ -1855,8 +2040,7 @@ local total=0
 local clean=0
 local blacklisted=0
 local other=0
-printf '%s\n' "${dnsbl_zones[@]}" |
-    sort -u |
+printf '%s\n' "${zones[@]}" |
     xargs -P "$parallel_jobs" -I {} "$BASH" -c '
         case $(dig +time=2 +tries=1 +short "$1.$2" A) in
             ""|127.255.255.*) echo Clean ;;
@@ -1871,6 +2055,9 @@ case "$line" in
 "Blacklisted")((blacklisted++));;
 *)((other++))
 esac
+if (( total % 25 == 0 || total == zone_count )); then
+    progress "$label · $total/$zone_count"
+fi
 done
 smail[t]="$total"
 smail[c]="$clean"
@@ -1880,7 +2067,7 @@ echo "${smail[t]} ${smail[c]} ${smail[m]} ${smail[b]}"
 }
 }
 check_dnsbl(){
-local num_array=($(check_dnsbl_parallel "$IP" 50))
+local num_array=($(check_dnsbl_parallel "$1" "$2" "$3"))
 smail[t]=${num_array[0]:-0}
 smail[c]=${num_array[1]:-0}
 smail[m]=${num_array[2]:-0}
@@ -2480,7 +2667,10 @@ mail_updates+=".Mail |= . * { DNSBlacklist: { Blacklisted: ${smail[b]:-null} } }
 ipjson=$(echo "$ipjson"|jq "$head_updates$basic_updates$type_updates$score_updates$factor_updates$media_updates$mail_updates.")
 }
 check_IP(){
-local ip_report
+local ip_report family=$2 stages=4
+[[ $family != 4 ]] || stages=5
+local db="[IPv$family 1/$stages] ${sprogress[db]}"
+local media="[IPv$family 2/$stages] ${sprogress[media]}"
 IP=$1
 ipjson='{
       "Head": {},
@@ -2493,26 +2683,29 @@ ipjson='{
     }'
 [[ $2 -eq 4 ]]&&hide_ipv4 $IP
 [[ $2 -eq 6 ]]&&hide_ipv6 $IP
-db_maxmind $2
-db_ipinfo
+run_probe "$db · MaxMind" db_maxmind "$family"
+run_probe "$db · IPinfo" db_ipinfo
 fill_basic_location
-[[ $mode_lite -eq 0 ]]&&db_scamalytics $2||scamalytics=()
-db_ipregistry $2
-db_ipapi $2
-[[ $mode_lite -eq 0 ]]&&db_abuseipdb $2||abuseipdb=()
-[[ $mode_lite -eq 0 ]]&&db_ip2location $2||ip2location=()
-db_dbip
-[[ $mode_lite -eq 0 ]]&&db_ipdata $2||ipdata=()
-[[ $mode_lite -eq 0 ]]&&db_ipqs $2||ipqs=()
-MediaUnlockTest_TikTok $2
-MediaUnlockTest_DisneyPlus $2
-MediaUnlockTest_Netflix $2
-MediaUnlockTest_YouTube_Premium $2
-MediaUnlockTest_PrimeVideo_Region $2
-MediaUnlockTest_Claude $2
-OpenAITest $2
-check_mail
-[[ $2 -eq 4 ]]&&check_dnsbl "$IP" 50
+[[ $mode_lite -eq 0 ]] && run_probe "$db · Scamalytics" db_scamalytics "$family" || scamalytics=()
+run_probe "$db · IPregistry" db_ipregistry "$family"
+run_probe "$db · ipapi" db_ipapi "$family"
+[[ $mode_lite -eq 0 ]] && run_probe "$db · AbuseIPDB" db_abuseipdb "$family" || abuseipdb=()
+[[ $mode_lite -eq 0 ]] && run_probe "$db · IP2Location" db_ip2location "$family" || ip2location=()
+run_probe "$db · DB-IP" db_dbip
+[[ $mode_lite -eq 0 ]] && run_probe "$db · ipdata" db_ipdata "$family" || ipdata=()
+[[ $mode_lite -eq 0 ]] && run_probe "$db · IPQS" db_ipqs "$family" || ipqs=()
+run_probe "$media · TikTok (1/7)" MediaUnlockTest_TikTok "$family"
+run_probe "$media · Disney+ (2/7)" MediaUnlockTest_DisneyPlus "$family"
+run_probe "$media · Netflix (3/7)" MediaUnlockTest_Netflix "$family"
+run_probe "$media · YouTube (4/7)" MediaUnlockTest_YouTube_Premium "$family"
+run_probe "$media · Prime Video (5/7)" MediaUnlockTest_PrimeVideo_Region "$family"
+run_probe "$media · Claude (6/7)" MediaUnlockTest_Claude "$family"
+run_probe "$media · ChatGPT (7/7)" OpenAITest "$family"
+check_mail "[IPv$family 3/$stages] ${sprogress[mail]}"
+if [[ $family == 4 ]]; then
+    check_dnsbl "$IP" 50 "[IPv4 4/$stages] ${sprogress[dnsbl]}"
+fi
+progress "[IPv$family $stages/$stages] ${sprogress[report]}"
 if [[ $mode_lite -eq 0 ]];then
 ip_report=$(show_head
 show_basic
@@ -2535,6 +2728,8 @@ save_json || return
 fi
 if [[ $mode_json -eq 1 ]];then
 printf '%s\n' "$ipjson"
+elif (( terminal_page )); then
+terminal_reports+=("$ip_report")
 else
 printf '%s\n\n' "$ip_report"
 fi
@@ -2575,18 +2770,21 @@ main() {
         print_help
         return 0
     fi
+    open_terminal_page
     if (( mode_no == 0 )); then
+        progress "${sprogress[deps]}"
         install_dependencies >&2 || return
     fi
 
     if (( IPV4check )); then
-        get_ipv4
+        run_probe "IPv4 · ${sprogress[egress]}" get_ipv4
         is_valid_ipv4 "$IPV4"
     fi
     if (( IPV6check )); then
-        get_ipv6
+        run_probe "IPv6 · ${sprogress[egress]}" get_ipv6
         is_valid_ipv6 "$IPV6"
     fi
+    progress
     if (( IPV4work == 0 && IPV6work == 0 )); then
         if [[ -n $iface ]]; then
             ERRORcode=7
@@ -2606,15 +2804,28 @@ main() {
 
     generate_random_user_agent
     adapt_locale
-    load_country_data
+    run_probe "${sprogress[country]}" load_country_data
     if (( IPV4work )); then
         check_IP "$IPV4" 4 || return
     fi
     if (( IPV6work )); then
         check_IP "$IPV6" 6 || return
     fi
+    if (( terminal_page )); then
+        view_terminal_reports
+    fi
 }
 
 if [[ ${BASH_SOURCE[0]:-$0} == "$0" ]]; then
+    trap cleanup_run EXIT
+    trap 'exit 129' HUP
+    trap 'exit 130' INT
+    trap 'exit 143' TERM
     main "$@"
+    result=$?
+    if (( result != 0 && terminal_page )); then
+        printf '\n%s' "${sprogress[close]}" >&2
+        IFS= read -rsn1 _ || :
+    fi
+    exit "$result"
 fi
