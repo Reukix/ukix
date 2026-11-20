@@ -36,6 +36,12 @@
 
 HTTPDNS 模块仅拦截列明的解析服务及已列明 IP 的解析路径，不再兜底封禁所有 IP 解析接口或整个 IP 的业务流量。KocoWidgets 模块要求 RevenueCat 请求头中的 App 标识与目标 App 一致，标识缺失或属于其他 App 时原样放行。拼多多取件页保留原站构建脚本，通过页面数据和推广元素清理广告。
 
+## IP 质量检测
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/ip.sh)
+```
+
 ## Snell 脚本
 
 `snell.sh` 是 Snell v5/v6 交互式部署脚本，支持自动检测系统架构、安装依赖、下载服务端、生成配置、创建 systemd 服务，并带有基础管理和多用户管理菜单。
