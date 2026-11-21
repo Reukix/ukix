@@ -4,7 +4,7 @@
   "asn_snapshot": "singbox/asn.json",
   "files": {
     "Apple.list": {
-      "source_sha256": "e14172a7530395b56700387eea369bace10a1e4b0e6e9e80028a1bc4e3709b23",
+      "source_sha256": "5ccc34a62505693048681398e865b16aaf847f741c49b785438857774f854e39",
       "source_rules": 13,
       "output_rules": 2,
       "warnings": [
@@ -18,7 +18,7 @@
       ]
     },
     "Binance.list": {
-      "source_sha256": "c51e6b54d3b422f78318e419d299f131c7f9fe12e91728a10e03b2d7fc9d7add",
+      "source_sha256": "f70d6a5dbac674d0db309d384d60d296ef94b0c75e2ef052038ccf32688f8673",
       "source_rules": 49,
       "output_rules": 3,
       "warnings": []
@@ -30,215 +30,215 @@
       "warnings": []
     },
     "CN.list": {
-      "source_sha256": "edd61e804b0fc0e64514933d0a8ec4199968201b5875e47ffba64f755ed6a7f6",
-      "source_rules": 128952,
+      "source_sha256": "b73947ff19dffd91bf82d8b3c70b2fab66ee43ace6f371252c58f69e2fa31bb9",
+      "source_rules": 128985,
       "output_rules": 4,
       "warnings": [
         {
-          "line": 128925,
+          "line": 128958,
           "rule": "USER-AGENT,%E4%B8%AD%E5%9B%BD%E5%B7%A5%E5%95%86%E9%93%B6%E8%A1%8C*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128926,
+          "line": 128959,
           "rule": "USER-AGENT,%E4%BA%AC%E4%B8%9C%E5%88%B0%E5%AE%B6*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128927,
+          "line": 128960,
           "rule": "USER-AGENT,%E4%BC%98%E9%85%B7*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128928,
+          "line": 128961,
           "rule": "USER-AGENT,%E5%8D%B3%E5%88%BB*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128929,
+          "line": 128962,
           "rule": "USER-AGENT,%E6%89%8B%E6%9C%BA%E6%B7%98%E5%AE%9D*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128930,
+          "line": 128963,
           "rule": "USER-AGENT,%E7%BD%91%E6%98%93%E4%BA%91%E9%9F%B3%E4%B9%90*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128931,
+          "line": 128964,
           "rule": "USER-AGENT,*Vainglory*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128932,
+          "line": 128965,
           "rule": "USER-AGENT,AdBlock*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128933,
+          "line": 128966,
           "rule": "USER-AGENT,Best%20Trace*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128934,
+          "line": 128967,
           "rule": "USER-AGENT,MegaWerewolf*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128935,
+          "line": 128968,
           "rule": "USER-AGENT,MicroMessenger%20Client",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128936,
+          "line": 128969,
           "rule": "USER-AGENT,MicroMessenger*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128937,
+          "line": 128970,
           "rule": "USER-AGENT,MicroMessengerClient*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128938,
+          "line": 128971,
           "rule": "USER-AGENT,Microsoft*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128939,
+          "line": 128972,
           "rule": "USER-AGENT,Moke*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128940,
+          "line": 128973,
           "rule": "USER-AGENT,NeteaseMusic*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128941,
+          "line": 128974,
           "rule": "USER-AGENT,QQ*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128942,
+          "line": 128975,
           "rule": "USER-AGENT,RemotePlay*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128943,
+          "line": 128976,
           "rule": "USER-AGENT,TIM*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128944,
+          "line": 128977,
           "rule": "USER-AGENT,TeamViewer*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128945,
+          "line": 128978,
           "rule": "USER-AGENT,TeslaMap",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128946,
+          "line": 128979,
           "rule": "USER-AGENT,WeChat*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128947,
+          "line": 128980,
           "rule": "USER-AGENT,WebTorrent*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128948,
+          "line": 128981,
           "rule": "USER-AGENT,arrowio*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128949,
+          "line": 128982,
           "rule": "USER-AGENT,balls*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128950,
+          "line": 128983,
           "rule": "USER-AGENT,cmb*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128951,
+          "line": 128984,
           "rule": "USER-AGENT,cmblife*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128952,
+          "line": 128985,
           "rule": "USER-AGENT,eusoft_ting_en_iphone",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128953,
+          "line": 128986,
           "rule": "USER-AGENT,hide*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 128954,
+          "line": 128987,
           "rule": "USER-AGENT,ting_en",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
@@ -246,13 +246,13 @@
         },
         {
           "kind": "no-resolve",
-          "occurrences": 18094,
+          "occurrences": 18121,
           "note": "DNS resolution behavior must be configured by the consumer"
         }
       ]
     },
     "Discord.list": {
-      "source_sha256": "b6249b66d942393f5d92e3cea120b759132e21caca6585c9bdd83073d3321a7b",
+      "source_sha256": "0b086c7bd71b37a59ce27bd65cb4a10b0c3cb1b3b7ed4f2ee170e7e11ea17576",
       "source_rules": 31,
       "output_rules": 2,
       "warnings": []
@@ -264,7 +264,7 @@
       "warnings": []
     },
     "FuckAds.list": {
-      "source_sha256": "5ebd84e110a3c5f219c0e72b8648079bc9489bf98daff402ecb3bf7b6ab42247",
+      "source_sha256": "dce372e2b24267e1e0c8b1ab452fd2ed701f1fb501e95fc92b7dc13171cd501d",
       "source_rules": 1015,
       "output_rules": 5,
       "warnings": [
@@ -276,13 +276,13 @@
       ]
     },
     "Github.list": {
-      "source_sha256": "f7ddac646ef070c8ddb8e83403cdcbedb73d4cb66af295b708559415a2111b68",
+      "source_sha256": "2fa3d0783889ca155977941b5e216aa8802e417aa86031a051e6c2ae6d2cc049",
       "source_rules": 74,
       "output_rules": 3,
       "warnings": []
     },
     "Google.list": {
-      "source_sha256": "73743dce903998cd55391dfa20c5eb8e3f80fda99663a20e1d95e44820838456",
+      "source_sha256": "6c2512375857910b688a1b4367d80f3d446772431b97d5bb1a44dc5206d37df2",
       "source_rules": 1146,
       "output_rules": 8,
       "warnings": [
@@ -322,7 +322,7 @@
       ]
     },
     "Intelligence.list": {
-      "source_sha256": "77f8f4b1a8503c2d380d12cf80c31441cfcae7cef7896803b35c7b137c8f5bee",
+      "source_sha256": "6f1924d0c77a0fefeebc23956b5f2466a82e72f3821969dd62f0e9bcc2a1c21a",
       "source_rules": 245,
       "output_rules": 7,
       "warnings": [
@@ -374,13 +374,13 @@
       "warnings": []
     },
     "OKX.list": {
-      "source_sha256": "db552def9258c284b2168dbfaab950eeaa19eb061d252ef78e3cf10874c623b4",
+      "source_sha256": "bd439f84b202689672ce5f8e5e9dc80cb3d9e1fd9c4e2302af7bfb1c3963c83f",
       "source_rules": 19,
       "output_rules": 3,
       "warnings": []
     },
     "PayPal.list": {
-      "source_sha256": "e21478b919e61b76c2c0af35adeec49e863c3f4c9285000f4e5e743a1c2312f9",
+      "source_sha256": "c877c8723df70934597b29bcd106c96dc31942f981d48499b3b4b97c4553484b",
       "source_rules": 248,
       "output_rules": 3,
       "warnings": [
@@ -406,82 +406,82 @@
       ]
     },
     "Proxy.list": {
-      "source_sha256": "2f80010fc09790681369b3476c6faee78e77a3528a306555446ee8be396e1c2f",
-      "source_rules": 24484,
+      "source_sha256": "eb46b796d2989f7c32313a412c62c3c439f9912397007d199f51b109bedb2d55",
+      "source_rules": 24486,
       "output_rules": 7,
       "warnings": [
         {
-          "line": 24473,
+          "line": 24475,
           "rule": "PROCESS-NAME,com.apple.Maps",
           "notes": [
             "package-like process mapped to process_name OR package_name"
           ]
         },
         {
-          "line": 24474,
+          "line": 24476,
           "rule": "PROCESS-NAME,com.apple.geod",
           "notes": [
             "package-like process mapped to process_name OR package_name"
           ]
         },
         {
-          "line": 24478,
+          "line": 24480,
           "rule": "USER-AGENT,Duolingo*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24479,
+          "line": 24481,
           "rule": "USER-AGENT,OneDrive*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24480,
+          "line": 24482,
           "rule": "USER-AGENT,PayPal*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24481,
+          "line": 24483,
           "rule": "USER-AGENT,Roam*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24482,
+          "line": 24484,
           "rule": "USER-AGENT,TwDramas",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24483,
+          "line": 24485,
           "rule": "USER-AGENT,WhatsApp*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24484,
+          "line": 24486,
           "rule": "USER-AGENT,battleroyale*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24485,
+          "line": 24487,
           "rule": "USER-AGENT,com.apple.trustd*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
           ]
         },
         {
-          "line": 24486,
+          "line": 24488,
           "rule": "USER-AGENT,hearthstone*",
           "notes": [
             "USER-AGENT omitted: unsupported by sing-box"
@@ -507,7 +507,7 @@
       ]
     },
     "Speedtest.list": {
-      "source_sha256": "926ea365307676914b7a81fedda824dd836bcf08c50d0e9f80298b8768d14940",
+      "source_sha256": "38bc958d63bec070d394046c859df59bf3ccf28e8483b4c57b09bbfee49784c9",
       "source_rules": 3511,
       "output_rules": 3,
       "warnings": [
@@ -521,7 +521,7 @@
       ]
     },
     "Spotify.list": {
-      "source_sha256": "3e3b55ff8e0b33aefaba0b759b431ca07d9202b4b78f2235b0cf22983eae3156",
+      "source_sha256": "939947fe32a9dd93ec03158a6a51e49cd07def3ccacd0a4f76595ce679119ce3",
       "source_rules": 40,
       "output_rules": 5,
       "warnings": [
@@ -547,7 +547,7 @@
       ]
     },
     "Telegram.list": {
-      "source_sha256": "79abcc492899320b5cc40bd9c1f3607430909245a9b21c155c449ab7af2e950e",
+      "source_sha256": "004cb7f4164d1986f1a99109e425413de50df366654e5ba63ef4d2f5c15ab63f",
       "source_rules": 67,
       "output_rules": 7,
       "warnings": [
@@ -616,7 +616,7 @@
       ]
     },
     "TikTok.list": {
-      "source_sha256": "4bab9f219a15cea1e7cc3ef659841fce814fd9143dc1797bab6f163a87c6a281",
+      "source_sha256": "965fd1cb1c4af4082be371258b740e0e4a196c3bcae806e0be551ee256c43e16",
       "source_rules": 67,
       "output_rules": 4,
       "warnings": [
@@ -643,7 +643,7 @@
       "warnings": []
     },
     "X.list": {
-      "source_sha256": "22e7767fc42bd65b8cf086d513478e71a9688e473d7caa87f2f5a58f53d02cea",
+      "source_sha256": "e6ddfe98213c87ef522ff7f2c0a69af77e5abd3d155a80da2f440df6685c8fc0",
       "source_rules": 36,
       "output_rules": 3,
       "warnings": [
@@ -655,7 +655,7 @@
       ]
     },
     "XHS.list": {
-      "source_sha256": "557b70f6a612b7d2742db54473b0518807dd547af695bd193a25caa4656013a3",
+      "source_sha256": "62f608d265ddee140262de00404902f36149226188ee3fe15f2463b5d84d0fe8",
       "source_rules": 12,
       "output_rules": 1,
       "warnings": []
