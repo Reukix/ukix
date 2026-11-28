@@ -1,4 +1,4 @@
-# Proxy Rules - Fetched on 2026-11-27 10:02:04 GMT+8
+# Proxy Rules - Fetched on 2026-11-28 09:46:30 GMT+8
 
 DOMAIN,3dna.nationbuilder.com
 DOMAIN,a-tiles.locationiq.com
@@ -122,7 +122,6 @@ DOMAIN,assets.khoros.com
 DOMAIN,assets.lemonsqueezy.com
 DOMAIN,assets.mailgun.com
 DOMAIN,assets.maxon.net
-DOMAIN,assets.mcp.corespeed.io
 DOMAIN,assets.media-platform.com
 DOMAIN,assets.monei.com
 DOMAIN,assets.monetizationos.com
@@ -292,6 +291,7 @@ DOMAIN,cdn-main.plus500.com
 DOMAIN,cdn-node.diskpart.com
 DOMAIN,cdn-public-apis.moonlock.com
 DOMAIN,cdn-public.sociabble.com
+DOMAIN,cdn-resize-prod-com.500px.cloud
 DOMAIN,cdn-seo.airdroid.com
 DOMAIN,cdn-service.jp.sumologic.com
 DOMAIN,cdn-share-sprites.flaticon.com
@@ -521,6 +521,7 @@ DOMAIN,cdn.privacy-mgmt.com
 DOMAIN,cdn.privacy.com
 DOMAIN,cdn.promo.capcomusa.com
 DOMAIN,cdn.promotekit.com
+DOMAIN,cdn.protect.clerk.com
 DOMAIN,cdn.quadpay.com
 DOMAIN,cdn.quickemailverification.com
 DOMAIN,cdn.rauno.me
@@ -1398,8 +1399,6 @@ DOMAIN,quriobot.com
 DOMAIN,r2.1hanime.com
 DOMAIN,r2.dejavu.moe
 DOMAIN,r2.gear4music.com
-DOMAIN,r2cdn.c7d.dev
-DOMAIN,r2cdn.corespeed.io
 DOMAIN,r2cdn.myshopline.com
 DOMAIN,rapid-cdn.yottaa.com
 DOMAIN,rawmarkdown.cloudflareaccess.org
@@ -1480,7 +1479,6 @@ DOMAIN,s4.itho.me
 DOMAIN,s8.maxstream.org
 DOMAIN,sandpack-cdn-staging.blazingly.io
 DOMAIN,sbl.onfastspring.com
-DOMAIN,scdn.clerk.com
 DOMAIN,schema-cf.bc0a.com
 DOMAIN,screenshot.domains
 DOMAIN,screenshots.debian.net
@@ -1508,7 +1506,6 @@ DOMAIN,searchserverapi.com
 DOMAIN,seccdn.libravatar.org
 DOMAIN,secure-res.craft.do
 DOMAIN,secure.beer7live.com
-DOMAIN,segapi.clerk.com
 DOMAIN,self.events.data.microsoft.com
 DOMAIN,sentry.ainopara.com
 DOMAIN,seo-wp.airdroid.com
@@ -1522,7 +1519,6 @@ DOMAIN,share-assets.fe.garmin.com
 DOMAIN,share.chessbase.com
 DOMAIN,shell.cdn.office.net
 DOMAIN,shields.rbtlog.dev
-DOMAIN,showcase.abovemarket.com
 DOMAIN,sig.grumpybumpers.com
 DOMAIN,sigma9.scpwikicn.com
 DOMAIN,signal.cdnbye.com
@@ -1543,7 +1539,6 @@ DOMAIN,sourcemaps.squarespace.net
 DOMAIN,sp.nba.com
 DOMAIN,sp.streamlabs.com
 DOMAIN,spcdn.incartupsell.com
-DOMAIN,spotlightimage.biggo.com
 DOMAIN,st-eu.dynamicyield.com
 DOMAIN,st.dynamicyield.com
 DOMAIN,st.prntscr.com
